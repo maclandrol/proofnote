@@ -1,0 +1,603 @@
+[
+  {
+    "auditId": "E-ARC-03",
+    "title": "Invariant and Equivariant Graph Networks",
+    "year": 2018,
+    "category": "Graphs & equivariance",
+    "primaryUrl": "https://arxiv.org/abs/1812.09902",
+    "citationCount": 583,
+    "citationUrl": "https://www.semanticscholar.org/paper/6541afa4b4061a7d5c8387514bedea9dc249fd80",
+    "issueTitle": "The equivariant basis count depends on graph size",
+    "addressingSources": [
+      {
+        "label": "Pearce-Crump: Section 3.5 and Theorems 18–19",
+        "url": "https://arxiv.org/html/2212.08648v3#S3.SS5"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-e-arc-03",
+    "status": "addressed",
+    "plainExplanation": "Partitions with more blocks than nodes describe empty index patterns. Counting only realizable partitions gives the exact dimension; the unrestricted Bell number applies once \\(n\\ge k+\\ell\\). Pearce-Crump derives this correction in a separate paper.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "missing_assumption"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "E-ARC-13",
+    "title": "Theoretical Limitations of Self-Attention in Neural Sequence Models",
+    "year": 2019,
+    "category": "Transformers & sequence models",
+    "primaryUrl": "https://arxiv.org/abs/1906.06755",
+    "citationCount": 420,
+    "citationUrl": "https://www.semanticscholar.org/paper/b3564be8b79f25585acb035f3deaf4ae93c26d8f",
+    "issueTitle": "The proof must include changes in attention weights",
+    "addressingSources": [
+      {
+        "label": "Author supplement: Section S2, pages 8–9",
+        "url": "https://mhahn.info/files/transformers-proof.pdf#page=8"
+      }
+    ],
+    "resolutionType": "revision",
+    "slug": "addressed-e-arc-13",
+    "status": "addressed",
+    "plainExplanation": "Changing a token changes both values and attention weights. The original proof controls only the values. Hahn’s dated supplement includes the missing weight term and bounds it by \\(O(1/n)\\) under the original assumptions, preserving the influence theorem.",
+    "addressingRelationship": "later-version",
+    "severity": "repairable",
+    "issueTypes": [
+      "proof_gap"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "IARC-027",
+    "title": "GemNet: Universal Directional Graph Neural Networks for Molecules",
+    "year": 2021,
+    "category": "Molecular models & equivariance",
+    "primaryUrl": "https://arxiv.org/abs/2106.08903",
+    "citationCount": 651,
+    "citationUrl": "https://www.semanticscholar.org/paper/5542d0ff99767f75f8c8a329fc3d88d73ff470c3",
+    "issueTitle": "A zero Clebsch-Gordan coefficient invalidates the spherical-product equivalence",
+    "addressingSources": [
+      {
+        "label": "The Price of Freedom: Proposition 3.2 (selection rule), p.5, and Appendix K",
+        "url": "https://proceedings.mlr.press/v267/xie25c.html"
+      },
+      {
+        "label": "GemNet author discussion of handed dihedral inputs",
+        "url": "https://github.com/TUM-DAML/gemnet_pytorch/issues/11#issuecomment-1263517623"
+      },
+      {
+        "label": "Duval et al., A Hitchhiker’s Guide, v2, Section 4.1",
+        "url": "https://arxiv.org/pdf/2312.07511v2"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-iarc-027",
+    "status": "addressed",
+    "plainExplanation": "GemNet’s arXiv v10 retains the claim that its spherical construction represents every $\\mathrm{SO}(3)$-invariant scalar target. The extra Clebsch–Gordan factor in Appendix A can vanish, removing interactions needed to distinguish a typed tetrahedron from its mirror. The Price of Freedom, published at ICML 2025, derives the same selection rule in Proposition 3.2 and Appendix K. That is an independent analysis of the algebraic obstruction; it neither identifies GemNet in the inspected text nor supplies a GemNet erratum or a corrected universality theorem.\n\nIn a 2022 repository discussion, Gasteiger explained that the implementation deliberately omits dihedral handedness after tests found no performance difference. This concerns the practical model; it does not acknowledge the separate defect in the spherical universality proof.",
+    "addressingRelationship": "different-work",
+    "severity": "critical",
+    "issueTypes": [
+      "false_statement",
+      "invalid_inference",
+      "proof_gap"
+    ],
+    "verificationStatus": "confirmed"
+  },
+  {
+    "auditId": "IARC-060",
+    "title": "Axiomatic Attribution for Deep Networks",
+    "year": 2017,
+    "category": "Explainability",
+    "primaryUrl": "https://arxiv.org/abs/1703.01365",
+    "citationCount": 8651,
+    "citationUrl": "https://www.semanticscholar.org/paper/f302e136c41db5de1d624412f68c9174cf7ae8be",
+    "issueTitle": "The stated completeness assumptions and path-uniqueness claim need correction",
+    "addressingSources": [
+      {
+        "label": "Lerma and Lucas: Sections 1.2.1-1.2.2; Proposition 1; Section 2",
+        "url": "https://arxiv.org/html/2103.13533"
+      },
+      {
+        "label": "Lundstrom and Razaviyayn, JMLR 26(177), Theorem 8 and Appendix A",
+        "url": "https://www.jmlr.org/papers/volume26/23-0671/23-0671.pdf"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-iarc-060",
+    "status": "addressed",
+    "plainExplanation": "The original arXiv v2 claims completeness under insufficient path regularity and uniqueness under symmetry alone. Lerma and Lucas, arXiv v1 (2021), identify both defects and give a corrected gradient theorem. Lundstrom and Razaviyayn, JMLR 26(177) (2025), corroborate the symmetry defect; their Theorem 8 characterizes integrated gradients among monotone path methods by adding affine scale invariance, within their stated function class and the domain where integrated gradients is defined. These are corrections by later authors; the inspected original versions retain the claims.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "missing_assumption",
+      "false_statement",
+      "proof_gap"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "auditId": "MBIO-ATOM-002",
+    "title": "TorchMD-NET: Equivariant Transformers for Neural Network based Molecular Potentials",
+    "year": 2022,
+    "category": "Molecular models & equivariance",
+    "primaryUrl": "https://arxiv.org/abs/2202.02541",
+    "citationCount": 303,
+    "citationUrl": "https://www.semanticscholar.org/paper/68ab47dbf07dcff861548ee37c906b6793dfd75c",
+    "issueTitle": "The vector message can remain nonzero at the distance cutoff",
+    "addressingSources": [
+      {
+        "label": "Official implementation: vector_cutoff documentation and original-architecture diagnosis in message()",
+        "url": "https://github.com/torchmd/torchmd-net/blob/main/torchmdnet/models/torchmd_et.py"
+      }
+    ],
+    "resolutionType": "implementation",
+    "slug": "addressed-mbio-atom-002",
+    "status": "addressed",
+    "plainExplanation": "A biased distance filter can remain nonzero after its radial inputs vanish. The scalar branch is tapered again, but the printed vector branch is not. Applying the cutoff to the entire vector message restores continuity under continuous downstream operations; the official code exposes this as an option.",
+    "addressingRelationship": "separate-code-source",
+    "severity": "repairable",
+    "issueTypes": [
+      "algorithm_specification"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "E-GEN-20",
+    "title": "Representation Learning with Contrastive Predictive Coding",
+    "year": 2018,
+    "primaryUrl": "https://arxiv.org/abs/1807.03748",
+    "citationCount": 14412,
+    "citationUrl": "https://www.semanticscholar.org/paper/b227f3e4c0dc96e5ac5426b85485a70f2175a205",
+    "category": "Representation learning",
+    "issueTitle": "The finite-batch InfoNCE bound needs an exact argument",
+    "resolutionType": "later-work",
+    "addressingSources": [
+      {
+        "label": "On Variational Bounds of Mutual Information — Section 2.3 and appendix derivation",
+        "url": "https://arxiv.org/abs/1905.06922"
+      }
+    ],
+    "slug": "addressed-e-gen-20",
+    "status": "addressed",
+    "plainExplanation": "Replacing a random negative-sample denominator by its mean is not an exact finite-sample argument. A candidate-index KL proof establishes the stated InfoNCE lower bound, as the later mutual-information analysis explains.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "proof_gap"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "O-2303.01469",
+    "title": "Consistency Models",
+    "year": 2023,
+    "primaryUrl": "https://proceedings.mlr.press/v202/song23a/song23a.pdf",
+    "citationCount": 2155,
+    "citationUrl": "https://www.semanticscholar.org/paper/ac974291d7e3a152067382675524f3e3c2ded11b",
+    "category": "Generative models",
+    "issueTitle": "The loss-limit argument does not justify a moving-average teacher",
+    "resolutionType": "later-work",
+    "addressingSources": [
+      {
+        "label": "Improved Techniques for Training Consistency Models: Section 3.2 and Proposition 1",
+        "url": "https://proceedings.iclr.cc/paper_files/paper/2024/file/41bd71e7bf7f9fe68f1c936940fd06bd-Paper-Conference.pdf"
+      }
+    ],
+    "slug": "addressed-o-2303-01469",
+    "status": "addressed",
+    "plainExplanation": "The loss approximation does not establish a useful learning signal when teacher and student parameters differ. In the authors’ scalar example, both losses agree but their common limit loses dependence on the data. Setting the teacher equal to the current student and stopping its gradient restores a data-dependent rescaled gradient in that example. The authors make this change in a later paper; the original loss identity remains valid.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "invalid_inference"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "IG002",
+    "title": "Importance Weighted Autoencoders",
+    "year": 2015,
+    "primaryUrl": "https://arxiv.org/pdf/1509.00519",
+    "citationCount": 1369,
+    "citationUrl": "https://www.semanticscholar.org/paper/3e47c4c2dd98c49b7771c7228812d5fd9eee56a3",
+    "category": "Generative models",
+    "issueTitle": "Convergence of the expected log needs control near zero",
+    "resolutionType": "later-work",
+    "addressingSources": [
+      {
+        "label": "Filtering Variational Objectives — Proposition 1(b) and proof",
+        "url": "https://arxiv.org/abs/1705.09279"
+      },
+      {
+        "label": "Hierarchical Importance Weighted Autoencoders — supplement, Section 4 and Appendix C",
+        "url": "https://proceedings.mlr.press/v97/huang19d/huang19d-supp.pdf"
+      }
+    ],
+    "slug": "addressed-ig002",
+    "status": "addressed",
+    "plainExplanation": "Positive bounded weights can approach zero so rapidly that every finite-sample expected log is negative infinity, even though their mean converges almost surely. Uniform integrability of the log averages restores the limit; later variational-bound analyses state this condition.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "missing_assumption"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "BIO-GEN-04",
+    "title": "GraphAF: a Flow-based Autoregressive Model for Molecular Graph Generation",
+    "year": 2020,
+    "primaryUrl": "https://arxiv.org/pdf/2001.09382",
+    "citationCount": 568,
+    "citationUrl": "https://www.semanticscholar.org/paper/036d743c7ca1e513adf0a91594fc8111e03dc30c",
+    "category": "Molecular generation",
+    "issueTitle": "A BFS edge can span more positions than one level contains",
+    "resolutionType": "implementation",
+    "addressingSources": [
+      {
+        "label": "GraphAF README — link to the authors' TorchDrug implementation",
+        "url": "https://github.com/DeepGraphLearning/GraphAF/blob/master/README.md"
+      },
+      {
+        "label": "TorchDrug AutoregressiveGeneration — max_edge_unroll and preprocessing",
+        "url": "https://github.com/DeepGraphLearning/torchdrug/blob/master/torchdrug/tasks/generation.py"
+      }
+    ],
+    "slug": "addressed-bio-gen-04",
+    "status": "addressed",
+    "plainExplanation": "A BFS edge can span more positions than the largest single level contains. The authors’ linked TorchDrug implementation instead measures actual endpoint gaps for the orderings processed. This addresses that window calculation without establishing a bound for every later random ordering or a failure on the reported datasets.",
+    "addressingRelationship": "separate-code-source",
+    "severity": "repairable",
+    "issueTypes": [
+      "algorithm_specification"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "BIO-GEN-07",
+    "title": "Junction Tree Variational Autoencoder for Molecular Graph Generation",
+    "year": 2018,
+    "primaryUrl": "https://arxiv.org/pdf/1802.04364",
+    "citationCount": 1716,
+    "citationUrl": "https://www.semanticscholar.org/paper/fd17bd9a5dc24a081ad9743570f50dd6750f54b2",
+    "category": "Molecular generation",
+    "issueTitle": "Singleton insertion can break the junction-tree property",
+    "resolutionType": "implementation",
+    "addressingSources": [
+      {
+        "label": "Authors' released tree_decomp implementation — bond/ring branching and overlap weights",
+        "url": "https://github.com/wengong-jin/icml18-jtnn/blob/master/fast_jtnn/chemutils.py"
+      }
+    ],
+    "slug": "addressed-bio-gen-07",
+    "status": "addressed",
+    "plainExplanation": "For two fused rings and a pendant bond, the printed singleton construction separates the rings while omitting a shared atom. The released code distinguishes this bond/ring case and uses overlap weights, avoiding the example. A general junction-tree guarantee still requires connectedness of every atom’s cluster set.",
+    "addressingRelationship": "separate-code-source",
+    "severity": "repairable",
+    "issueTypes": [
+      "algorithm_specification"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "BIO-ML-01",
+    "title": "Pre-training Molecular Graph Representation with 3D Geometry",
+    "year": 2022,
+    "primaryUrl": "https://arxiv.org/abs/2110.07728v2",
+    "citationCount": 489,
+    "citationUrl": "https://www.semanticscholar.org/paper/b8f816e23ff40d6afabccca2ee4770087ef0ef57",
+    "category": "Molecular representation learning",
+    "issueTitle": "Entropy offsets and the KL weight determine which bounds hold",
+    "resolutionType": "later-work",
+    "addressingSources": [
+      {
+        "label": "A Group Symmetric Stochastic Differential Equation Model for Molecule Multi-modal Pretraining — Appendix F, Eqs. (65), (68)–(69)",
+        "url": "https://proceedings.mlr.press/v202/liu23h/liu23h.pdf"
+      }
+    ],
+    "slug": "addressed-bio-ml-01",
+    "status": "addressed",
+    "plainExplanation": "The mutual-information derivation needs marginal entropy offsets for continuous variables. A beta-weighted reconstruction objective is not automatically an evidence lower bound below unit KL weight. The authors’ later MoleculeSDE appendix supplies the entropy constants, a unit-weight ELBO and a separately labeled beta-weighted proxy; it is a related correct formulation rather than an erratum to this version.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "formula_error",
+      "interpretation_error"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "BIO-ML-03",
+    "title": "Graph Contrastive Learning with Augmentations",
+    "year": 2020,
+    "primaryUrl": "https://arxiv.org/pdf/2010.13902v1",
+    "citationCount": 2978,
+    "citationUrl": "https://www.semanticscholar.org/paper/76c124786ccf4263e6403a15a8e350ac28be4e65",
+    "category": "Molecular representation learning",
+    "issueTitle": "The original loss formula included the positive pair in its denominator",
+    "resolutionType": "revision",
+    "addressingSources": [
+      {
+        "label": "Authors revised Eq. (3), arXiv v2",
+        "url": "https://arxiv.org/pdf/2010.13902v2"
+      },
+      {
+        "label": "Author acknowledgement of the denominator error",
+        "url": "https://github.com/Shen-Lab/GraphCL/issues/2#issuecomment-725190176"
+      }
+    ],
+    "slug": "addressed-bio-ml-03",
+    "status": "addressed",
+    "plainExplanation": "The authors corrected the positive-pair denominator in Eq. (3) in v2. Current v3 retains that correction.",
+    "addressingRelationship": "later-version",
+    "severity": "no_issues",
+    "issueTypes": [],
+    "verificationStatus": "resolved_in_original"
+  },
+  {
+    "auditId": "E-OPT-13",
+    "title": "Deep Learning without Poor Local Minima",
+    "year": 2016,
+    "category": "Optimization & generalization",
+    "primaryUrl": "https://arxiv.org/pdf/1605.07110v3",
+    "citationCount": 1015,
+    "citationUrl": "https://www.semanticscholar.org/paper/07925910d45761d96269fc3bdfdc21b1d20d84ad",
+    "issueTitle": "The proposed saddle family need not have zero Hessian",
+    "addressingSources": [
+      {
+        "label": "Later saddle classification: Theorem 7",
+        "url": "https://www.jmlr.org/papers/volume25/23-0493/23-0493.pdf"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-e-opt-13",
+    "status": "addressed",
+    "plainExplanation": "Zero hidden factors with an arbitrary output factor can have nonzero Hessian and a strict saddle. Setting every factor to zero supplies the non-strict saddle needed by the corollary. The later classification explains which other critical points are strict.",
+    "addressingRelationship": "different-work",
+    "severity": "minor_cosmetic",
+    "issueTypes": [
+      "incorrect_bound"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "E-RL-02",
+    "title": "Trajectory balance: Improved credit assignment in GFlowNets",
+    "year": 2022,
+    "category": "Reinforcement learning",
+    "primaryUrl": "https://arxiv.org/pdf/2201.13259",
+    "citationCount": 302,
+    "citationUrl": "https://www.semanticscholar.org/paper/0116eb4208e9abff3064934d178e655e716d92ad",
+    "issueTitle": "The gradient-variance formula reverses the likelihood ratio",
+    "addressingSources": [
+      {
+        "label": "Later variance-difference derivation: f-Trajectory Balance, Appendix B.2",
+        "url": "https://arxiv.org/pdf/2605.15417"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-e-rl-02",
+    "status": "addressed",
+    "plainExplanation": "Expanding the two covariance matrices gives \\(-\\mathbb E[(1+2a)SS^T]\\), where \\(a=\\log(P_F/T)\\). The printed inverse ratio changes that sign. Correcting it preserves a precise local variance comparison near the target.",
+    "addressingRelationship": "different-work",
+    "severity": "minor_cosmetic",
+    "issueTypes": [
+      "formula_error"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "E-RL-08",
+    "title": "ORPO: Monolithic Preference Optimization without Reference Model",
+    "year": 2024,
+    "category": "Reinforcement learning",
+    "primaryUrl": "https://arxiv.org/pdf/2403.07691",
+    "citationCount": 689,
+    "citationUrl": "https://www.semanticscholar.org/paper/973814cd535facbf4f27c3de477b05bf19366030",
+    "issueTitle": "The printed odds-ratio gradient is missing a minus sign",
+    "addressingSources": [
+      {
+        "label": "Correct ORPO gradient at beta=1: Appendix E",
+        "url": "https://arxiv.org/pdf/2502.01237"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-e-rl-08",
+    "status": "addressed",
+    "plainExplanation": "The defined negative log-sigmoid loss differentiates with a minus sign. Correcting the displayed manual derivative agrees with the later tempered-gradient formula at unit temperature; the scalar loss itself is unchanged.",
+    "addressingRelationship": "different-work",
+    "severity": "minor_cosmetic",
+    "issueTypes": [
+      "formula_error"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "O-1710.10345",
+    "title": "The Implicit Bias of Gradient Descent on Separable Data",
+    "year": 2017,
+    "category": "Optimization & generalization",
+    "primaryUrl": "https://arxiv.org/pdf/1710.10345v6",
+    "citationCount": 1160,
+    "citationUrl": "https://www.semanticscholar.org/paper/11adc8bd35bd897502f9b5452ab7ac668ec9b0fb",
+    "issueTitle": "An unproved multiclass assumption was added to the theorem",
+    "addressingSources": [
+      {
+        "label": "Authors' revised multiclass Theorem 7",
+        "url": "https://arxiv.org/pdf/1710.10345v7"
+      }
+    ],
+    "resolutionType": "revision",
+    "slug": "addressed-o-1710-10345",
+    "status": "addressed",
+    "plainExplanation": "Version 7 adds solvability of the support-vector equations as an explicit assumption in Theorem 7. The earlier binary-case argument did not establish that condition for generic multiclass data.",
+    "addressingRelationship": "later-version",
+    "severity": "no_issues",
+    "issueTypes": [],
+    "verificationStatus": "resolved_in_original"
+  },
+  {
+    "auditId": "IR005",
+    "title": "A Distributional Perspective on Reinforcement Learning",
+    "year": 2017,
+    "category": "Reinforcement learning",
+    "primaryUrl": "https://arxiv.org/abs/1707.06887",
+    "citationCount": 1952,
+    "citationUrl": "https://www.semanticscholar.org/paper/c1f4ef741242d629d1f56e442a09a7ba29595a0e",
+    "issueTitle": "Bellman variance includes variation across successor means",
+    "addressingSources": [
+      {
+        "label": "Authors' total-variance derivation: Section 5.4, Eq. (5.19)",
+        "url": "https://www.distributional-rl.org/contents/chapter5"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-ir005",
+    "status": "addressed",
+    "plainExplanation": "Equal within-state variances do not imply equal variances after mixing states with different means. The authors’ later book gives the complete total-variance identity. A variance contraction follows on a common-mean class, not for arbitrary input distributions.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "formula_error",
+      "missing_assumption"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "IR022",
+    "title": "Learning Robust Rewards with Adversarial Inverse Reinforcement Learning",
+    "year": 2017,
+    "category": "Reinforcement learning",
+    "primaryUrl": "https://arxiv.org/abs/1710.11248",
+    "citationCount": 882,
+    "citationUrl": "https://www.semanticscholar.org/paper/5e2c4e7b3302549b3718601c44d9af6c7554efef",
+    "issueTitle": "The stochastic reward-transfer proof needs a stronger transition condition",
+    "addressingSources": [
+      {
+        "label": "Stochastic identification analysis after Proposition 3.8, Eqs. (45)-(46)",
+        "url": "https://arxiv.org/pdf/2605.30843"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-ir022",
+    "status": "addressed",
+    "plainExplanation": "Theorem 5.1 allows stochastic dynamics, but equal expected successor potentials do not imply equal potential values. Its support-based decomposability assumption is insufficient. Kang’s 2026 analysis identifies the missing transition-completeness condition in Section 3.3, Eqs. (45)–(46). The separate deterministic recovery argument in the original Appendix C is unaffected.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "missing_assumption",
+      "invalid_inference"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "auditId": "IO-1607.00133",
+    "title": "Deep Learning with Differential Privacy",
+    "year": 2016,
+    "category": "Optimization & generalization",
+    "primaryUrl": "https://arxiv.org/pdf/1607.00133v2",
+    "citationCount": 8326,
+    "citationUrl": "https://www.semanticscholar.org/paper/e9a986c8ff6c2f381d026fe014f6aaa865f34da7",
+    "issueTitle": "Adaptive privacy losses cannot be factored as independent variables",
+    "addressingSources": [
+      {
+        "label": "Conditional composition proof: Proposition 1, pp4–5",
+        "url": "https://arxiv.org/pdf/1702.07476v3"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-io-1607-00133",
+    "status": "addressed",
+    "plainExplanation": "Independent random seeds do not make adaptive privacy losses independent. The theorem remains valid by conditioning each moment bound on the released history and iterating the tower property, as the later Rényi-composition proof does.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "proof_gap"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "IO-1802.08908",
+    "title": "Scalable Private Learning with PATE",
+    "year": 2018,
+    "category": "Optimization & generalization",
+    "primaryUrl": "https://arxiv.org/pdf/1802.08908v1",
+    "citationCount": 734,
+    "citationUrl": "https://www.semanticscholar.org/paper/44058a625cb64c311043145655645d8206e272c2",
+    "issueTitle": "The refined privacy bound needs a positive denominator",
+    "addressingSources": [
+      {
+        "label": "Author code: positivity check, lines 176–179",
+        "url": "https://github.com/tensorflow/privacy/blob/3d038a490a0cdd809c030435281c2e94e44c2f83/research/pate_2018/core.py#L176-L179"
+      }
+    ],
+    "resolutionType": "implementation",
+    "slug": "addressed-io-1802-08908",
+    "status": "addressed",
+    "plainExplanation": "The theorem can invert a negative lower bound on a probability, producing a negative upper bound on zero divergence. Requiring \\(\\widetilde q e^{\\epsilon_2}<1\\) repairs that step; the official accountant already checks the condition.",
+    "addressingRelationship": "separate-code-source",
+    "severity": "repairable",
+    "issueTypes": [
+      "missing_assumption"
+    ],
+    "verificationStatus": "addressed"
+  },
+  {
+    "auditId": "IO-1902.09843",
+    "title": "Adaptive Gradient Methods with Dynamic Bound of Learning Rate",
+    "year": 2019,
+    "category": "Optimization & generalization",
+    "primaryUrl": "https://arxiv.org/pdf/1902.09843v1",
+    "citationCount": 696,
+    "citationUrl": "https://www.semanticscholar.org/paper/03af562fb8e69677865dbe94910e464443dd4623",
+    "issueTitle": "Clipping does not ensure monotone inverse step sizes",
+    "addressingSources": [
+      {
+        "label": "Savarese's correction and repaired conditions",
+        "url": "https://arxiv.org/pdf/1908.04457"
+      }
+    ],
+    "resolutionType": "later-work",
+    "slug": "addressed-io-1902-09843",
+    "status": "addressed",
+    "plainExplanation": "The regret proof assumes that inverse adaptive step sizes are nondecreasing. Tightening the clipping bounds does not ensure this, so the estimate for the signed telescoping sum can fail. Savarese identifies this precise error in On the Convergence of AdaBound and its Connection to SGD. A valid replacement retains the positive variation of the weighted inverse step sizes. The $O(\\sqrt T)$ rate additionally requires control of that variation and of the momentum schedule.",
+    "addressingRelationship": "different-work",
+    "severity": "repairable",
+    "issueTypes": [
+      "proof_gap",
+      "incorrect_bound"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "auditId": "IO-1801.09344",
+    "title": "Certified Defenses against Adversarial Examples",
+    "year": 2018,
+    "category": "Optimization & generalization",
+    "primaryUrl": "https://arxiv.org/pdf/1801.09344v2",
+    "citationCount": 1021,
+    "citationUrl": "https://www.semanticscholar.org/paper/966e3c7a65ec75a6359b55c0cecaf3896d318432",
+    "issueTitle": "The SDP matrix places its constant block on the wrong coordinates",
+    "addressingSources": [
+      {
+        "label": "Author code-bounds bundle: bounds_sdp.py, lines 23–40",
+        "url": "https://worksheets.codalab.org/worksheets/0xa21e794020bb474d8804ec7bc0543f52"
+      }
+    ],
+    "resolutionType": "implementation",
+    "slug": "addressed-io-1801-09344",
+    "status": "addressed",
+    "plainExplanation": "The printed block order represents a different quadratic form and can underestimate the required perturbation bound. Moving the constant block restores the SDP certificate. The official implementation already uses the equivalent correct construction.",
+    "addressingRelationship": "separate-code-source",
+    "severity": "repairable",
+    "issueTypes": [
+      "formula_error",
+      "incorrect_bound"
+    ],
+    "verificationStatus": "addressed"
+  }
+]

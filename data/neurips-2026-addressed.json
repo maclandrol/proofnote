@@ -1,0 +1,35 @@
+[
+  {
+    "auditId": "SUS26-152700-01",
+    "slug": "persona-manifold-distance-ratio",
+    "title": "PersonaManifold: Revealing and Exploiting Curved Geometry in LLM Persona Representations",
+    "issueTitle": "Metric scale changes the geodesic-to-Euclidean ratio on a flat line",
+    "year": 2026,
+    "category": "Representation learning",
+    "status": "addressed",
+    "collection": "neurips-2026",
+    "primaryUrl": "https://arxiv.org/html/2609.34571v1",
+    "resolutionType": "qualification",
+    "addressingRelationship": "separate-code-source",
+    "plainExplanation": "A straight one-dimensional point cloud can have a ratio above or below one because only the numerator uses the inverse-covariance metric. Comparing path and chord in the same constant metric removes this scale effect; interpreting spatially varying metrics still requires a separate curvature argument.",
+    "addressingSources": [
+      {
+        "label": "Author method notes: metric scale and anisotropy qualification",
+        "url": "https://github.com/airaer1998/PersonaManifold/blob/33e181cb42220d2a0bc63c4c16260ed70c48fccb/docs/METHOD.md"
+      },
+      {
+        "label": "Parent implementation commit already containing the qualification",
+        "url": "https://github.com/airaer1998/PersonaManifold/tree/ef67be0b6de27c0688d509c16e5ea6bc3f596aac"
+      },
+      {
+        "label": "Reviewed public manuscript and upload history",
+        "url": "https://arxiv.org/abs/2609.34571"
+      }
+    ],
+    "severity": "repairable",
+    "issueTypes": [
+      "interpretation_error"
+    ],
+    "verificationStatus": "addressed"
+  }
+]

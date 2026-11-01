@@ -1,0 +1,1317 @@
+[
+  {
+    "slug": "big-bird-infinity-norm",
+    "title": "Big Bird: Transformers for Longer Sequences",
+    "issueTitle": "Big Bird’s uniform-approximation lemma fails at a jump",
+    "year": 2020,
+    "category": "Transformers & in-context learning",
+    "status": "counterexample",
+    "version": "v2",
+    "location": "Appendix A.2.3, Lemma 5: arXiv v2 PDF page 21; published NeurIPS supplement PDF page 5 (printed page 20).",
+    "originalClaim": "Appendix Lemma 5 claims that every network $\\bar g$ in the modified hardmax class can be approximated by a finite softmax/ReLU transformer for $1\\le p\\le\\infty$. The modified class permits discontinuous piecewise-linear activations. The main-text Theorem 1 has the narrower range $1<p<\\infty$.",
+    "formula": "\\forall\\bar g\\in\\overline{\\mathcal T}^{2,1,1},\\quad 1\\le p\\le\\infty:\\quad\\exists g\\in\\mathcal T^{2,1,4},\\quad d_p(g,\\bar g)\\le\\varepsilon/3.",
+    "assumptions": [
+      "The modified class permits hardmax and possibly discontinuous piecewise-linear activations from the cited Yun et al. construction.",
+      "An ordinary transformer has finitely many softmax/ReLU layers with finite weights, so its output is continuous on the input cube.",
+      "Appendix Lemma 5 includes $p=\\infty$. Main-text Theorem 1 assumes $1<p<\\infty$."
+    ],
+    "plainExplanation": "The modified class contains a unit jump, while every finite softmax/ReLU transformer is continuous. A continuous function has uniform approximation error at least $1/2$ across that jump, contradicting the $p=\\infty$ case of Lemma 5. The cited approximation result covers finite $p$, which is enough for the main-text theorem’s stated range.",
+    "steps": [
+      {
+        "title": "A discontinuous target in the permitted class",
+        "text": "Set the attention output weights to zero. A width-one feed-forward residual block with activation $\\mathbf1\\{t>0\\}$ and bias $-1/2$ adds the same step to the chosen feature at every token. The construction respects shared layer weights.",
+        "formula": "\\bar g_1(X)=X_{11}+\\mathbf 1\\{X_{11}>1/2\\}."
+      },
+      {
+        "title": "Continuity imposes a lower bound",
+        "text": "Fix the other coordinates in the interior of the input cube. A finite softmax/ReLU transformer is continuous, so the affected output coordinate approaches the same value $c$ from either side of $x=1/2$. The target limits are $1/2$ and $3/2$, forcing an error of at least $1/2$ on one side.",
+        "formula": "\\max\\{|c-1/2|,|c-3/2|\\}\\ge 1/2."
+      },
+      {
+        "title": "The error occupies a set of positive measure",
+        "text": "For any threshold strictly below $1/2$, the error exceeds it on one side of the jump. Continuity within that side gives an open set of failing inputs, which has positive measure. Changing the target only at the jump does not repair the essential-supremum bound.",
+        "formula": "d_\\infty(g,\\bar g)\\ge 1/2."
+      },
+      {
+        "title": "Why finite norms behave differently",
+        "text": "A continuous ramp can smooth the jump over a region of width proportional to $\\delta$. Its integrated error tends to zero for finite $p$, while the uniform error remains at least $1/2$. The cited Yun lemma uses precisely the finite-$p$ range.",
+        "formula": "\\|e_\\delta\\|_p=O(\\delta^{1/p})\\ \\ (p<\\infty),\\qquad\\|e_\\delta\\|_\\infty\\ge 1/2."
+      }
+    ],
+    "counterexample": "For $\\varepsilon=1$, Lemma 5 requires an approximation error at most $1/3$. The discontinuous target has uniform distance at least $1/2$ from every continuous approximant.",
+    "witnessFormula": "\\bar g(x)=x+\\mathbf1\\{x>1/2\\},\\qquad\\inf_{g\\in C([0,1])}\\|g-\\bar g\\|_\\infty\\ge\\frac12>\\frac13.",
+    "impact": "The appendix adds a uniform-approximation endpoint that the intermediate-network argument cannot support. Removing that endpoint brings the lemma back within the cited result’s range; this objection does not affect the main theorem’s stated finite-$p$ range.",
+    "practical": "The argument concerns the approximation lemma and its use in the appendix. It gives no conclusion about the training runs or experimental benchmarks.",
+    "repair": "Restrict Lemma 5 to $1\\le p<\\infty$ and remove the $p=\\infty$ endpoint from the appendix conclusion that depends on it. This is the range of the cited Yun et al. Lemma 9. The mathematical distinction is visible in a centered continuous ramp: smoothing a unit jump over $[1/2-\\delta,1/2+\\delta]$ gives $\\|e_\\delta\\|_p^p=2^{1-p}\\delta/(p+1)$ for finite $p$, while $\\|e_\\delta\\|_\\infty=1/2$. The smoothing error can therefore vanish for finite $p$ while remaining bounded away from zero in the uniform norm. Restricting the lemma to the cited finite-$p$ range retains the range needed by the main-text Theorem 1. A uniform theorem for continuous targets would require a separate construction that controls the transition regions in the uniform norm.",
+    "repairFormula": null,
+    "repairProofFormula": null,
+    "implementation": "No code change follows from restricting the lemma to finite $p$. A uniform-error guarantee requires a separate approximation argument for continuous targets.",
+    "caveats": [
+      "The discontinuous-target statement in Lemma 5 is false at $p=\\infty$; the main-text finite-$p$ theorem is outside this obstruction.",
+      "A separate uniform theorem for continuous targets could still hold.",
+      "The witness belongs to the modified activation class. Ordinary finite softmax/ReLU transformers remain continuous."
+    ],
+    "correctionSearch": "The cited Yun lemma already restricts approximation to finite $p$; that restriction is part of the original result. The inspected paper versions and public discussions do not establish a later author correction of Big Bird’s added $p=\\infty$ endpoint.",
+    "sources": [
+      {
+        "label": "Big Bird, arXiv v2",
+        "url": "https://arxiv.org/pdf/2007.14062v2#page=21",
+        "location": "Lemma 5 and Appendix Theorem 2, PDF p. 21; main Theorem 1, PDF p. 5"
+      },
+      {
+        "label": "Published NeurIPS supplement",
+        "url": "https://papers.nips.cc/paper/2020/file/c8512d142a2d849725f31a9a7a361ab9-Supplemental.pdf#page=5",
+        "location": "Lemma 5, PDF p.5 / printed p.20"
+      },
+      {
+        "label": "Yun et al., Are Transformers Universal Approximators?",
+        "url": "https://arxiv.org/pdf/1912.10077v2#page=14",
+        "location": "Modified activation class, PDF p.5; finite-p Lemma 9, PDF p.14"
+      },
+      {
+        "label": "Sumformer: Universal Approximation of Permutation Equivariant Functions",
+        "url": "https://proceedings.mlr.press/v221/alberti23a/alberti23a.pdf",
+        "location": "Section 4.2 and Appendix B: separate finite-p and continuous-target uniform constructions"
+      },
+      {
+        "label": "Author repository public issues",
+        "url": "https://github.com/google-research/bigbird/issues?q=is%3Aissue",
+        "location": "Open and closed issue history"
+      }
+    ],
+    "auditId": "E-ARC-15",
+    "primaryUrl": "https://arxiv.org/pdf/2007.14062v2#page=21",
+    "citationCount": 3071,
+    "citationUrl": "https://www.semanticscholar.org/paper/044e13d7dd4e0655eb76f0bd00b2c1bdb44e2be3",
+    "paperSummary": "Big Bird introduces sparse attention that combines local, random and global connections so that attention costs grow linearly with sequence length when the number of connections per token is fixed. The paper argues that this design retains key expressive and computational properties of full attention, and evaluates its longer context on language and genomics tasks.",
+    "theoryRole": "Lemma 5 transfers a modified hardmax construction to ordinary softmax/ReLU networks. Its claimed $p=\\infty$ endpoint supports the extra uniform conclusion in the appendix. The main-text theorem already assumes finite $p$.",
+    "severity": "repairable",
+    "issueTypes": [
+      "lemma_error",
+      "citation_hypothesis_mismatch"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "transformers-statisticians-local-smoothness",
+    "title": "Transformers as Statisticians: Provable In-Context Learning with In-Context Algorithm Selection",
+    "issueTitle": "A perturbed gradient step can leave the smoothness region",
+    "year": 2023,
+    "category": "Transformers & in-context learning",
+    "status": "counterexample",
+    "version": "arXiv v2 (6 July 2023); NeurIPS 2023 published version",
+    "location": "arXiv v2 Lemma 14, PDF pp.11–12; proof Appendix C.4, p.40. Published NeurIPS Lemma D.1, p.28; proof Appendix E.3, p.34.",
+    "originalClaim": "Lemma D.1 considers convex gradient descent and perturbed gradient descent initialized at zero. It assumes an $L_f$-Lipschitz gradient only on the origin-centred ball of radius $R$, a minimizer satisfying $2\\|w^*\\|_2\\le R$, and steps of size $0<\\eta\\le2/L_f$. For $L\\le R/(2\\varepsilon)$, it claims linear error accumulation and the following radius bound. Here $L$ is the number of updates, and each additive update perturbation has Euclidean norm at most $\\varepsilon$.",
+    "formula": "\\|\\widehat w^L-w^L_{\\rm GD}\\|_2\\le L\\varepsilon,\\qquad\\|\\widehat w^L\\|_2\\le R/2+L\\varepsilon\\le R.",
+    "assumptions": [
+      "$f$ is convex on $\\mathbb R^d$ and has a global minimizer $w^*$.",
+      "Its gradient is $L_f$-Lipschitz on the origin-centred ball $B_2^d(R)$.",
+      "$R\\ge2\\|w^*\\|_2$, $0<\\eta\\le2/L_f$, both initial iterates are zero, $\\|e^\\ell\\|_2\\le\\varepsilon$, and $L\\le R/(2\\varepsilon)$."
+    ],
+    "plainExplanation": "The proof bounds distance from the minimizer $w^*$ and uses that estimate as a bound on distance from the origin. From a zero initialization, the resulting origin bound is $2\\|w^*\\|_2$, before adding perturbations. The stated assumptions allow this term to use the entire radius $R$. A perturbed step can then leave the ball, where the local smoothness condition no longer controls the following update.",
+    "steps": [
+      {
+        "title": "A convex objective with local smoothness",
+        "text": "The quadratic is centred at $1$; the nonnegative quartic term begins at $2$. The function is globally convex and $C^3$. On $[-2,2]$, its derivative is $w-1$, so the gradient has Lipschitz constant $1$ and the unique minimizer is $w^*=1$.",
+        "formula": "f(w)=\\tfrac12(w-1)^2+250(w-2)_+^4,\\quad f\\prime(w)=w-1+1000(w-2)_+^3."
+      },
+      {
+        "title": "Parameters allowed by the lemma",
+        "text": "Take $R=2$, $L_f=1$, $\\eta=2$, $\\varepsilon=0.1$ and $L=2$. Then $R=2|w^*|$, $\\eta=2/L_f$, and $2\\le R/(2\\varepsilon)=10$. Perturb only the first update by $0.1$.",
+        "formula": "(R,L_f,\\eta,\\varepsilon,L)=(2,1,2,0.1,2),\\quad(e^0,e^1)=(0.1,0)."
+      },
+      {
+        "title": "The exact iterates stay in the ball",
+        "text": "At zero the derivative is $-1$, so exact gradient descent moves to $2$. At $2$ the derivative is $1$, so the next update returns to zero.",
+        "formula": "w^0_{\\rm GD}=0,\\quad w^1_{\\rm GD}=2,\\quad w^2_{\\rm GD}=0."
+      },
+      {
+        "title": "A perturbation leaves the ball",
+        "text": "The first perturbed update reaches $2.1$, outside the ball. There the quartic term contributes $1$ to the derivative, giving $f\\prime(2.1)=1.1+1=2.1$. The next update reaches $-2.1$.",
+        "formula": "\\widehat w^1=2.1,\\quad f\\prime(2.1)=2.1,\\quad\\widehat w^2=2.1-2(2.1)=-2.1."
+      },
+      {
+        "title": "Both bounds fail",
+        "text": "The two-step discrepancy is $2.1$, exceeding $2\\varepsilon=0.2$. The first-step radius is $2.1$, exceeding $R/2+\\varepsilon=1.1$. The final proof inequality controls distance from $w^*$ and cannot serve as an origin-radius bound. Even the exact first iterate $2$ violates the asserted radius $1.1$.",
+        "formula": "|\\widehat w^2-w^2_{\\rm GD}|=2.1>0.2;\\quad|\\widehat w^1|=2.1>1.1."
+      }
+    ],
+    "counterexample": "Every printed numerical hypothesis holds, but the two-step error is $2.1>0.2$ and the first-step radius is $2.1>1.1$.",
+    "witnessFormula": "f(w)=\\frac12(w-1)^2+250(w-2)_+^4,\\quad 0\\to2\\to0,\\quad0\\to2.1\\to-2.1,\\quad2.1>2\\varepsilon=0.2.",
+    "impact": "The lemma supplies the error-accumulation estimate used after Theorem D.1, but a permitted perturbation can invalidate it after two updates. The corrected radius condition restores the local stability argument and states how much space the approximate updates need.",
+    "practical": "The result concerns the stability bound used to analyze approximate updates. It does not measure the trained transformers or their experimental predictions.",
+    "repair": "For a prescribed horizon $L$, require $2\\|w^*\\|_2+L\\varepsilon\\le R$ and replace the radius conclusion by $$\\|\\widehat w^\\ell\\|_2\\le2\\|w^*\\|_2+\\ell\\varepsilon\\le R,\\qquad0\\le\\ell\\le L.$$ Within the smoothness ball, $T_\\eta(w)=w-\\eta\\nabla f(w)$ is nonexpansive. Comparing each update with its fixed point $w^*$ gives $\\|\\widehat w^\\ell-w^*\\|_2\\le\\|w^*\\|_2+\\ell\\varepsilon$; the triangle inequality supplies the corrected origin bound. This keeps each update input inside the ball and makes the induction legitimate. Comparing the two trajectories then yields $\\|\\widehat w^\\ell-w^\\ell_{\\rm GD}\\|_2\\le\\ell\\varepsilon$. Any use in the transformer construction must allow this same headroom.",
+    "repairFormula": "2\\|w^*\\|+L\\varepsilon\\le R\\quad\\Longrightarrow\\quad\\|\\widehat w^\\ell\\|\\le2\\|w^*\\|+\\ell\\varepsilon\\le R.",
+    "repairProofFormula": "\\|\\widehat w^\\ell-w^*\\|_2\\le\\|w^*\\|_2+\\ell\\varepsilon,\\qquad\\|\\widehat w^\\ell\\|_2\\le2\\|w^*\\|_2+\\ell\\varepsilon\\le R.",
+    "implementation": "Allow the corrected headroom in both the smoothness region and the region where a transformer layer approximates the update. A projected algorithm is a different update rule and requires its own analysis.",
+    "caveats": [
+      "The witness refutes the supporting lemma, without refuting every existential network construction in Theorem D.1.",
+      "Global smoothness restores the trajectory-difference bound but does not restore the printed origin-radius bound.",
+      "The corrected headroom must be propagated to any theorem using this local lemma."
+    ],
+    "correctionSearch": "Both the NeurIPS 2023 paper and arXiv v2 retain the selected radius and error bounds. The author publication listing and repository contain no identified correction notice for this lemma.",
+    "sources": [
+      {
+        "label": "Published NeurIPS paper",
+        "url": "https://papers.neurips.cc/paper_files/paper/2023/file/b2e63e36c57e153b9015fece2352a9f9-Paper-Conference.pdf#page=28",
+        "location": "Lemma D.1 and its use after Theorem D.1, p.28; proof p.34"
+      },
+      {
+        "label": "arXiv v2",
+        "url": "https://arxiv.org/pdf/2306.04637v2#page=11",
+        "location": "Lemma 14, pp.11–12; proof Appendix C.4, p.40"
+      },
+      {
+        "label": "Author publication page",
+        "url": "https://yubai.org/",
+        "location": "Publication listing checked for a revised or correction link"
+      },
+      {
+        "label": "Author code repository",
+        "url": "https://github.com/allenbai01/transformers-as-statisticians/issues?q=is%3Aissue",
+        "location": "All-state issue listing was empty on retrieval"
+      },
+      {
+        "label": "Later reuse: In-Context Algorithm Emulation in Fixed-Weight Transformers",
+        "url": "https://openreview.net/pdf?id=BC7YLA0zJ0",
+        "location": "Lemma D.4, p.34, reproduces the same local-smoothness statement; only this reuse was checked"
+      }
+    ],
+    "auditId": "IARC-073",
+    "primaryUrl": "https://papers.neurips.cc/paper_files/paper/2023/file/b2e63e36c57e153b9015fece2352a9f9-Paper-Conference.pdf#page=28",
+    "citationCount": 348,
+    "citationUrl": "https://www.semanticscholar.org/paper/70c3d5ab03a54281be91709b19e3f50a2e4be0e3",
+    "paperSummary": "This paper constructs transformers that carry out familiar learning algorithms, such as regression and gradient descent, using examples in a prompt without updating the transformer’s weights. It also shows how a single transformer can select an algorithm or task from the supplied data. The analysis gives quantitative prediction and pretraining guarantees for specified statistical settings, alongside experiments on algorithm selection.",
+    "theoryRole": "The selected lemma controls how errors accumulate when transformer layers approximate successive steps of convex gradient descent, supporting quantitative guarantees for that construction. Its failure means the argument needs a valid bound keeping the iterates inside the region where the update is controlled; it does not invalidate every construction in the paper.",
+    "severity": "repairable",
+    "issueTypes": [
+      "lemma_error",
+      "incorrect_bound",
+      "missing_assumption"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "implicit-bayesian-icl-prior-shift",
+    "title": "An Explanation of In-context Learning as Implicit Bayesian Inference",
+    "issueTitle": "Close priors can give different conditional predictions",
+    "year": 2021,
+    "category": "Transformers & in-context learning",
+    "status": "counterexample",
+    "version": "v6",
+    "location": "Assumption 3, PDF p.5; Lemma 1 and proof, Appendix C, pp.17–18, equations (31)–(47), arXiv v6.",
+    "originalClaim": "Assumption 3 bounds the total-variation distance between the prompt's hidden start distribution and every transition distribution following a delimiter. Lemma 1 uses this condition to claim that, once the correct concept $\\theta^*$ is known, the model and prompt predictors have the same most likely label after observing $x$. Write $\\Delta>0$ for the gap between the prompt predictor’s largest and second-largest label probabilities at the evaluated input.",
+    "formula": "\\arg\\max_y\\sum_{h\\in\\mathcal H}p(y\\mid x,h,\\theta^*)p(h\\mid S_n,x,\\theta^*)=\\arg\\max_y p_{\\rm prompt}(y\\mid x).",
+    "assumptions": [
+      "The prompt and model use the same HMM transition and emission rules under $\\theta^*$; their hidden start priors may differ.",
+      "$\\Delta$ is the prompt predictive margin after observing $x$, while Assumption 3 bounds priors before observing $x$.",
+      "The five-state witness has strictly positive transitions and a unique state that emits the delimiter.",
+      "A uniform pretraining hidden-state start and a singleton concept family with probability-one concept prior complete the delimiter, well-specification and positivity conditions. The public conclusion remains scoped to Lemma 1."
+    ],
+    "plainExplanation": "Observing $x$ can amplify a small difference between hidden-state priors. The proof forms a predictive matrix $W$ whose columns sum to input likelihoods, then treats $Wu$ and $Wv$ as normalized conditional probabilities. Each vector needs its own evidence normalizer. A positive normalizer leaves an individual argmax unchanged, but it changes the probability margin used to compare the two predictors.",
+    "steps": [
+      {
+        "title": "Conditioning changes the normalisation",
+        "text": "For $W_{yh}=p(y\\mid x,h,\\theta^*)p(x\\mid h,\\theta^*)$, each column sums to $p(x\\mid h,\\theta^*)$. The prediction from a prior $u$ is $Wu$ divided by its total mass. Equations (37)–(38) omit that denominator. Normalization preserves each argmax separately, but it changes the probability margin used to compare them.",
+        "formula": "q_u(y\\mid x)=\\frac{(Wu)_y}{\\mathbf1^\\top Wu},\\qquad\\sum_y W_{yh}=p(x\\mid h)."
+      },
+      {
+        "title": "Close priors can predict different labels",
+        "text": "The two-state calculation illustrates the effect. Use priors $u=(0.04,0.96)$ and $v=(0.005,0.995)$, input likelihoods $(0.9,0.01)$, and labels identifying the branch. Their prior TV distance is $0.035$. Conditioning reverses which branch is most likely.",
+        "formula": "\\frac{0.04(0.9)}{0.04(0.9)+0.96(0.01)}\\approx0.78947,\\qquad\\frac{0.005(0.9)}{0.005(0.9)+0.995(0.01)}\\approx0.31142."
+      },
+      {
+        "title": "The construction fits the HMM setting",
+        "text": "The HMM witness has states $A_x,B_x,A_y,B_y,D$. The first two emit $x$ with probabilities $0.9$ and $0.01$, otherwise $z$; the other three emit $a,b,\\#$ deterministically. The transition matrix $T_0$ sends $A_x$ to $A_y$, $B_x$ to $B_y$, both label states to $D$, and $D$ to $0.005A_x+0.995B_x$. Set $T=0.999T_0+0.0002\\mathbf1\\mathbf1^\\top$. Every transition is positive. A prompt such as $[x,a,\\#]$ has positive probability, and the terminal delimiter makes the next model prior exactly $T_D$.",
+        "formula": "T=0.999T_0+0.0002\\mathbf1\\mathbf1^\\top,\\qquad\\min_{i,j}T_{ij}=0.0002."
+      },
+      {
+        "title": "The prior-TV condition holds",
+        "text": "The prompt start prior is $u=0.999(0.04,0.96,0,0,0)+0.0002\\mathbf1^\\top$. Its TV distance from $T_D$ is $0.034965$. Across the five one-token inputs $x,z,a,b,\\#$, the smallest prompt margin is approximately $0.57995488$. Therefore Assumption 3 holds for every input.",
+        "formula": "0.034965<\\min_x\\Delta(x)/4,\\qquad\\min_x\\Delta(x)/4\\approx0.14498872."
+      },
+      {
+        "title": "The conditional argmax reverses",
+        "text": "On input $x$, the prompt assigns probability approximately $0.78967744$ to $a$ and approximately $0.20972256$ to $b$. The model instead assigns probability approximately $0.67966461$ to $b$ and approximately $0.31973539$ to $a$. The transition rules and concept agree; the different pre-emission priors produce opposite conditional labels.",
+        "formula": "\\arg\\max q_u(\\cdot\\mid x)=a\\ne b=\\arg\\max q_{T_D}(\\cdot\\mid x)."
+      }
+    ],
+    "counterexample": "The exact HMM calculation gives $\\operatorname{TV}(u,T_D)=0.034965<\\Delta(x)/4$ for every input, but the two predictors have different maximizers at $x$.",
+    "witnessFormula": "\\operatorname{TV}(u,T_D)=0.034965<\\Delta/4,\\quad q_u(a\\mid x)\\approx0.78967744,\\quad q_{T_D}(b\\mid x)\\approx0.67966461.",
+    "impact": "Lemma 1 connects recovery of the correct concept to agreement with the prompt predictor. The prior-distance condition does not establish that connection. The posterior or evidence-scaled condition restores it for the lemma and must be carried into any result that uses the lemma.",
+    "practical": "The witness concerns the ideal HMM predictor in Lemma 1. It does not evaluate the synthetic-data experiments or trained language models.",
+    "repair": "Retain the evidence normalizers and replace the prior condition by a bound on the hidden-state distributions after observing $x$: $$\\operatorname{TV}\\!\\left(p_{\\rm prompt}(h\\mid x),p(h\\mid S_n,x,\\theta^*)\\right)<\\Delta/2.$$ The common conditional label kernel cannot increase total variation, so each label probability moves by less than $\\Delta/2$ and the unique maximizer is preserved. A sufficient condition stated directly in terms of the original priors is $$\\delta<\\frac{p_{\\rm prompt}(x)\\Delta}{2},\\qquad\\delta=\\max_{d\\in\\mathcal D}\\operatorname{TV}(u,T_d).$$ Indeed, conditioning yields a posterior distance at most $\\delta/p_{\\rm prompt}(x)$. This exposes the additional accuracy needed when the observed input has small probability. Here $\\mathcal D$ is the delimiter-state set, and $T_d$ is the transition row following delimiter state $d$. In the proof bound below, $u^x$ and $v^x$ are the priors conditioned on $x$, and $p_u(x)$ and $p_v(x)$ are the corresponding input probabilities.",
+    "repairFormula": "\\operatorname{TV}(u(\\cdot\\mid x),v(\\cdot\\mid x))<\\Delta/2\\quad\\Longrightarrow\\quad\\arg\\max q_u=\\arg\\max q_v.",
+    "repairProofFormula": "\\operatorname{TV}(u^x,v^x)\\le\\frac{\\operatorname{TV}(u,v)}{\\max\\{p_u(x),p_v(x)\\}}\\le\\frac{\\delta}{p_{\\rm prompt}(x)}<\\frac{\\Delta}{2}.",
+    "implementation": "Compute each conditional prediction with its own evidence normalizer. To justify label agreement from a prior-shift condition, include the input likelihood in the bound or directly control the conditional hidden-state distribution.",
+    "caveats": [
+      "The two-state example illustrates conditioning; the five-state HMM supplies the witness in the paper’s model.",
+      "The result is scoped to Lemma 1; the main proof uses this lemma, but a complete main-theorem counterexample is not claimed.",
+      "Correct normalization alone does not guarantee label agreement. The sufficient repair strengthens the distributional condition."
+    ],
+    "correctionSearch": "ArXiv v6 retains Assumption 3 and the selected normalization argument. The five author-repository issues and their eight accessible comments do not identify a correction to this lemma.",
+    "sources": [
+      {
+        "label": "arXiv v6",
+        "url": "https://arxiv.org/pdf/2111.02080v6#page=17",
+        "location": "Assumption 3, p.5; Lemma 1, pp.17–18; equations (33)–(38) and (44)"
+      },
+      {
+        "label": "Author code repository",
+        "url": "https://github.com/p-lambda/incontext-learning/issues?q=is%3Aissue",
+        "location": "All five issue bodies inspected; none addressed this lemma"
+      },
+      {
+        "label": "Author explanation",
+        "url": "https://ai.stanford.edu/blog/understanding-incontext/",
+        "location": "2022 explanation and limitations; no correction to the prior-TV lemma identified"
+      },
+      {
+        "label": "Later Bayesian model-averaging analysis",
+        "url": "https://arxiv.org/html/2305.19420",
+        "location": "Section 4.1, Proposition 4.1 and discussion of Xie et al.; no repair of the selected prior-TV implication identified"
+      },
+      {
+        "label": "Later kernel-regression analysis",
+        "url": "https://arxiv.org/html/2305.12766",
+        "location": "Sections 3.2–3.3 and Appendix A; different covariance-based assumptions, not a correction of Lemma 1"
+      },
+      {
+        "label": "Dual Operating Modes of In-Context Learning",
+        "url": "https://arxiv.org/html/2402.18819",
+        "location": "Sections 2 and 5.3 discuss biased inputs and task retrieval; no statement addressing the selected hidden-start-prior bound identified"
+      }
+    ],
+    "auditId": "IARC-072",
+    "primaryUrl": "https://arxiv.org/pdf/2111.02080v6#page=17",
+    "citationCount": 1152,
+    "citationUrl": "https://www.semanticscholar.org/paper/10bd4160b44803ada6a3d2e366c44b7e2a4ffe90",
+    "paperSummary": "This paper explains in-context learning as inference about a hidden concept shared by examples in a prompt. In a model where documents come from hidden Markov models, it analyzes when an ideal predictor can recover the relevant concept despite differences between prompts and pretraining data. Experiments on synthetic data explore related behaviour in transformers and recurrent models.",
+    "theoryRole": "Lemma 1 connects knowing the correct concept to predicting the prompt’s most likely label, providing a bridge in the main convergence argument. The counterexample shows that its assumption on starting distributions does not justify this bridge after conditioning on the input; it does not establish a failure of the main theorem under all of its assumptions.",
+    "severity": "repairable",
+    "issueTypes": [
+      "lemma_error",
+      "missing_assumption",
+      "invalid_inference"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "cql-linear-projection",
+    "title": "Conservative Q-Learning for Offline Reinforcement Learning",
+    "issueTitle": "CQL's projected conservative penalty can be negative",
+    "year": 2020,
+    "category": "Reinforcement learning",
+    "status": "counterexample",
+    "version": "arXiv:2006.04779v3, 19 August 2020; also present in the NeurIPS 2020 supplement",
+    "location": "Theorem D.1, printed pp20–22; projected-penalty argument immediately after equation (16), p21.",
+    "originalClaim": "Appendix D.1 permits arbitrary linear features $F$ with invertible $F^\\top DF$. Its proof asserts that projecting the conservative penalty preserves a nonnegative policy average. The paragraph after Theorem D.1 further states that an exactly representable Bellman target makes every $\\alpha>0$ sufficient for a lower bound. Here $F$ is the feature matrix, $D$ is the diagonal data-weight matrix, $\\beta$ is the behavior policy, $\\pi$ is the evaluated policy, and $\\alpha$ is the penalty weight.",
+    "formula": "P_F=F(F^\\top D F)^{-1}F^\\top D,\\qquad \\pi^\\top P_F\\!\\left(\\frac{\\pi-\\beta}{\\beta}\\right)\\ge 0",
+    "assumptions": [
+      "One discounted state, two actions and deterministic return to the same state, with $\\gamma=1/2$.",
+      "The behavior policy is $\\beta=(1/2,1/2)$ and the evaluated policy is $\\pi=(9/10,1/10)$, so both actions have positive support.",
+      "The critic is $Q_w=(w,2w)$, with $D=\\operatorname{diag}(1/2,1/2)$ and $F^\\top DF=5/2$, so the required inverse exists.",
+      "Use an exact population backup, $\\alpha=1$, rewards $r=(9/20,29/20)$ and initial critic $Q^\\pi=(1,2)$."
+    ],
+    "plainExplanation": "An orthogonal projection in the data-weighted inner product need not preserve the sign of a policy average. For the permitted feature space below, the projected conservative penalty has negative policy average. Subtracting it raises the estimated policy value, even though the Bellman target is exactly representable.",
+    "steps": [
+      {
+        "title": "An exactly representable Bellman target",
+        "text": "The true policy value is $(9/10)\\cdot1+(1/10)\\cdot2=11/10$. The chosen rewards give Bellman target $r+\\gamma(11/10)=(1,2)$, which lies exactly in the feature space. Sampling and representation error both vanish.",
+        "formula": null
+      },
+      {
+        "title": "The penalty favours increasing the weight",
+        "text": "For $Q_w=(w,2w)$, the conservative term is $\\alpha(11w/10-3w/2)=-2\\alpha w/5$, while half the behavior-weighted squared Bellman error is $5(w-1)^2/4$. The regularizer favors increasing $w$.",
+        "formula": null
+      },
+      {
+        "title": "The minimizer raises the estimate",
+        "text": "The strictly convex objective has derivative zero at $w=1+4\\alpha/25$. For $\\alpha=1$, the minimizer is $29/25$ and its policy value is $(11/10)(29/25)=319/250=1.276$.",
+        "formula": null
+      },
+      {
+        "title": "The policy value is too high",
+        "text": "The true policy value is $11/10=1.1$. The estimate exceeds it by $22/125=0.176$.",
+        "formula": null
+      },
+      {
+        "title": "The tabular update remains conservative",
+        "text": "At $\\alpha=1$, the tabular update is $(1,2)-(4/5,-4/5)=(1/5,14/5)$, whose policy value is $23/50=0.46$. Projection reverses the regularizer’s effect.",
+        "formula": null
+      },
+      {
+        "title": "Projection reverses the penalty’s sign",
+        "text": "The $D$-orthogonal projector is $P_F=\\begin{pmatrix}1/5&2/5\\\\2/5&4/5\\end{pmatrix}$. It maps $h=(\\pi-\\beta)/\\beta=(4/5,-4/5)$ to $P_Fh=(-4/25,-8/25)$, whose policy average is $-22/125$. This contradicts the universal nonnegativity assertion.",
+        "formula": null
+      },
+      {
+        "title": "The source explicitly includes the realizable case",
+        "text": "The paragraph after Theorem D.1 says that every $\\alpha>0$ suffices when the target is representable and projection bias vanishes. This construction has those properties. The contradiction does not require resolving the displayed threshold’s ambiguous vector notation.",
+        "formula": null
+      }
+    ],
+    "counterexample": "At $\\alpha=1$, the objective has minimizer $w=29/25$. Its policy value is $319/250$, exceeding the true value $11/10$ by $22/125$ despite an exact Bellman target and a realizable critic.",
+    "witnessFormula": "J_\\alpha(w)=\\frac54(w-1)^2-\\frac{2\\alpha}{5}w,\\quad w_\\alpha=1+\\frac{4\\alpha}{25},\\quad \\widehat V_\\alpha-V^\\pi=\\frac{22\\alpha}{125}>0",
+    "impact": "The original linear-feature extension does not obtain conservatism from realizability alone. A statewise projection condition and a valid bias threshold restore the iterative policy-value guarantee on a non-tabular feature subclass.",
+    "practical": "The example concerns the guarantee for arbitrary linear features. It gives no conclusion about the separate tabular guarantee or the reported neural-network benchmarks.",
+    "repair": "A sufficient correction uses separate feature blocks for each state, with the constant function represented in every block. For $D_s=\\operatorname{diag}(\\beta(\\cdot\\mid s))$, let $P_s$ be the weighted orthogonal projector and $h_s=\\pi_s/\\beta_s-\\mathbf1$. Then\n$$b_s=\\pi_s^\\top P_sh_s=\\|P_sh_s\\|_{D_s}^2\\ge0.$$\nThe identity uses $P_s\\mathbf1=\\mathbf1$ and policy normalization. It supplies a nonnegative penalty in each state, which a single global constant feature does not guarantee.\n\nFor the current exact Bellman target $y_{k,s}$, define $e_{k,s}=\\pi_s^\\top(P_s-I)y_{k,s}$. Choose a nonnegative scalar weight satisfying\n$$\\alpha_k\\ge\\max\\left\\{0,\\max_{s:b_s>0}\\frac{e_{k,s}}{b_s}\\right\\},\\qquad e_{k,s}\\le0\\ \\text{if }b_s=0.$$\nThe update then obeys $\\widehat V_{k+1}\\le r_\\pi+\\gamma P_\\pi\\widehat V_k$. Here $r_\\pi$ and $P_\\pi$ denote the policy-averaged reward vector and transition matrix, and $V_{k+1}=r_\\pi+\\gamma P_\\pi V_k$ is the unregularized tabular value sequence. Starting from $\\widehat V_0\\le V_0$, monotonicity of the tabular Bellman operator proves $\\widehat V_k\\le V_k$ at every iteration. The averaged threshold in the source controls only an averaged one-step bias; the statewise condition supplies the stronger induction hypothesis.\n\nIf each block represents its reward vector and all vectors $p(t\\mid s,\\cdot)$, every Bellman target is realizable and $e_{k,s}=0$. Every $\\alpha_k\\ge0$ then suffices. For fixed $\\alpha$, the values converge to\n$$\\widehat V_\\infty=V^\\pi-\\alpha(I-\\gamma P_\\pi)^{-1}b\\le V^\\pi.$$\nThis feature condition permits non-tabular action generalization: a two-state, four-action construction with two features per state has exact Bellman closure and strictly positive projected penalties. The correction narrows the feature class without changing the CQL objective.",
+    "repairFormula": null,
+    "repairProofFormula": null,
+    "implementation": "A lower-bound certificate for a shared linear critic must control the projected penalty and the projection error. A global certificate concerns their averages over states; a statewise certificate must establish the corresponding inequalities at each state.",
+    "caveats": [
+      "The original sign and realizable-case claims remain false for arbitrary linear features.",
+      "The corrected theorem uses state-block-diagonal features containing a constant and a statewise bias threshold with an explicit zero-penalty condition.",
+      "Representing each reward vector and transition column guarantees Bellman closure, so every nonnegative penalty weight is sufficient for the corrected iterative value guarantee.",
+      "This is a non-tabular feature restriction: actions within a state can share a low-dimensional feature representation. It does not recover arbitrary parameter sharing across states or a neural-critic theorem.",
+      "The optional value clip is inactive for the original counterexample: $2R_{\\max}/(1-\\gamma)=29/5$ exceeds both updated critic values."
+    ],
+    "correctionSearch": "The retrieved comment on repository issue #21 asks about tabular nonnegativity in Theorem 3.2 and does not include feature projection. It therefore does not establish an earlier report or an author correction of this projected-sign failure. The inspected public records do not resolve the Appendix D.1 construction.",
+    "sources": [
+      {
+        "label": "Current primary paper",
+        "url": "https://arxiv.org/pdf/2006.04779v3",
+        "location": "Theorem D.1 and proof, pp20–22"
+      },
+      {
+        "label": "Published supplement",
+        "url": "https://papers.nips.cc/paper/2020/file/0d2b2061826a5df3221116a5085a6052-Supplemental.pdf",
+        "location": "Theorem D.1; PDF pp7–9, printed pp20–22"
+      },
+      {
+        "label": "Related public discussion",
+        "url": "https://github.com/aviralkumar2907/CQL/issues/21",
+        "location": "Tabular nonnegativity discussion; distinct from projection through arbitrary features"
+      }
+    ],
+    "auditId": "E-RL-05",
+    "primaryUrl": "https://arxiv.org/pdf/2006.04779v3",
+    "citationCount": 2786,
+    "citationUrl": "https://www.semanticscholar.org/paper/28db20a81eec74a50204686c3cf796c42a020d2e",
+    "paperSummary": "CQL learns decision policies from a fixed collection of past experience, without collecting new interactions. It adds a penalty to the value-learning objective to discourage optimistic estimates for actions that the data do not support well, then uses those estimates to guide policy improvement.",
+    "theoryRole": "The selected theorem extends the lower-value guarantee from separate tabular values to critics that share parameters through linear features. That extension is an important bridge toward the neural critics used in practice; the tabular analysis is a separate result.",
+    "severity": "repairable",
+    "issueTypes": [
+      "false_statement",
+      "proof_gap",
+      "missing_assumption"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "bear-suboptimality-constant",
+    "title": "Stabilizing Off-Policy Q-Learning via Bootstrapping Error Reduction",
+    "issueTitle": "The BEAR bound misses the cost of the current action",
+    "year": 2019,
+    "category": "Reinforcement learning",
+    "status": "counterexample",
+    "version": "arXiv:1906.00949v2, 25 November 2019; NeurIPS 2019 main and supplement",
+    "location": "Definitions 4.1–4.2, Assumption 4.1 and Theorem 4.1, p4; proof in Appendix B.1, pp12–13.",
+    "originalClaim": "Theorem 4.1 bounds the value loss of the constrained greedy policies. Its suboptimality constant is $\\alpha(\\Pi)=\\|\\mathcal T^\\Pi Q^*-\\mathcal TQ^*\\|_\\infty$, where both operators are action-value backups. The pointwise Bellman error is bounded by $\\delta$, and $C(\\Pi)$ is the stated concentrability coefficient. Here $\\Pi$ is the allowed policy class, $Q^*$ is the optimal action-value function, $V^\\pi$ is the state value of policy $\\pi$, and $\\gamma$ is the discount factor. The distributions $\\rho_0$ and $\\mu$ describe initial states and data states, respectively. The display writes the source constant $\\alpha(\\Pi)$ as $\\alpha_Q(\\Pi)$.",
+    "formula": "\\alpha_Q(\\Pi)=\\|\\mathcal T^\\Pi Q^*-\\mathcal T Q^*\\|_\\infty,\\qquad \\delta=0\\Longrightarrow \\lim_k\\mathbb E_{\\rho_0}|V^{\\pi_k}-V^*|\\le \\frac{\\alpha_Q(\\Pi)}{1-\\gamma}",
+    "assumptions": [
+      "A finite discounted MDP has initial state $s_0$, absorbing state $s_1$, and $\\gamma=1/2$.",
+      "At $s_0$, actions $g$ and $b$ give rewards $1$ and $0$ and both move to $s_1$; rewards at $s_1$ are zero.",
+      "The allowed policy class is the singleton choosing $b$, also used by the behavior policy.",
+      "The discounted data-state marginal is $\\mu(s_0)=\\mu(s_1)=1/2$. Choosing $c(k)=2$ for every $k\\geq1$ yields $C(\\Pi)=2$.",
+      "Exact constrained iteration begins at $Q^*(s_0,\\cdot)=(1,0)$ and $Q^*(s_1,\\cdot)=(0,0)$, so every residual is zero."
+    ],
+    "plainExplanation": "An action-value backup keeps the current action fixed and restricts only future choices. Its discrepancy can therefore miss an immediate reward excluded by the policy constraint. The proof switches to a state-value contraction argument while retaining the action-value discrepancy.",
+    "steps": [
+      {
+        "title": "The exact Q-values",
+        "text": "All future rewards vanish at $s_1$, giving $Q^*(s_0,g)=1$, $Q^*(s_0,b)=0$, and $Q^*(s_1,\\cdot)=0$.",
+        "formula": null
+      },
+      {
+        "title": "The Q-backup discrepancy is zero",
+        "text": "Both operators keep the current reward and add a zero continuation value. Thus $\\mathcal T^\\Pi Q^*=\\mathcal TQ^*=Q^*$ and $\\alpha_Q=0$.",
+        "formula": null
+      },
+      {
+        "title": "Exact iteration has no residual error",
+        "text": "This table is a fixed point of constrained iteration, so $\\delta(s,a)=0$ at every step. The residual assumption does not require the dataset to identify the value of the excluded action.",
+        "formula": null
+      },
+      {
+        "title": "The policy still loses one unit",
+        "text": "The constrained policy chooses $b$, giving value $0$ at $s_0$ instead of the optimal value $1$.",
+        "formula": null
+      },
+      {
+        "title": "The claimed bound becomes zero",
+        "text": "Both error terms vanish, while $C(\\Pi)=2$ is finite. The displayed guarantee would therefore require $1\\leq0$.",
+        "formula": null
+      },
+      {
+        "title": "The proof changes Bellman operators",
+        "text": "Appendix B.1 uses a state-value backup, which includes the current action choice. Definition 4.2 instead uses action-value backups with the current action fixed; the contraction proof needs the former discrepancy.",
+        "formula": null
+      }
+    ],
+    "counterexample": "Use two states, an initial state $s_0$ and an absorbing state $s_1$, with $\\gamma=1/2$. At $s_0$, actions $g$ and $b$ give rewards $1$ and $0$ and both move to $s_1$; all rewards at $s_1$ are zero. Let $\\Pi$ contain only the policy choosing $b$, and use it as the behavior policy. Its discounted state marginal is $\\mu(s_0)=\\mu(s_1)=1/2$. For every $k\\geq1$, $c(k)=2$ satisfies the concentrability condition, giving $C(\\Pi)=2$. Initialize $Q_0=Q^*$, so $Q^*(s_0,g)=1$, $Q^*(s_0,b)=0$, and $Q^*(s_1,\\cdot)=0$. Both backup operators preserve this function: $$\\mathcal T^\\Pi Q^*=\\mathcal TQ^*=Q^*.$$ Thus $\\delta=\\alpha(\\Pi)=0$ at every iteration. The only permitted policy nevertheless has $V^{\\pi_k}(s_0)=0$, while $V^*(s_0)=1$. The theorem’s right side is zero and its left side is one.",
+    "witnessFormula": "\\alpha_Q=0,\\quad \\delta=0,\\quad C(\\Pi)=2,\\qquad V^*(s_0)-V^\\Pi(s_0)=1>0",
+    "impact": "A constraint can exclude the best first action even when it changes no continuation backup. Multiplying the original zero discrepancy by a larger constant cannot account for that loss; the discrepancy must include the current decision.",
+    "practical": "The witness uses exact iteration, a singleton rectangular policy class, finite concentrability, and an ordinary finite discounted MDP. The repair fixes the constraint-cost term and supplies a uniform approximation-error guarantee. It does not preserve the original distribution-weighted approximation term or imply an empirical failure of BEAR.",
+    "repair": "Measure the loss of the current choice with $$\\Delta_\\Pi=\\left\\|V^*-\\max_{\\pi\\in\\Pi}\\mathbb E_\\pi Q^*\\right\\|_\\infty.$$ For a rectangular policy restriction, which permits the allowed action distributions to be chosen independently at each state, define the state-value backup $T_\\Pi V(s)=\\max_{\\pi\\in\\Pi}\\mathbb E_\\pi[r(s,a)+\\gamma PV(s,a)]$. Here $r$ is the reward, $PV(s,a)$ is expected successor value, $T$ is the unrestricted state-value backup, and $V^\\Pi$ is the fixed point of $T_\\Pi$. Its contraction gives $$\\|V^*-V^\\Pi\\|_\\infty\\leq\\gamma\\|V^*-V^\\Pi\\|_\\infty+\\|TV^*-T_\\Pi V^*\\|_\\infty,$$ hence $\\|V^*-V^\\Pi\\|_\\infty\\leq\\Delta_\\Pi/(1-\\gamma)$. Here $\\Delta_\\Pi=1$, so the missing loss is detected. For approximate iteration, let $Q^\\Pi$ be the fixed point of the constrained action-value backup. If a uniform residual tolerance $\\varepsilon\\ge0$ satisfies $\\|Q_{k+1}-\\mathcal T^\\Pi Q_k\\|_\\infty\\leq\\varepsilon$ and $\\pi_k$ is constrained greedy for $Q_k$, contraction gives $\\limsup_k\\|Q_k-Q^\\Pi\\|_\\infty\\leq\\varepsilon/(1-\\gamma)$. Greedy selection then loses at most twice this action-value error per state, and policy evaluation adds a factor $1/(1-\\gamma)$. Therefore $$\\limsup_k\\|V^{\\pi_k}-V^*\\|_\\infty\\leq\\frac{\\Delta_\\Pi}{1-\\gamma}+\\frac{2\\varepsilon}{(1-\\gamma)^2}.$$ This uniform bound supplies a valid replacement without relying on the original distribution-weighted approximation coefficient.",
+    "repairFormula": null,
+    "repairProofFormula": null,
+    "implementation": "Performance certificates for support-restricted policies must account for the value of excluded current actions. Small Bellman residuals and benign state-distribution shift alone do not establish near-optimality.",
+    "caveats": [
+      "The witness satisfies the residual assumption and uses a singleton rectangular policy class.",
+      "The correction proves the exact constraint-cost term and a uniform approximation-error replacement. It does not certify the original distribution-weighted coefficient or the practical MMD constraint.",
+      "The calculation does not assess empirical benchmark performance."
+    ],
+    "correctionSearch": "The inspected arXiv history, related same-author tutorial, and author repository discussions do not supply an explicit correction of this constant. Public-search coverage remains partial and does not establish novelty.",
+    "sources": [
+      {
+        "label": "Current primary paper",
+        "url": "https://arxiv.org/pdf/1906.00949v2",
+        "location": "p4; Appendix B.1, pp12–13"
+      },
+      {
+        "label": "Published main paper",
+        "url": "https://papers.neurips.cc/paper/9349-stabilizing-off-policy-q-learning-via-bootstrapping-error-reduction.pdf",
+        "location": "Definitions 4.1–4.2 and Theorem 4.1, p4"
+      },
+      {
+        "label": "Related same-author tutorial",
+        "url": "https://arxiv.org/abs/2005.01643",
+        "location": "Offline RL policy-constraint discussion; no located repair of this constant"
+      }
+    ],
+    "auditId": "IR009",
+    "primaryUrl": "https://arxiv.org/pdf/1906.00949v2",
+    "citationCount": 1344,
+    "citationUrl": "https://www.semanticscholar.org/paper/82b4b03a4659d6e04bd7cbf51d6e08fde1348dbd",
+    "paperSummary": "BEAR studies why learning from a fixed dataset can become unstable when value updates rely on actions scarcely represented in that data. Its algorithm constrains the learned policy toward the data's action support while still trying to select rewarding actions within that support.",
+    "theoryRole": "The selected theorem formalizes the proposed trade-off between avoiding distribution shift and excluding good actions. Its suboptimality term is meant to measure the performance cost of the policy restriction.",
+    "severity": "repairable",
+    "issueTypes": [
+      "incorrect_bound",
+      "definition_error"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "combo-zero-penalty",
+    "title": "COMBO: Conservative Offline Model-Based Policy Optimization",
+    "issueTitle": "A zero conservative penalty cannot offset model bias",
+    "year": 2021,
+    "category": "Reinforcement learning",
+    "status": "counterexample",
+    "version": "arXiv:2102.08363v2, 27 January 2022; NeurIPS 2021",
+    "location": "Proposition 4.1, p5; Corollary A.1, pp17–18, especially equation (14). Lemma A.1, p15, permits a zero expected penalty.",
+    "originalClaim": "Proposition 4.1 and Corollary A.1 claim that a sufficiently large conservative weight $\\beta$ makes COMBO’s learned action value a lower bound in expectation under the initial distribution and policy. The analysis allows an interpolation between the empirical and learned-model Bellman backups. Here $\\pi$ is the evaluated policy, $\\mu_0$ the initial state distribution, $Q^\\pi$ its true action value, and $\\widehat Q^\\pi$ the learned estimate. Write $d$ for the data state-action distribution and $\\rho$ for the model state-action distribution. Lemma A.1 uses the interpolation $d_f=fd+(1-f)\\rho$.",
+    "formula": "\\widehat Q_{k+1}=\\widehat{\\mathcal B}^{\\pi}\\widehat Q_k-\\beta\\frac{\\rho-d}{d_f},\\qquad \\mathbb E_{\\mu_0,\\pi}\\widehat Q^\\pi\\le\\mathbb E_{\\mu_0,\\pi}Q^\\pi\\quad\\text{for sufficiently large }\\beta",
+    "assumptions": [
+      "There is one state and one action, with deterministic self-transition and $\\gamma=1/2$.",
+      "True and empirical rewards are zero; the learned-model reward is $1/10$.",
+      "The interpolation is $f=1/2$, all occupancies satisfy $\\rho=d=d_f=1$, and every denominator is positive.",
+      "Transitions are exact and empirical observations deterministic; the only error is the stated learned-reward bias."
+    ],
+    "plainExplanation": "The conservative update is proportional to the difference between model and data occupancies. Equal occupancies make that penalty vanish for every $\\beta$, even if the learned reward is positively biased. Lemma A.1 explicitly permits a zero penalty; the corollary’s proof subsequently treats it as strictly positive.",
+    "steps": [
+      {
+        "title": "Matching occupancies eliminate the penalty",
+        "text": "Every normalized occupancy equals $1$, so $(\\rho-d)/d_f=0$ and $\\nu(\\rho,f)=0$. Increasing $\\beta$ leaves the update unchanged.",
+        "formula": null
+      },
+      {
+        "title": "The backup retains reward bias",
+        "text": "The mixed reward is $f\\cdot0+(1-f)/10=1/20$. The continuation term is $\\widehat Q_k/2$.",
+        "formula": null
+      },
+      {
+        "title": "The biased fixed point is independent of $\\beta$",
+        "text": "The recursion $\\widehat Q_{k+1}=1/20+\\widehat Q_k/2$ converges to $\\widehat Q^\\pi=1/10$ independently of $\\beta$.",
+        "formula": null
+      },
+      {
+        "title": "The true value remains zero",
+        "text": "Every true reward is zero, giving $Q^\\pi=0$. The learned fixed point exceeds the true value by $1/10$.",
+        "formula": null
+      },
+      {
+        "title": "The proof needs strict positivity",
+        "text": "Lemma A.1 allows $\\nu=0$, but Eq. (14) labels it strictly positive when claiming that a large enough $\\beta$ removes the remaining error.",
+        "formula": null
+      },
+      {
+        "title": "The identity only guarantees nonnegativity",
+        "text": "For normalized distributions with positive denominators, $\\nu=f\\sum(\\rho-d)^2/d_f\\geq0$. Equal occupancies attain equality, so nonnegativity alone cannot justify strict positivity.",
+        "formula": null
+      }
+    ],
+    "counterexample": "Take one state and one action, deterministic self-transition, discount $\\gamma=1/2$, and interpolation $f=1/2$. The true and empirical reward are zero; the learned-model reward is $1/10$. Both transition models are exact. All occupancies are $\\rho=d=d_f=1$, so support is positive and $c=(\\rho-d)/d_f=0$. The empirical backup has no sampling error, and the interpolated reward is $1/20$. Hence the update is $$\\widehat Q_{k+1}=\\frac1{20}+\\frac12\\widehat Q_k-\\beta\\cdot0.$$ Its fixed point is $\\widehat Q^\\pi=1/10$, while $Q^\\pi=0$. This violates the claimed lower bound for every finite $\\beta$. The rewards and the resulting iterates are bounded, for example with $R_{\\max}=1$.",
+    "witnessFormula": "\\rho=d=d_f=1,\\quad \\nu=0,\\quad \\widehat Q_{k+1}=\\frac1{20}+\\frac12\\widehat Q_k,\\quad \\widehat Q^\\pi=\\frac1{10}>0=Q^\\pi",
+    "impact": "A large penalty coefficient has no effect when the penalty itself is zero. The corrected statement identifies when increasing $\\beta$ supplies pessimism and when a positive model bias must remain in the guarantee.",
+    "practical": "The counterexample refutes the unrestricted sufficiently-large-$\\beta$ claim at the allowed interpolation $f=1/2$. It preserves exact transitions and positive support. Choosing $f=1$ removes the model-reward bias in this example, but that is a change of interpolation, not a consequence of increasing $\\beta$. The earlier error-bearing bound and the empirical COMBO results are not refuted by this calculation.",
+    "repair": "Keep the bias term unless the effective conservative penalty can dominate it. For a fixed policy and interpolation on a finite state-action space, take $0\\le\\gamma<1$ and write the actual affine backup as $r_f+\\gamma P_fQ$, where $r_f$ and $P_f$ are its reward vector and stochastic transition matrix. Let $c=(\\rho-d)/d_f$, $S_f=(I-\\gamma P_f)^{-1}$, and let $u$ be the initial state-action distribution. The fixed-point equation gives $$\\widehat Q_\\beta=S_f(r_f-\\beta c),\\qquad u^\\top(\\widehat Q_\\beta-Q^\\pi)=B-\\beta\\kappa,$$ where $B=u^\\top(S_fr_f-Q^\\pi)$ and $\\kappa=u^\\top S_fc$. This identity proves the exact condition: $\\beta\\kappa\\geq B$. In particular, if a valid bias bound $B\\leq E$ is available and $\\kappa>0$, choosing $\\beta\\geq\\max\\{0,E/\\kappa\\}$ is sufficient. If $\\kappa=0$, a lower bound requires $B\\leq0$; increasing $\\beta$ cannot remove positive bias. If $\\kappa<0$, increasing $\\beta$ worsens the bound. Thus the theorem should require a positive effective penalty and a quantitative bias condition, or retain the residual bias in its conclusion. This argument uses the occupancy of the actual effective backup rather than assuming that its penalty coefficient is positive. Writing $r$ and $P$ for the true policy-evaluation reward vector and transition matrix, one usable bias bound is $$E=\\frac{e_r}{1-\\gamma}+\\frac{\\gamma e_PR_{\\max}}{(1-\\gamma)^2},$$ where $e_r\\geq\\|r_f-r\\|_\\infty$, $e_P\\geq\\max_i\\sum_j|(P_f-P)_{ij}|$, and $\\|r\\|_\\infty\\leq R_{\\max}$. Indeed, $S_fr_f-Q^\\pi=S_f[(r_f-r)+\\gamma(P_f-P)Q^\\pi]$, while $\\|S_f\\|_\\infty=(1-\\gamma)^{-1}$ and $\\|Q^\\pi\\|_\\infty\\leq R_{\\max}/(1-\\gamma)$. Thus certified reward and transition errors, together with $\\kappa>0$, yield an explicit sufficient choice of $\\beta$.",
+    "repairFormula": null,
+    "repairProofFormula": null,
+    "implementation": "If a certified lower bound is required, occupancy matching cannot replace a bound on reward/model error. One would need an independently justified error penalty or another assumption that prevents this zero-penalty case.",
+    "caveats": [
+      "The witness has full support and can use an arbitrarily small positive learned-reward bias.",
+      "A positive penalty under the model occupancy does not automatically identify the penalty coefficient of a mixed backup. The repaired statement uses its actual resolvent coefficient $\\kappa=u^\\top(I-\\gamma P_f)^{-1}c$.",
+      "The fixed-policy correction does not establish policy improvement or benchmark failure. A practical uncertainty penalty would require separate algorithmic evaluation."
+    ],
+    "correctionSearch": "The checked arXiv version, official NeurIPS supplement, and Kumar’s 2023 thesis retain the sufficiently-large-penalty claim. The thesis is a later restatement, not a correction. OpenReview and author-code coverage remain partial; these searches do not establish novelty.",
+    "sources": [
+      {
+        "label": "Current primary paper",
+        "url": "https://arxiv.org/pdf/2102.08363v2",
+        "location": "Proposition 4.1 p5; Lemma A.1 p15; Corollary A.1 pp17–18"
+      },
+      {
+        "label": "OpenReview version",
+        "url": "https://openreview.net/pdf?id=dUEpGV2mhf",
+        "location": "Section 4.1 and Appendix A"
+      },
+      {
+        "label": "Later same-author thesis",
+        "url": "https://www2.eecs.berkeley.edu/Pubs/TechRpts/2023/EECS-2023-223.pdf",
+        "location": "Theorem 5.2.1, PDF p. 63, repeats the sufficiently-large-penalty statement"
+      }
+    ],
+    "auditId": "IR012",
+    "primaryUrl": "https://arxiv.org/pdf/2102.08363v2",
+    "citationCount": 544,
+    "citationUrl": "https://www.semanticscholar.org/paper/245682e8b3fa76f4a3e2991b5497577af95cbb3f",
+    "paperSummary": "COMBO learns a model of the environment and uses simulated transitions alongside an offline dataset to train a policy. Its critic regularization is designed to make value estimates conservative on model-generated state-action pairs, without requiring a separate explicit uncertainty estimator.",
+    "theoryRole": "The selected proposition provides the expected lower-value guarantee that motivates this form of pessimism. It supports the paper's policy-improvement argument; it is distinct from the empirical evidence for the algorithm.",
+    "severity": "repairable",
+    "issueTypes": [
+      "missing_assumption",
+      "incorrect_bound"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "pac-bayes-finite-symmetry-mixture",
+    "title": "Computing Nonvacuous Generalization Bounds for Deep (Stochastic) Neural Networks with Many More Parameters than Training Data",
+    "issueTitle": "A finite set of symmetries need not give the stated KL reduction",
+    "year": 2017,
+    "category": "Optimization & generalization",
+    "status": "counterexample",
+    "version": "arXiv:1703.11008v2, 19 October 2017; UAI 2017 supplement",
+    "location": "Appendix B.1, Lemma B.1, arXiv PDF p. 11; original UAI supplement PDF p. 2.",
+    "originalClaim": "For any finite set of parameter symmetries preserving the prior, Lemma B.1 assigns an exact KL reduction to the equally weighted mixture of transformed posteriors. Write $P$ for the prior, $Q$ for the posterior, $S$ for the finite set of transformations, and $Q_\\sigma$ for the distribution obtained by applying $\\sigma$ to a draw from $Q$.",
+    "formula": "Q^S=\\frac1{|S|}\\sum_{\\sigma\\in S}Q_\\sigma,\\qquad \\mathrm{KL}(Q^S\\|P)=\\mathrm{KL}(Q\\|P)-\\mathrm{KL}(Q\\|Q^S)",
+    "assumptions": [
+      "The three-parameter network $h_w(x)=\\operatorname{sign}(\\sum_i\\operatorname{ReLU}(w_ix)-1)$ is unchanged by coordinate permutations.",
+      "The prior is $P=\\mathcal N(0,I_3)$. The regions $E_i$ in which coordinate $i$ is largest have probability $1/3$; ties have measure zero.",
+      "The posterior satisfies $dQ/dP=3q_i$ on $E_i$, with $q=(3/5,3/10,1/10)$. Its bounded positive density ratio gives finite differential entropy and finite KL.",
+      "The set $S$ contains the identity and one coordinate cycle. Both maps are invertible prior-preserving network symmetries, but the set is not closed under composition."
+    ],
+    "plainExplanation": "Averaging prior-preserving transformations can reduce KL, but the exact reduction involves every component of the mixture. Lemma B.1 replaces that average by the divergence of the original posterior alone. Full finite-group averaging justifies this replacement; an arbitrary finite subset does not.",
+    "steps": [
+      {
+        "title": "A partial cyclic mixture",
+        "text": "Choose the cycle whose sector masses are $q_\\sigma=(1/10,3/5,3/10)$. The equal mixture has masses $q^S=(7/20,9/20,1/5)$.",
+        "formula": null
+      },
+      {
+        "title": "Gaussian sectors reduce the integrals to sums",
+        "text": "The density ratio is constant in each equal-probability Gaussian sector. Each continuous KL integral is exactly a three-point categorical sum.",
+        "formula": null
+      },
+      {
+        "title": "The three KL terms",
+        "text": "The sums give $\\operatorname{KL}(Q\\|P)\\approx0.20066656381$, $\\operatorname{KL}(Q^S\\|P)\\approx0.04995849931$ and $\\operatorname{KL}(Q\\|Q^S)\\approx0.13244364995$.",
+        "formula": null
+      },
+      {
+        "title": "The claimed identity does not hold",
+        "text": "The printed difference is approximately $0.06822291386$. The exact actual-minus-claimed residual is $\\log(11664/16807)/20<0$.",
+        "formula": null
+      },
+      {
+        "title": "The error can also understate complexity",
+        "text": "With $q=(3/5,1/10,3/10)$, the actual mixture KL is unchanged but the claimed value is approximately $0.03169408476$. Thus the identity can understate complexity as well.",
+        "formula": null
+      },
+      {
+        "title": "The missing average over components",
+        "text": "The mixture decomposition subtracts the average of $\\operatorname{KL}(Q_\\sigma\\|Q^S)$. For a full finite group, invariance makes these divergences equal; a partial set need not have that invariance.",
+        "formula": null
+      }
+    ],
+    "counterexample": "Use the permutation-invariant network $h_w(x)=\\operatorname{sign}(\\sum_{i=1}^3\\operatorname{ReLU}(w_ix)-1)$ and prior $P=\\mathcal N(0,I_3)$. Let $E_i$ be the region where coordinate $i$ is largest, so $P(E_i)=1/3$, and set $dQ/dP=3q_i$ there, with $q=(3/5,3/10,1/10)$. The positive bounded density ratio gives an absolutely continuous posterior with finite differential entropy and finite KL. Average the identity and one coordinate cycle, whose transformed masses are $(1/10,3/5,3/10)$. The mixture masses are $(7/20,9/20,1/5)$. The continuous integrals reduce exactly to categorical sums: $\\operatorname{KL}(Q^S\\|P)\\approx0.04995849931$, whereas the claimed difference is approximately $0.06822291386$. The exact actual-minus-claimed difference is $\\log(11664/16807)/20$. Using $q=(3/5,1/10,3/10)$ reverses the discrepancy: the actual KL remains approximately $0.04995849931$, but the printed expression is approximately $0.03169408476$.",
+    "witnessFormula": "\\operatorname{KL}(Q^S\\|P)\\approx0.04995849931,\\qquad\\operatorname{KL}(Q\\|P)-\\operatorname{KL}(Q\\|Q^S)\\approx0.06822291386,\\qquad\\operatorname{KL}(Q^S\\|P)\\ne\\operatorname{KL}(Q\\|P)-\\operatorname{KL}(Q\\|Q^S).",
+    "impact": "The exact complexity reduction is wrong for a partial symmetry mixture and can underestimate the KL used in a certificate. The full-group correction preserves the intended symmetry result. The paper explicitly uses a different construction for its reported numerical bounds.",
+    "practical": "The reported numerical PAC-Bayes bounds used symmetry-breaking initialization rather than this mixture reduction. This auxiliary identity was not used to compute them.",
+    "repair": "For a finite collection of measurable bijections preserving $P$ and with $\\operatorname{KL}(Q\\|P)<\\infty$, use $$\\operatorname{KL}(Q^S\\|P)=\\operatorname{KL}(Q\\|P)-\\frac1{|S|}\\sum_{\\sigma\\in S}\\operatorname{KL}(Q_\\sigma\\|Q^S).$$ For the proof, write $p$, $q_\\sigma$ and $q^S$ for the prior, component and mixture densities with respect to a common reference measure. Expand $\\log(q_\\sigma/p)=\\log(q_\\sigma/q^S)+\\log(q^S/p)$, integrate and average. The second integral becomes the mixture KL; invariance makes each component-to-prior KL equal to the original KL. Alternatively, require $S$ to be a finite group and average over the whole group. Its mixture is invariant under every group element, so all component-to-mixture divergences equal $\\operatorname{KL}(Q\\|Q^S)$ and the printed identity follows. For noninvertible maps allowed by the original definition, the exact first term is instead the average of $\\operatorname{KL}(Q_\\sigma\\|P)$; data processing still proves KL non-increase.",
+    "repairFormula": null,
+    "repairProofFormula": null,
+    "implementation": "A certificate based on a partial symmetry mixture should evaluate the actual mixture KL or the complete average of component-to-mixture divergences. The inspected author code instead computes the Gaussian KL directly.",
+    "caveats": [
+      "The counterexample uses a finite set that is not a group, as the printed statement permits.",
+      "The full-group correction assumes measurable bijections and finite KL. Finite differential entropy alone does not rule out undefined subtraction of infinite KL terms.",
+      "For arbitrary noninvertible prior-preserving maps, data processing preserves the no-increase conclusion, while the exact mixture formula must retain the average component-to-prior KL.",
+      "The numerical PAC-Bayes bounds are outside this auxiliary counterexample."
+    ],
+    "correctionSearch": "The arXiv version history ends at v2, and the original UAI supplement repeats the finite-set identity. The inspected author repository contains five issue/PR entries and seven comments. Its duplicate-term and numerical-stability fixes concern the Gaussian bound calculation. They do not correct Lemma B.1. This search does not establish whether an earlier exact report exists. Lyle et al. (2020), Lemma 6 and Theorem 7, and Beck–Ochs v2 (2026), Lemma 1.4 and Lemma 3.4, concern deterministic pushforwards of functions. They supply related KL identities rather than an exact report or author correction of the finite-set parameter-mixture claim.",
+    "sources": [
+      {
+        "label": "Current primary paper",
+        "url": "https://arxiv.org/pdf/1703.11008v2",
+        "location": "Appendix B.1, Lemma B.1, p11"
+      },
+      {
+        "label": "Later invariance analysis",
+        "url": "https://arxiv.org/abs/2005.00178",
+        "location": "Group-based function averaging; a distinct operation from arbitrary finite mixtures of parameter distributions"
+      },
+      {
+        "label": "Later PAC-Bayes symmetry analysis",
+        "url": "https://arxiv.org/pdf/2510.17303v2",
+        "location": "Lemma 1.4 and averaging-operator construction; general deterministic-pushforward decomposition"
+      },
+      {
+        "label": "Original UAI 2017 supplement",
+        "url": "https://auai.org/uai2017/proceedings/supplements/173.pdf",
+        "location": "Appendix B.1, Lemma B.1, physical PDF p. 2"
+      }
+    ],
+    "auditId": "IO-1703.11008",
+    "primaryUrl": "https://arxiv.org/pdf/1703.11008v2",
+    "citationCount": 975,
+    "citationUrl": "https://www.semanticscholar.org/paper/540c226fdf7047ac602c7cb05a18db19ee595df0",
+    "paperSummary": "This paper computes informative numerical generalization bounds for stochastic neural networks, including networks with many more parameters than training examples. It optimizes a PAC-Bayes objective that balances measured training error against the complexity of a distribution over network weights.",
+    "theoryRole": "The selected appendix lemma explores whether averaging equivalent parameter settings can further reduce the complexity term. It is an auxiliary route to tighter bounds, not a step used to obtain the paper's reported numerical bounds.",
+    "severity": "repairable",
+    "issueTypes": [
+      "false_statement",
+      "missing_assumption"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "batchnorm-weight-gradient-bound",
+    "title": "How Does Batch Normalization Help Optimization?",
+    "issueTitle": "The BatchNorm bound can be negative for a squared gradient",
+    "year": 2018,
+    "category": "Optimization & generalization",
+    "status": "counterexample",
+    "version": "arXiv:1805.11604v5, 15 April 2019; NeurIPS 2018 main and supplement",
+    "location": "Theorem 4.4, p8; Appendix C.2, pp20–21, especially the final step after equation (17).",
+    "originalClaim": "Theorem 4.4 gives a worst-case squared weight-gradient bound for BatchNorm by subtracting mean-gradient and activation-correlation terms from the corresponding ordinary-network quantity. Here $W$ is the layer weight matrix, $X$ the input batch, $\\lambda$ its operator-norm bound, and $L$ and $\\widehat L$ the ordinary and normalized losses. For output coordinate $j$, $m$ is the batch size, $\\sigma_j$ its standard deviation, $\\widehat y_j$ its centered unit-variance activation vector, $\\gamma$ the fixed scale, and $\\mu_{g_j}$ the mean activation derivative in the paper’s notation.",
+    "formula": "g_j=\\max_{\\|X\\|\\le\\lambda}\\|\\nabla_W L\\|^2,\\quad \\widehat g_j=\\max_{\\|X\\|\\le\\lambda}\\|\\nabla_W\\widehat L\\|^2,\\quad \\widehat g_j\\le\\frac{\\gamma^2}{\\sigma_j^2}\\left(g_j^2-m\\mu_{g_j}^2-\\lambda^2\\langle\\nabla_{y_j}L,\\widehat y_j\\rangle^2\\right)",
+    "assumptions": [
+      "The batch size is $m=2$, the weight vector is $w=(1,-1)^\\top$, and the input matrix satisfies $\\|X\\|_2\\le1$. The fixed BatchNorm parameters are $\\gamma=1$ and $\\beta=0$.",
+      "Both networks use the nonnegative differentiable loss $\\ell(y)=[\\operatorname{Huber}_1(y_1+3)+\\operatorname{Huber}_1(y_2-3)]/2$.",
+      "Normalization has no numerical stabilizer, as in the paper, and the admissible batches have positive variance.",
+      "The downstream gradient is $a=(1/2,-1/2)^\\top$ at every allowed ordinary activation and both normalized outputs. Thus the main counterexample does not rely on a mismatch between derivatives."
+    ],
+    "plainExplanation": "Theorem 4.4 can give a negative upper bound for a squared gradient. Its correlation subtraction lacks the factor supplied by the BatchNorm projection. Correcting this coefficient alone does not establish the stated worst-case comparison: the variance, normalized activations and downstream derivative depend on the input batch, and the two networks can evaluate that derivative at different activations.",
+    "steps": [
+      {
+        "title": "The loss has the same gradient in both networks",
+        "text": "The operator-norm constraint implies $\\|Xw\\|_2\\le\\sqrt2$. The Huber residuals stay in their linear regions, giving the same gradient $a=(1/2,-1/2)^\\top$ in both networks.",
+        "formula": null
+      },
+      {
+        "title": "The ordinary gradient has a finite maximum",
+        "text": "The ordinary weight gradient is $X^\\top a$, whose squared norm is at most $\\|a\\|^2=1/2$. The matrix $X=I$ attains that maximum.",
+        "formula": null
+      },
+      {
+        "title": "Two examples leave no BatchNorm gradient direction",
+        "text": "Every positive-variance two-example batch has $\\widehat y=\\pm(1,-1)^\\top$. Consequently $P=I-\\mathbf1\\mathbf1^\\top/2-\\widehat y\\widehat y^\\top/2=0$.",
+        "formula": null
+      },
+      {
+        "title": "The disputed subtraction remains nonzero",
+        "text": "The BatchNorm weight gradient is zero throughout the admissible input set. At $X=I$, however, $\\sigma^2=1$, the mean of $a$ is zero, and $\\langle a,\\widehat y\\rangle^2=1$.",
+        "formula": null
+      },
+      {
+        "title": "The upper bound falls below zero",
+        "text": "The printed definition gives $g_j=1/2$, so its right side is $(1/2)^2-1=-3/4$. Removing the extra square gives $1/2-1=-1/2$, which is still negative.",
+        "formula": null
+      },
+      {
+        "title": "The projection calculation supplies the missing factor",
+        "text": "For a fixed batch, the projection removes $\\langle\\mathbf1,a\\rangle^2/m$ and $\\langle\\widehat y,a\\rangle^2/m$. Both terms follow from the two normalized orthogonal directions. Their input dependence must remain inside a subsequent supremum.",
+        "formula": null
+      }
+    ],
+    "counterexample": "Take two examples, $w=(1,-1)^\\top$, $\\|X\\|_2\\le1$, $\\gamma=1$, $\\beta=0$, and the common loss $\\ell(y)=[\\operatorname{Huber}_1(y_1+3)+\\operatorname{Huber}_1(y_2-3)]/2$. Here $\\operatorname{Huber}_1(t)=t^2/2$ for $|t|\\le1$ and $|t|-1/2$ otherwise. Every allowed ordinary activation and every normalized output has downstream gradient $a=(1/2,-1/2)^\\top$. The ordinary squared weight-gradient maximum is $1/2$, attained at $X=I$. Every positive-variance two-example batch has $\\widehat y=\\pm(1,-1)^\\top$, so its projection $P=I-\\mathbf1\\mathbf1^\\top/2-\\widehat y\\widehat y^\\top/2$ is zero and the BatchNorm gradient maximum is zero. At $X=I$, the variance is one, the mean gradient is zero and $\\langle a,\\widehat y\\rangle^2=1$. The printed right side is $-3/4$; interpreting the extra square as a notational mistake still gives $-1/2$. Both contradict the zero left side.\n\nThe failure of an unrestricted maximum is not confined to two examples. For a three-example batch, let $w=(1,0)^\\top$, $a=(1,1,-2)^\\top$, $u=(1,-1,0)^\\top$, $v=a/\\sqrt6$, and $X_t=[tu,v]$ for $0<t\\le1/\\sqrt2$, with $\\gamma=1$ and $\\beta=0$. Use the common nonnegative loss $\\ell(y)=\\operatorname{Huber}_1(y_1+10)+\\operatorname{Huber}_1(y_2+10)+2\\operatorname{Huber}_1(y_3-10)$. Its gradient is $a$ at these ordinary and normalized outputs. The matrix has operator norm one, variance $2t^2/3$ and $Pa=a$. The normalized squared weight gradient is $9/t^2$, which diverges as $t$ tends to zero, while the ordinary squared maximum is $6$.\n\nA variance floor alone also leaves a mismatch between the derivatives. Let $S(r)=0$ for $r\\le0$, $S(r)=6r^5-15r^4+10r^3$ for $0<r<1$, and $S(r)=1$ for $r\\ge1$. For three inputs and three examples, take $w=(1,-1,0)^\\top$, $\\gamma=2$, $\\beta=0$, $c=(1,1,-2)^\\top$, and the common loss\n$$\\ell(v)=S\\!\\left(\\frac{\\|v\\|^2-2}{2}\\right)(1+c^\\top v)^2.$$\nEvery ordinary output under $\\|X\\|_2\\le1$ has squared norm at most $2$, where both the loss and its gradient vanish. Its squared weight-gradient maximum is therefore zero. At $X=I$, the normalized output has squared norm $12$, the variance is $2/3$, and the downstream derivative is $2c$. Since $Pc=c$, the normalized squared weight gradient is $144$. This batch satisfies the variance floor $\\sigma\\ge1/2$.",
+    "witnessFormula": "\\widehat g=0,\\quad g=\\frac12,\\quad \\langle a,\\widehat y\\rangle^2=1,\\qquad 0\\not\\le-\\frac34\\quad(\\text{or }-\\tfrac12\\text{ if the extra square is removed})",
+    "impact": "The claimed quantitative comparison between the worst-case weight gradients is false. The local projection bound is valid, but it does not establish that BatchNorm improves the unrestricted weight-space maximum.",
+    "practical": "The fixed-batch projection identity remains valid when the downstream derivative is evaluated at the normalized output. These counterexamples do not evaluate all other smoothing claims or the reported experiments.",
+    "repair": "For a batch of size $m$, write $y=Xw$, let $\\sigma>0$ be its standard deviation, and let $\\widehat y$ be its centered unit-variance vector. For this fixed batch, evaluate the downstream derivative at the actual BatchNorm output: $a=\\nabla\\ell(\\gamma\\widehat y+\\beta\\mathbf1)$. Differentiation gives $\\nabla_w\\widehat L=X^\\top(\\gamma/\\sigma)Pa$, where $P=I-\\mathbf1\\mathbf1^\\top/m-\\widehat y\\widehat y^\\top/m$. The two removed directions are orthonormal after division by $\\sqrt m$, so $$\\|\\nabla_w\\widehat L\\|^2\\le\\frac{\\lambda^2\\gamma^2}{\\sigma^2}\\left(\\|a\\|^2-\\frac{\\langle\\mathbf1,a\\rangle^2}{m}-\\frac{\\langle\\widehat y,a\\rangle^2}{m}\\right).$$ Taking the supremum of this whole expression is valid. A comparison with the ordinary maximum also follows under stronger assumptions: if the same fixed vector $a$ is the downstream gradient at all relevant ordinary and normalized outputs, and the normalized batches satisfy $\\sigma\\ge s>0$, set $G=\\lambda^2\\|a\\|^2$ and $D=\\inf_X[\\langle\\mathbf1,a\\rangle^2+\\langle\\widehat y_X,a\\rangle^2]/m$. Then the bound is $\\sup_X\\|\\nabla_w\\widehat L\\|^2\\le(\\gamma^2/s^2)(G-\\lambda^2D)$. Here the final supremum and the infimum defining $D$ range over $\\|X\\|_2\\le\\lambda$ with $\\sigma_X\\ge s$. The ordinary maximum $G$ is taken over the full operator-norm ball. This is a restricted comparison for a fixed downstream derivative, not a repair of the arbitrary-loss theorem.",
+    "repairFormula": null,
+    "repairProofFormula": null,
+    "implementation": "Use the fixed-batch projection bound with the derivative evaluated at the normalized output. A worst-case comparison for an arbitrary loss still needs a separate theorem. A numerical stabilizer changes the exact normalization derivative; the zero-gradient two-example calculation applies to the idealized normalization.",
+    "caveats": [
+      "The printed theorem does not exclude $m=2$. Zero-variance inputs are excluded because the idealized normalization is undefined there.",
+      "Correcting the missing factor and the extra square does not justify taking $\\sigma$, $\\widehat y$ or the downstream derivative outside an input supremum.",
+      "A positive variance floor alone does not equate the downstream derivatives. The explicit three-example loss above has ordinary squared-gradient maximum zero and normalized squared gradient $144$ at $X=I$.",
+      "The fixed-batch identity and the restricted fixed-gradient theorem are proved corrections. Neither restores the original comparison for an arbitrary downstream loss."
+    ],
+    "correctionSearch": "The arXiv history ends at v5. The NeurIPS main paper and separately recovered supplement retain the disputed weight-gradient expression. A related activation-space coefficient is corrected from $1/\\sqrt m$ in the 2018 paper to $1/m$ in v5, but Theorem 4.4 and its maximization argument remain unchanged in the relevant respects. The three original reviewer reports discuss empirical interpretation and presentation. Dannemann and Junike explicitly challenge the distinct Lemma 4.5. No author repository was established, and this search does not establish priority or exclude an earlier exact report.",
+    "sources": [
+      {
+        "label": "Current primary paper",
+        "url": "https://arxiv.org/pdf/1805.11604v5",
+        "location": "Theorem 4.4 p8; Appendix C.2 pp20–21"
+      },
+      {
+        "label": "Distinct published criticism",
+        "url": "https://arxiv.org/pdf/2502.17913v1",
+        "location": "Dannemann–Junike, Sections 1 and 3: counterexample to initialization Lemma 4.5, not weight-space Theorem 4.4"
+      }
+    ],
+    "auditId": "IO-1805.11604",
+    "primaryUrl": "https://arxiv.org/pdf/1805.11604v5",
+    "citationCount": 1763,
+    "citationUrl": "https://www.semanticscholar.org/paper/94be567c32ae76bdaadabd4975807a94181e39b3",
+    "paperSummary": "The paper studies how batch normalization changes gradient magnitudes and smoothness, and how those changes affect optimization.",
+    "theoryRole": "Training changes weights, whereas normalization acts on activations. Theorem 4.4 attempts to connect the two by bounding the worst-case weight gradient.",
+    "severity": "major",
+    "issueTypes": [
+      "false_statement",
+      "incorrect_bound",
+      "proof_gap"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "trades-loss-domination",
+    "title": "Theoretically Principled Trade-off between Robustness and Accuracy",
+    "issueTitle": "The TRADES bound needs more than classification calibration",
+    "year": 2019,
+    "category": "Optimization & generalization",
+    "status": "counterexample",
+    "version": "arXiv:1901.08573v3, 24 June 2019; ICML 2019 paper and supplement",
+    "location": "Theorem 3.1, p6; Appendix B.1, p20. Instance space and relative adversarial balls are defined in Section 2.1.",
+    "originalClaim": "Theorem 3.1 first bounds robust excess error by a calibration term plus boundary error, then replaces the boundary error by the surrogate term displayed below. It assumes any nonnegative classification-calibrated margin loss with $\\phi(0)\\ge1$ and any measurable predictor. Here $R_{\\rm rob}$ is robust error, $R_{\\rm nat}^*$ the Bayes natural error, $R_\\phi-R_\\phi^*$ surrogate excess risk, and $\\psi$ the calibration transform. The set $B(X,\\epsilon)$ contains permitted perturbations and $\\lambda>0$ is the trade-off parameter. The source counts $Yf(X)\\le0$ as an error, including a zero score for either label.",
+    "formula": "R_{\\rm rob}(f)-R_{\\rm nat}^*\\le\\psi^{-1}(R_\\phi(f)-R_\\phi^*)+\\mathbb E\\max_{x'\\in B(X,\\epsilon)}\\phi\\!\\left(\\frac{f(x')f(X)}{\\lambda}\\right)",
+    "assumptions": [
+      "The instance space is $\\mathcal X=\\{-1,1\\}\\subset\\mathbb R$, with uniform data, deterministic label $Y=X$ and predictor $f(x)=x$.",
+      "The perturbation radius is $\\epsilon=2$ and $\\lambda=1$. As defined in the paper, perturbation balls are intersected with $\\mathcal X$.",
+      "Let $S(u)=0$ for $u\\le0$, $S(u)=6u^5-15u^4+10u^3$ for $0<u<1$, and $S(u)=1$ for $u\\ge1$.",
+      "Use $\\phi(t)=1-S(t)$ for $t\\ge0$ and $\\phi(t)=1/2+S(t+1)/2$ for $t<0$. This loss is nonnegative, twice continuously differentiable and satisfies $\\phi(0)=1$."
+    ],
+    "plainExplanation": "Classification calibration requires a penalty for choosing the wrong sign, but it does not require that penalty to be at least one. The second inequality of Theorem 3.1 needs this stronger domination property when it bounds a boundary indicator by the loss. A nonnegative calibrated loss can satisfy $\\phi(0)=1$ and still have $\\phi(-1)=1/2$. Restoring the entire displayed chain also requires consistent treatment of zero scores.",
+    "steps": [
+      {
+        "title": "An admissible loss can charge less than one for a wrong sign",
+        "text": "The loss satisfies $\\phi(1)=0$, $\\phi(-1)=1/2$ and $\\phi(0)=1$. The first two derivatives agree at every junction because the first two derivatives of $S$ vanish at its endpoints.",
+        "formula": null
+      },
+      {
+        "title": "The conditional risks can be minimized exactly",
+        "text": "For conditional label probability $\\eta$, the best positive score has risk $(1-\\eta)/2$ and the best negative score has risk $\\eta/2$. Hence $H(\\eta)=\\min(\\eta,1-\\eta)/2$.",
+        "formula": null
+      },
+      {
+        "title": "The loss is classification-calibrated",
+        "text": "For $\\eta\\ne1/2$, restricting to the wrong sign gives $H^-(\\eta)=\\max(\\eta,1-\\eta)/2>H(\\eta)$. Thus the loss is classification-calibrated and its calibration transform is $\\psi(\\theta)=\\theta/2$.",
+        "formula": null
+      },
+      {
+        "title": "The predictor has no ordinary or surrogate excess error",
+        "text": "The predictor classifies both points correctly with margin one, so its natural and surrogate risks are both zero and optimal.",
+        "formula": null
+      },
+      {
+        "title": "The adversary can always reach the opposite prediction",
+        "text": "Each perturbation ball contains both points. Robust error is one, while the largest boundary surrogate is $\\max\\{\\phi(1),\\phi(-1)\\}=1/2$.",
+        "formula": null
+      },
+      {
+        "title": "The indicator-to-loss inequality fails",
+        "text": "The second inequality becomes $1\\le1/2$. The incorrect step replaces a wrong-sign indicator by a loss that can be less than one on negative margins.",
+        "formula": null
+      },
+      {
+        "title": "Zero scores expose a separate first-step failure",
+        "text": "Separately, take a singleton instance space with balanced random labels, $f\\equiv0$, and normalized logistic loss $\\phi(t)=\\log(1+e^{-t})/\\log2$. Under the printed $Yf(X)\\le0$ convention, natural and robust risks are both $1$, while Bayes natural risk is $1/2$. The score zero minimizes the conditional logistic risk, so surrogate excess is zero. Boundary error is also zero because its definition requires $Yf(X)>0$. Thus the first, calibration-plus-boundary inequality would require $1/2\\le0$. This is a separate failure of the first step, rather than another counterexample to the final surrogate bound displayed above.",
+        "formula": null
+      }
+    ],
+    "counterexample": "Let $S(u)=0$ for $u\\le0$, $S(u)=6u^5-15u^4+10u^3$ for $0<u<1$, and $S(u)=1$ for $u\\ge1$. Define $\\phi(t)=1-S(t)$ for $t\\ge0$ and $\\phi(t)=1/2+S(t+1)/2$ for $t<0$. This nonnegative twice continuously differentiable loss has $\\phi(1)=0$, $\\phi(0)=1$ and $\\phi(-1)=1/2$. For $\\eta=\\Pr(Y=1\\mid X)$, let $H(\\eta)$ be the best conditional surrogate risk and $H^-(\\eta)$ the best risk restricted to a wrong-sign score. They are $H(\\eta)=\\min(\\eta,1-\\eta)/2$ and $H^-(\\eta)=\\max(\\eta,1-\\eta)/2$, so it is classification-calibrated with $\\psi(\\theta)=\\theta/2$. On the permitted space $\\mathcal X=\\{-1,1\\}$, take uniform data, $Y=X$, $f(x)=x$, radius $2$ and $\\lambda=1$. Surrogate excess risk and natural Bayes risk are zero, robust risk is one, and the largest boundary-surrogate value is $1/2$. The proposed bound becomes $1\\le1/2$. Separately, take a singleton instance space with balanced random labels, $f\\equiv0$, and normalized logistic loss $\\phi(t)=\\log(1+e^{-t})/\\log2$. Under the printed $Yf(X)\\le0$ convention, natural and robust risks are both $1$, while Bayes natural risk is $1/2$. The score zero minimizes the conditional logistic risk, so surrogate excess is zero. Boundary error is also zero because its definition requires $Yf(X)>0$. Thus the first, calibration-plus-boundary inequality would require $1/2\\le0$. This is a separate failure of the first step, rather than another counterexample to the final surrogate bound displayed above.",
+    "witnessFormula": "\\phi(-1)=\\frac12,\\quad \\phi(0)=1,\\quad \\phi(1)=0,\\quad \\psi(\\theta)=\\frac{\\theta}{2},\\qquad 1=R_{\\rm rob}-R_{\\rm nat}^*>\\frac12",
+    "impact": "The theorem’s loss assumptions do not justify its second inequality on all permitted input spaces. Wrong-sign domination repairs that step; excluding zero scores on the data distribution also restores the first inequality under the stated error convention.",
+    "practical": "The two-point counterexample does not invalidate the multiclass TRADES benchmark results. The binary theorem requires explicit conditions when it is applied to a different loss, a discrete input space or predictors that can output zero with positive probability.",
+    "repair": "Add $\\phi(t)\\ge1$ for every $t\\le0$; a non-increasing loss with $\\phi(0)\\ge1$ is sufficient. Whenever a perturbation changes the sign or reaches a zero score, one product $f(x^{\\prime})f(x)/\\lambda$ is nonpositive, so its surrogate is at least one. Nonnegativity handles the complement of this event, and expectation gives the second inequality. For the entire chain under the paper’s convention that zero margins count as errors for both labels, also assume $\\Pr(f(X)=0)=0$. Natural risk then coincides with ordinary classification risk, so the calibration inequality applies. A naturally correct nonzero score becomes adversarially incorrect exactly when a reachable score has nonpositive product with it. This proves the decomposition and the boundary bound together. Use a supremum if the maximum over the perturbation set is not attained.",
+    "repairFormula": null,
+    "repairProofFormula": null,
+    "implementation": "For a binary guarantee, check $\\phi(t)\\ge1$ on $t\\le0$. Under the printed zero-margin error convention, also check $\\Pr(f(X)=0)=0$. These conditions concern the theorem; the author’s multiclass code uses a separate heuristic objective.",
+    "caveats": [
+      "The source permits arbitrary instance spaces. Continuity on a connected perturbation domain can expose a zero score, but it does not exclude this two-point construction.",
+      "The loss is intentionally non-monotone; monotonicity is not a printed assumption.",
+      "The two-point example does not challenge the first calibration inequality. An independent balanced-label example with $f\\equiv0$ does, because the paper counts zero margins as errors for both labels.",
+      "Wrong-sign domination proves the second step. Adding $\\Pr(f(X)=0)=0$ restores the whole displayed chain under the original risk definitions.",
+      "The lower-bound tightness theorem and the practical multiclass objective are outside these proofs."
+    ],
+    "correctionSearch": "The arXiv history ends at v3. The ICML main paper and supplement retain the stated loss assumptions. The author repository contains 33 issue/PR entries and 55 comments; the inspected discussions concern multiclass objectives, implementation and training behavior. The author’s explanation in issue 10 distinguishes the binary theory from the multiclass heuristic, without acknowledging the two mathematical issues here. The first 200 commit records were also inspected; this bounded search does not establish priority or the absence of earlier reports.",
+    "sources": [
+      {
+        "label": "Current primary paper",
+        "url": "https://arxiv.org/pdf/1901.08573v3",
+        "location": "Section 2.1; Theorem 3.1 p6; Appendix B.1 p20"
+      },
+      {
+        "label": "Official ICML version",
+        "url": "https://proceedings.mlr.press/v97/zhang19p.html",
+        "location": "Main paper and supplementary proof of Theorem 3.1"
+      },
+      {
+        "label": "Author repository discussion",
+        "url": "https://github.com/yaodongyu/TRADES/issues",
+        "location": "Earlier same-day issue/comment inventory; binary/multiclass and loss-implementation discussions distinguished"
+      }
+    ],
+    "auditId": "IO-1901.08573",
+    "primaryUrl": "https://arxiv.org/pdf/1901.08573v3",
+    "citationCount": 3147,
+    "citationUrl": "https://www.semanticscholar.org/paper/6c405d4b5dc41a86be05acd59c06ed19daf01d14",
+    "paperSummary": "TRADES studies how resistance to adversarial perturbations competes with ordinary prediction accuracy. It separates robust error into ordinary classification error and an error associated with the decision boundary. Surrogate losses then give a training objective that balances accurate predictions against sensitivity to perturbations.",
+    "theoryRole": "Theorem 3.1 helps justify replacing robust error, which is difficult to optimize directly, with a surrogate objective. The assumptions on that surrogate determine whether the same guarantee extends to other losses and input spaces.",
+    "severity": "repairable",
+    "issueTypes": [
+      "false_statement",
+      "missing_assumption"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "infovae-divergence-sign",
+    "title": "InfoVAE: Balancing Learning and Inference in Variational Autoencoders",
+    "issueTitle": "InfoVAE’s divergence substitution needs a coefficient restriction",
+    "year": 2019,
+    "category": "Generative models",
+    "status": "counterexample",
+    "version": "arXiv:1706.02262v3, 30 May 2018; published AAAI 2019 version also inspected",
+    "location": "arXiv v3, Proposition 2 and Eq. (6), PDF p. 4; proof pp. 11–12. Published AAAI version: Proposition 2 and Eq. (6), printed p. 5888.",
+    "originalClaim": "Proposition 2 allows the aggregate KL divergence in the InfoVAE objective to be replaced by any strict divergence $D$. It claims that, for $\\alpha<1$ and $\\lambda>0$, an exact data model with exact inference is a global maximizer at each fixed encoder mutual information. Here $p_D$ is the data distribution, $q(z\\mid x)$ the encoder, $p_\\theta(x\\mid z)$ the decoder, $p(z)$ the latent prior, and $q(z)$ the encoder’s aggregate latent distribution.",
+    "formula": "\\widehat{\\mathcal L}=\\mathbb E_{p_D(x)q(z\\mid x)}\\log p_\\theta(x\\mid z)-(1-\\alpha)\\mathbb E_{p_D(x)}D_{\\mathrm{KL}}(q(z\\mid x)\\|p(z))-(\\alpha+\\lambda-1)D(q(z)\\|p(z)).",
+    "assumptions": [
+      "The data and latent spaces are continuous.",
+      "The proposition assumes $\\alpha<1$ and $\\lambda>0$, without requiring $\\alpha+\\lambda-1\\ge0$.",
+      "$D$ is nonnegative and vanishes exactly when its two distributions agree.",
+      "$I_q(X;Z)$ is fixed. The witness has $I_q(X;Z)=0$ and finite unit encoder variance.",
+      "The optimization family contains the stated Gaussian encoders and independent Gaussian decoder."
+    ],
+    "plainExplanation": "The allowed range includes $\\alpha+\\lambda-1<0$, so the objective rewards the substituted divergence. Multiplying KL by a positive constant still gives a strict divergence. That reward can therefore exceed the remaining KL penalty. The appendix treats these terms as nonnegative penalties without establishing the needed coefficient sign.",
+    "steps": [
+      {
+        "title": "The stated parameter range permits a negative penalty",
+        "text": "Choose $\\alpha=0$ and $\\lambda=1/2$. Both stated parameter conditions hold, although the coefficient $\\alpha+\\lambda-1=-1/2$ is negative.",
+        "formula": "\\alpha=0,\\quad\\lambda=\\tfrac12,\\quad\\alpha+\\lambda-1=-\\tfrac12."
+      },
+      {
+        "title": "Only the encoder mean changes",
+        "text": "Let the data and latent prior be standard normal. The decoder returns the data distribution independently of $z$; the encoder returns $\\mathcal N(m,1)$ independently of $x$. Changing $m$ leaves reconstruction fixed.",
+        "formula": "p_D(x)=p_\\theta(x\\mid z)=\\mathcal N(0,1),\\quad p(z)=\\mathcal N(0,1),\\quad q_m(z\\mid x)=\\mathcal N(m,1)."
+      },
+      {
+        "title": "Mutual information stays fixed",
+        "text": "Because the encoder ignores $x$, its mutual information is zero for every $m$. Multiplying KL by $3$ preserves strict divergence. The shifted Gaussian has KL divergence $m^2/2$ from the prior.",
+        "formula": "D=3D_{\\mathrm{KL}},\\quad I_{q_m}(X;Z)=0,\\quad D_{\\mathrm{KL}}(\\mathcal N(m,1)\\|\\mathcal N(0,1))=\\tfrac{m^2}{2}."
+      },
+      {
+        "title": "The objective rewards the shift",
+        "text": "The conditional KL term contributes $-m^2/2$, while the substituted divergence contributes $+3m^2/4$. Their sum increases the objective by $m^2/4$.",
+        "formula": "\\widehat{\\mathcal L}(m)=-H(p_D)-\\tfrac{m^2}{2}+\\tfrac12\\left(3\\tfrac{m^2}{2}\\right)=-H(p_D)+\\tfrac{m^2}{4}."
+      },
+      {
+        "title": "The matched model is not a maximum",
+        "text": "At $m=0$, the model has the correct data marginal and the encoder is the true posterior. Every nonzero $m$ gives a larger objective; as $|m|$ grows, the objective tends to $+\\infty$.",
+        "formula": "\\widehat{\\mathcal L}(2)-\\widehat{\\mathcal L}(0)=1,\\qquad \\widehat{\\mathcal L}(m)\\longrightarrow+\\infty\\quad\\text{as }|m|\\to\\infty."
+      }
+    ],
+    "counterexample": "At fixed $I_q(X;Z)=0$, changing $m$ from $0$ to $2$ increases the objective by $1$, so the exact matched model at $m=0$ is not a global maximizer.",
+    "witnessFormula": "\\alpha=0,\\ \\lambda=\\tfrac12,\\ D=3D_{\\mathrm{KL}}\\quad\\Longrightarrow\\quad\\widehat{\\mathcal L}(m)=-H(\\mathcal N(0,1))+\\tfrac14m^2.",
+    "impact": "The optimality guarantee for arbitrary strict divergences fails in part of the stated parameter range. Requiring $\\alpha+\\lambda-1\\ge0$ restores the guarantee when the model family contains an exact matched joint with the prescribed mutual information.",
+    "practical": "The result concerns the universal optimality statement. It does not show that the paper’s experimental parameter choices have the same defect.",
+    "repair": "Add $\\alpha+\\lambda-1\\ge0$ to the proposition. For finite entropy and KL terms, the chain rule gives $$\\widehat{\\mathcal L}=-H(p_D)+\\alpha I_q(X;Z)-\\mathbb E_{q(z)}D_{\\mathrm{KL}}(q(x\\mid z)\\|p_\\theta(x\\mid z))-(1-\\alpha)D_{\\mathrm{KL}}(q(z)\\|p(z))-(\\alpha+\\lambda-1)D(q(z)\\|p(z)).$$ At fixed $I_q(X;Z)$, all three subtracted quantities are nonnegative under the corrected conditions. A representable matched joint with that mutual information sets them to zero and therefore attains the global upper bound. The boundary $\\alpha+\\lambda-1=0$ is also valid. In the bound below, $q_Z$ and $p_Z$ denote the aggregate latent distribution and latent prior, and $I_q$ abbreviates $I_q(X;Z)$.",
+    "repairFormula": "1-\\alpha>0,\\qquad \\alpha+\\lambda-1\\ge0.",
+    "repairProofFormula": "\\widehat{\\mathcal L}\\le-H(p_D)+\\alpha I_q-(1-\\alpha)D_{\\mathrm{KL}}(q_Z\\|p_Z)-(\\alpha+\\lambda-1)D(q_Z\\|p_Z)\\le-H(p_D)+\\alpha I_q.",
+    "implementation": "When arbitrary strict divergences are supported, enforce $\\alpha+\\lambda-1\\ge0$ or establish a sufficient condition for the chosen divergence. Configurations already satisfying this condition retain the same training objective.",
+    "caveats": [
+      "The proposition permits any strict divergence, so $D=3D_{\\mathrm{KL}}$ is admissible.",
+      "Every objective value is finite at finite $m$; the encoder variance stays equal to $1$.",
+      "The coefficient restriction is sufficient; it need not be necessary for a specific divergence.",
+      "The fixed-information optimality repair requires well-defined entropy and KL quantities and a representable exact matched joint at the prescribed mutual information."
+    ],
+    "correctionSearch": "The same coefficient range appears in arXiv v3 and the published AAAI paper. The author tutorial and later Lagrangian formulation use nonnegative divergence weights, but neither inspected passage explicitly corrects Proposition 2.",
+    "sources": [
+      {
+        "label": "InfoVAE, exact arXiv version",
+        "url": "https://arxiv.org/pdf/1706.02262v3",
+        "location": "Proposition 2; Eq. (6); proof of Proposition 2, pp. 4, 11–12"
+      },
+      {
+        "label": "Published AAAI paper",
+        "url": "https://ojs.aaai.org/index.php/AAAI/article/download/4538/4416",
+        "location": "Proposition 2 and Eq. (6), printed p. 5888"
+      },
+      {
+        "label": "Version history",
+        "url": "https://arxiv.org/abs/1706.02262",
+        "location": "Latest listed revision v3, 30 May 2018"
+      },
+      {
+        "label": "The Information Autoencoding Family: A Lagrangian Perspective",
+        "url": "https://arxiv.org/pdf/1806.06514",
+        "location": "Eq. (18), Section 6, and the InfoVAE conversion"
+      },
+      {
+        "label": "Coupled Variational Autoencoder",
+        "url": "https://proceedings.mlr.press/v202/hao23b/hao23b.pdf",
+        "location": "Section 2, Eq. (4); experimental parameter footnote on p. 6"
+      }
+    ],
+    "auditId": "IG007",
+    "primaryUrl": "https://arxiv.org/pdf/1706.02262v3",
+    "citationCount": 495,
+    "citationUrl": "https://www.semanticscholar.org/paper/6f88397a7df1861d18303b19a77d6453ed32621e",
+    "paperSummary": "A variational autoencoder learns an encoder from data to hidden variables and a decoder back to data. InfoVAE changes its training objective to balance generation, inference, and the information retained in those hidden variables. It introduces adjustable weights and alternative ways to compare the aggregate latent distribution with the model's prior.",
+    "theoryRole": "Proposition 2 supports the use of alternative divergence measures by asserting that exact data and inference matching remain globally optimal at a fixed mutual information. It provides an idealized optimization justification for the broader objective family.",
+    "severity": "repairable",
+    "issueTypes": [
+      "false_statement",
+      "missing_assumption"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "numerics-gan-skew-scale",
+    "title": "The Numerics of GANs",
+    "issueTitle": "The consensus damping bound omits the scale of the skew part",
+    "year": 2017,
+    "category": "Generative models",
+    "status": "counterexample",
+    "version": "arXiv:1705.10461v3, 11 June 2018; NeurIPS 2017 main paper and author-hosted supplement",
+    "location": "Lemma 9, Eqs. (17)–(18), PDF p. 6; proof, Eq. (32), PDF p. 14 of the combined arXiv version.",
+    "originalClaim": "For an invertible real matrix $A$ with negative semidefinite symmetric part, $\\|Av\\|\\geq\\rho\\|v\\|$ with $\\rho>0$, and $\\gamma>0$, Lemma 9 bounds $q(\\gamma)$, the largest ratio of absolute imaginary to absolute real eigenvalue parts of $A-\\gamma A^\\top A$. Its quantity $c$ is the infimum of $|v^*(A+A^\\top)v|/|v^*(A-A^\\top)v|$ over complex unit vectors. Here $v^*$ denotes conjugate transpose.",
+    "formula": "q(\\gamma)=\\max_{\\lambda\\in\\operatorname{spec}(A-\\gamma A^\\top A)}\\frac{|\\operatorname{Im}\\lambda|}{|\\operatorname{Re}\\lambda|}\\ \\le\\ \\frac{1}{c+2\\rho^2\\gamma},\\qquad c=\\inf_{\\|v\\|=1}\\frac{|v^*(A+A^\\top)v|}{|v^*(A-A^\\top)v|}.",
+    "assumptions": [
+      "$A$ is real and invertible, with negative semidefinite symmetric part; the paper explicitly permits nonsymmetric $A$.",
+      "$\\|Av\\|\\ge\\rho\\|v\\|$ for $\\rho>0$, and $\\gamma>0$.",
+      "The ratio defining $c$ is evaluated on complex unit vectors; a zero denominator is interpreted as an infinite ratio when its numerator is positive.",
+      "The counterexample satisfies the stronger condition $A+A^\\top=-2I$."
+    ],
+    "plainExplanation": "The proof divides by the skew quadratic form but drops the same divisor from the regularization term. That form has no assumed unit bound. The resulting estimate fails even for a strictly dissipative $2\\times2$ matrix. Restoring its scale repairs the estimate and retains the conclusion that increasing $\\gamma$ can make the ratio arbitrarily small.",
+    "steps": [
+      {
+        "title": "A strictly dissipative matrix satisfies the assumptions",
+        "text": "Take $A=-I+J$, with $J$ the ninety-degree rotation matrix. Its symmetric part is strictly negative, and $A^\\top A=2I$ gives the singular-value lower bound $\\rho=\\sqrt2$.",
+        "formula": "A=\\begin{pmatrix}-1&-1\\\\1&-1\\end{pmatrix},\\quad J=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix},\\quad A^\\top A=2I,\\quad\\rho=\\sqrt2."
+      },
+      {
+        "title": "The ratio $c$ equals one",
+        "text": "For any complex unit vector, the numerator defining $c$ is $2$ and the denominator is at most $2$. An eigenvector of $J$ attains denominator $2$, so $c=1$.",
+        "formula": "|v^*(A+A^\\top)v|=2,\\quad |v^*(A-A^\\top)v|\\le2,\\quad v=\\tfrac1{\\sqrt2}(1,-i)^\\top\\Longrightarrow c=1."
+      },
+      {
+        "title": "Regularization leaves an imaginary part of one",
+        "text": "With $\\gamma=1$, subtracting $A^\\top A$ changes $A$ to $-3I+J$. Its eigenvalues are $-3\\pm i$.",
+        "formula": "B=A-A^\\top A=\\begin{pmatrix}-3&-1\\\\1&-3\\end{pmatrix},\\qquad \\operatorname{spec}(B)=\\{-3+i,-3-i\\}."
+      },
+      {
+        "title": "The claimed estimate is too small",
+        "text": "The imaginary-to-real ratio is $1/3$. Substituting $c=1$ and $\\rho^2=2$ into the printed bound instead gives $1/(1+4)=1/5$.",
+        "formula": "q(1)=\\tfrac13>\\tfrac15=\\frac{1}{c+2\\rho^2}."
+      },
+      {
+        "title": "Division by the skew form introduces a scale factor",
+        "text": "For a unit eigenvector, set $a=|v^*(A+A^\\top)v|$ and $b=|v^*(A-A^\\top)v|$. The exact ratio is $b/(a+2\\gamma\\|Av\\|^2)$. Dividing by $b$ also divides the regularization term by $b$; that denominator cannot be dropped.",
+        "formula": "\\frac{|\\operatorname{Im}\\lambda|}{|\\operatorname{Re}\\lambda|}=\\frac{b}{a+2\\gamma\\|Av\\|^2}=\\frac{1}{a/b+2\\gamma\\|Av\\|^2/b}."
+      },
+      {
+        "title": "The matrix comes from a smooth game",
+        "text": "This $A$ is the Jacobian of the ascent–descent field for the displayed concave–convex quadratic payoff. The example therefore also fits the paper’s smooth-game setting.",
+        "formula": "f(x,y)=-\\tfrac12x^2-xy+\\tfrac12y^2,\\qquad(\\partial_xf,-\\partial_yf)=A(x,y)^\\top."
+      }
+    ],
+    "counterexample": "The matrix has $A^\\top A=2I$, $c=1$ and $\\rho=\\sqrt2$. With $\\gamma=1$, its regularized eigenvalues are $-3\\pm i$, so the ratio $1/3$ exceeds the claimed bound $1/5$.",
+    "witnessFormula": "A=-I+J,\\quad \\gamma=1,\\quad c=1,\\quad\\rho^2=2:\\qquad q(1)=\\tfrac13>\\tfrac15.",
+    "impact": "The printed bound understates the oscillation remaining after consensus regularization. The corrected bound supports the same qualitative damping conclusion, with the matrix-dependent scale included.",
+    "practical": "The defect concerns the quantitative estimate in Lemma 9. The example satisfies strict negativity of the symmetric part, so singularity and borderline stability do not explain the violation. The correction does not change the consensus update or establish new empirical convergence results.",
+    "repair": "Keep the skew scale $s=\\|A-A^\\top\\|_2$. When $s>0$, define $c$ as the infimum of the original ratio over complex unit vectors with nonzero skew form. For a unit eigenvector $v$ of $B=A-\\gamma A^\\top A$ with eigenvalue $\\lambda$, put $a=-v^*(A+A^\\top)v\\geq0$ and $b=|v^*(A-A^\\top)v|$. If $b>0$, the exact identity is $$\\frac{|\\operatorname{Im}\\lambda|}{|\\operatorname{Re}\\lambda|}=\\frac{b}{a+2\\gamma\\|Av\\|^2}=\\frac{1}{a/b+2\\gamma\\|Av\\|^2/b}\\leq\\frac{1}{c+2\\gamma\\rho^2/s}.$$ Eigenvectors with $b=0$ have zero imaginary part. If $s=0$, $B$ is symmetric and $q(\\gamma)=0$. This correction is valid under the original matrix assumptions and is sharp for the displayed example.",
+    "repairFormula": "q(\\gamma)\\le\\frac{1}{c+2\\gamma\\rho^2/\\|A-A^\\top\\|_2}\\qquad(\\|A-A^\\top\\|_2>0).",
+    "repairProofFormula": null,
+    "implementation": "Any step-size or damping certificate derived from this quantitative bound must retain the skew scale or compute the relevant spectrum directly. The consensus update $A-\\gamma A^\\top A$ itself does not need to change.",
+    "caveats": [
+      "The negative-semidefinite convention is the one explicitly used by the paper for nonsymmetric game Jacobians.",
+      "The repaired estimate is a sufficient general bound and is exact for the displayed witness.",
+      "Only Lemma 9's quantitative claim is evaluated here."
+    ],
+    "correctionSearch": "The source search covered Lemma 9, its proof, the NeurIPS paper and supplement, public reviews, two repository issue records and the author’s dissertation. No inspected passage restores the skew-part scale in the quantitative bound. The later qualitative convergence discussion and minibatch-gradient bias criticism concern different claims. Database coverage and access limits, including PubPeer, are recorded in the source-search download. These searches do not establish that the issue has never been reported.",
+    "sources": [
+      {
+        "label": "The Numerics of GANs, exact combined version",
+        "url": "https://arxiv.org/pdf/1705.10461v3",
+        "location": "Lemma 9, Eqs. (17)–(18), p. 6; proof Eq. (32), p. 14"
+      },
+      {
+        "label": "NeurIPS main paper",
+        "url": "https://papers.neurips.cc/paper/6779-the-numerics-of-gans.pdf",
+        "location": "Lemma 9, p. 6"
+      },
+      {
+        "label": "Author-hosted supplementary material",
+        "url": "https://www.cvlibs.net/publications/Mescheder2017NIPS_supplementary.pdf",
+        "location": "Lemma 9 and its proof"
+      },
+      {
+        "label": "Version history",
+        "url": "https://arxiv.org/abs/1705.10461",
+        "location": "Latest listed revision v3, 11 June 2018"
+      },
+      {
+        "label": "Official reviews",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2017/file/4588e674d3f0faf985047d4c3f13ed0d-Reviews.html",
+        "location": "Three public review reports"
+      },
+      {
+        "label": "Author code issues",
+        "url": "https://github.com/LMescheder/TheNumericsOfGANs/issues",
+        "location": "Open and closed issue records checked"
+      }
+    ],
+    "auditId": "IG023",
+    "primaryUrl": "https://arxiv.org/pdf/1705.10461v3",
+    "citationCount": 490,
+    "citationUrl": "https://www.semanticscholar.org/paper/459fbc416eb9a55920645c741b1e4cce95f39786",
+    "paperSummary": "The Numerics of GANs studies training as a dynamical system in which two networks continually respond to one another. It connects poor local convergence to properties of the combined gradient's Jacobian and proposes consensus optimization, which adds a penalty based on the size of that gradient. The aim is to reduce unstable or strongly oscillatory behavior near an equilibrium.",
+    "theoryRole": "Lemma 9 quantifies how consensus regularization changes the ratio of oscillation to decay in the local linear dynamics. This numerical estimate supports the paper's explanation of improved damping; it is distinct from the preceding qualitative local-convergence argument.",
+    "severity": "repairable",
+    "issueTypes": [
+      "incorrect_bound",
+      "lemma_error"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "dps-gaussian-noise-scaling",
+    "title": "Diffusion Posterior Sampling for General Noisy Inverse Problems",
+    "issueTitle": "The DPS likelihood bound has the wrong dependence on noise",
+    "year": 2023,
+    "category": "Generative models",
+    "status": "counterexample",
+    "version": "arXiv:2209.14687v4, 20 May 2024; ICLR 2023",
+    "location": "Definition 1, Eq. (12), PDF p. 4; Theorem 1, Eq. (14), p. 5; Lemmas 2–3 and proof of Theorem 1, pp. 14–15.",
+    "originalClaim": "Theorem 1 bounds the signed Jensen gap $\\mathcal J=p(y\\mid x_t)-p(y\\mid\\widehat x_0)$, where $\\widehat x_0=\\mathbb E[X_0\\mid x_t]$. The measurement model is $Y=\\mathcal A(X_0)+N$ with $N\\sim\\mathcal N(0,\\sigma^2I)$. The bound uses the global derivative bound of $\\mathcal A$ and $m_1=\\mathbb E[\\|X_0-\\widehat x_0\\|\\mid x_t]$. The source writes $d$ for the dimension in its Gaussian bound. The repair below uses $n$ for the number of measurement coordinates.",
+    "formula": "\\mathcal J=\\mathbb E[p(y\\mid X_0)\\mid X_t]-p(y\\mid\\mathbb E[X_0\\mid X_t]),\\qquad \\mathcal J\\le\\frac{d}{\\sqrt{2\\pi\\sigma^2}}e^{-1/(2\\sigma^2)}\\|\\nabla\\mathcal A\\|m_1.",
+    "assumptions": [
+      "The measurement noise is Gaussian with standard deviation $\\sigma>0$.",
+      "The forward operator has a finite derivative bound.",
+      "The conditional distribution of $X_0$ given $X_t$ has finite first centered absolute moment $m_1$.",
+      "The witness is one-dimensional and comes from an ordinary variance-preserving Gaussian forward diffusion with an exact conditional mean.",
+      "The Jensen gap is signed as defined in Eq. (12); the witness below makes it positive."
+    ],
+    "plainExplanation": "The Gaussian Lipschitz constants in Lemmas 2 and 3 are incorrect, so the likelihood bound fails even in one dimension with identity observation. The maximum derivative occurs one standard deviation from the Gaussian mean. Its magnitude scales as $\\sigma^{-2}$ in one dimension, whereas the printed constant has a different power and exponential dependence on $\\sigma$.",
+    "steps": [
+      {
+        "title": "A Gaussian diffusion gives the required conditional law",
+        "text": "Take independent standard normals $X_0$ and $Z$, with $X_t=\\sqrt{0.99}X_0+\\sqrt{0.01}Z$. Conditioning on $X_t=0$ gives $X_0\\mid X_t=0\\sim\\mathcal N(0,0.01)$. Its conditional mean is zero.",
+        "formula": "X_0,Z\\stackrel{\\mathrm{ind}}{\\sim}\\mathcal N(0,1),\\quad X_t=\\sqrt{0.99}X_0+\\sqrt{0.01}Z,\\quad X_0\\mid X_t=0\\sim\\mathcal N(0,0.01)."
+      },
+      {
+        "title": "The observation model fixes the remaining terms",
+        "text": "Use the identity operator, measurement standard deviation $0.1$ and observation $y=0.2$. The operator derivative bound is $1$, and the first centered absolute moment is $m_1=0.1\\sqrt{2/\\pi}$.",
+        "formula": "\\mathcal A(x)=x,\\quad \\sigma=0.1,\\quad y=0.2,\\quad m_1=0.1\\sqrt{2/\\pi}."
+      },
+      {
+        "title": "The exact likelihood is a Gaussian convolution",
+        "text": "Averaging the $\\mathcal N(0,0.01)$ measurement-noise density over the conditional $\\mathcal N(0,0.01)$ state distribution gives a $\\mathcal N(0,0.02)$ density for $y$. Evaluating only at the conditional mean instead uses the $\\mathcal N(0,0.01)$ density.",
+        "formula": "p(0.2\\mid X_t=0)=\\frac{e^{-1}}{\\sqrt{0.04\\pi}},\\qquad p(0.2\\mid\\widehat X_0=0)=\\frac{e^{-2}}{\\sqrt{0.02\\pi}}."
+      },
+      {
+        "title": "The positive gap exceeds the stated bound",
+        "text": "At $y=0.2$, the averaged likelihood exceeds the plug-in likelihood by approximately $0.497859$. Equation (14) gives approximately $6.14\\times10^{-23}$. Positivity makes this a counterexample even to the signed-gap convention in Definition 1.",
+        "formula": "\\mathcal J=\\frac{e^{-1}}{\\sqrt{0.04\\pi}}-\\frac{e^{-2}}{\\sqrt{0.02\\pi}}\\approx0.4978590784>\\frac{e^{-50}}{\\pi}\\approx6.139401446\\times10^{-23}."
+      },
+      {
+        "title": "The Gaussian derivative determines the correct constant",
+        "text": "The derivative magnitude of $\\phi_\\sigma(r)=(\\sqrt{2\\pi}\\sigma)^{-1}\\exp[-r^2/(2\\sigma^2)]$ reaches its maximum at $|r|=\\sigma$. Substitution gives $e^{-1/2}/(\\sqrt{2\\pi}\\sigma^2)$.",
+        "formula": "|\\phi_\\sigma'(r)|=\\frac{|r|}{\\sqrt{2\\pi}\\sigma^3}e^{-r^2/(2\\sigma^2)},\\qquad \\sup_r|\\phi_\\sigma'(r)|=\\frac{e^{-1/2}}{\\sqrt{2\\pi}\\sigma^2}."
+      },
+      {
+        "title": "Averaging the Lipschitz estimate restores the bound",
+        "text": "Apply this constant to the likelihood composed with the forward operator. Averaging its distance bound around the conditional mean gives the first-moment estimate below. It bounds the absolute gap and hence the signed gap as well.",
+        "formula": "|\\mathcal J|\\le\\frac{e^{-1/2}}{\\sqrt{2\\pi}\\sigma^2}\\|\\nabla\\mathcal A\\|m_1."
+      }
+    ],
+    "counterexample": "Under this Gaussian construction, the signed likelihood gap is approximately $0.49785908$, while the claimed upper bound is approximately $6.14\\times10^{-23}$. The gap uses the signed convention in Definition 1; its positivity is essential to this counterexample.",
+    "witnessFormula": "\\sigma=0.1,\\ y=0.2,\\ X_0\\mid X_t=0\\sim\\mathcal N(0,0.01):\\qquad \\mathcal J\\approx0.497859>6.1394\\times10^{-23}.",
+    "impact": "The printed constant can make the advertised likelihood error many orders of magnitude too small. Correcting it restores a likelihood approximation guarantee. A bound for the score $\\nabla_{x_t}\\log p(y\\mid x_t)$ still requires a separate argument.",
+    "practical": "The counterexample concerns Theorem 1, Eq. (14), and the Gaussian constants in Lemmas 2 and 3. The repair concerns likelihood values at a fixed diffusion state; it does not prove a score-error bound or an empirical failure of the DPS sampler.",
+    "repair": "Replace both Gaussian lemmas with the Euclidean gradient bound for the actual measurement density. Let $\\phi_{\\sigma,n}$ be the centered Gaussian density in $n$ measurement dimensions with covariance $\\sigma^2I$. Then $$\\sup_z\\|\\nabla\\phi_{\\sigma,n}(z)\\|_2=\\frac{e^{-1/2}}{(2\\pi)^{n/2}\\sigma^{n+1}}=:L_n.$$ Indeed, at radius $r$ the gradient norm is $r\\sigma^{-2}(2\\pi\\sigma^2)^{-n/2}e^{-r^2/(2\\sigma^2)}$, maximized at $r=\\sigma$. If $\\mathcal A$ is globally Lipschitz with constant $L_{\\mathcal A}$, composition and the triangle inequality give $$|\\mathcal J|\\leq\\mathbb E\\!\\left[|\\phi_{\\sigma,n}(y-\\mathcal A(X_0))-\\phi_{\\sigma,n}(y-\\mathcal A(\\widehat x_0))|\\mid x_t\\right]\\leq L_nL_{\\mathcal A}m_1.$$ This proves an absolute likelihood-gap bound under the same finite-moment and bounded-derivative requirements, with dimension and norms explicit.",
+    "repairFormula": "|\\mathcal J|\\le\\frac{e^{-1/2}}{(2\\pi)^{n/2}\\sigma^{n+1}}\\operatorname{Lip}(\\mathcal A)\\,m_1.",
+    "repairProofFormula": null,
+    "implementation": "A certificate or error tolerance based on the printed noise constant needs correction. The mathematical repair does not change the DPS denoiser or guidance update. A guarantee on the score, which the algorithm uses, still requires a separate argument.",
+    "caveats": [
+      "Likelihood densities can exceed one; the displayed likelihood values are densities, not event probabilities.",
+      "The positive signed-gap witness uses $y=0.2$. At $y=0$, the corresponding signed gap is negative and would not by itself refute Eq. (14).",
+      "The conditional Gaussian is the standard regular conditional distribution, and the violation persists for a neighborhood of the displayed observation and diffusion state."
+    ],
+    "correctionSearch": "The source search found no correction to this Gaussian constant in the inspected paper versions, repository discussions or later Gaussian/score analyses. Earlier criticism of conditional-covariance approximations and of deriving scores from density bounds concerns different limitations. OpenReview was not fully accessible. An indexed document repeated the constant, but its identity and full text were not verified, so no propagation claim is made. Database coverage and access limits, including PubPeer, are recorded in the source-search download. These searches do not establish that the issue has never been reported.",
+    "sources": [
+      {
+        "label": "DPS, exact version",
+        "url": "https://arxiv.org/pdf/2209.14687v4",
+        "location": "Definition 1/Eq. (12), p. 4; Theorem 1/Eq. (14), p. 5; Lemmas 2–3 and theorem proof, pp. 14–15"
+      },
+      {
+        "label": "Version history",
+        "url": "https://arxiv.org/abs/2209.14687",
+        "location": "Latest listed revision v4, 20 May 2024"
+      },
+      {
+        "label": "Author repository discussions",
+        "url": "https://github.com/DPS2022/diffusion-posterior-sampling/issues",
+        "location": "Available open and closed issues and comments checked during the audit"
+      },
+      {
+        "label": "Frequency-Guided Posterior Sampling for Diffusion-Based Image Restoration",
+        "url": "https://arxiv.org/abs/2411.15295",
+        "location": "Gaussian conditional/score analysis, Section 5 and Appendix B"
+      },
+      {
+        "label": "On the Guidance of Flow Matching",
+        "url": "https://proceedings.mlr.press/v267/feng25s.html",
+        "location": "Section 3.2, discussion following the local guidance error bound; density error versus guidance-vector-field error"
+      },
+      {
+        "label": "ICLR discussion page",
+        "url": "https://openreview.net/forum?id=OnD9zGAGT0k",
+        "location": "Discussion access was incomplete in this audit"
+      }
+    ],
+    "auditId": "IG045",
+    "primaryUrl": "https://arxiv.org/pdf/2209.14687v4",
+    "citationCount": 1867,
+    "citationUrl": "https://www.semanticscholar.org/paper/61e46884567be7cad12e999365b16a8d3414b678",
+    "paperSummary": "Diffusion Posterior Sampling uses a pretrained diffusion model to reconstruct signals or images from noisy measurements, including nonlinear measurement processes. It combines diffusion sampling with measurement guidance computed through a denoised estimate of the unknown clean input. A key approximation evaluates the measurement likelihood at that estimate instead of averaging it over the entire conditional distribution.",
+    "theoryRole": "Theorem 1 bounds the likelihood error from evaluating at the posterior mean instead of averaging over the conditional distribution. DPS uses a guidance gradient, however, whose error is not directly controlled by this likelihood bound.",
+    "severity": "repairable",
+    "issueTypes": [
+      "incorrect_bound",
+      "lemma_error"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "constrained-belief-updates-normalisation",
+    "title": "Constrained Belief Updates Explain Geometric Structures in Transformer Representations",
+    "issueTitle": "Averaging row-conditioned transitions does not give the posterior",
+    "year": 2025,
+    "category": "Transformers & in-context learning",
+    "status": "counterexample",
+    "version": "ICML 2025 proceedings; arXiv v2 (15 October 2025)",
+    "location": "Appendix A.2, Eqs. (26)–(27), using the row-normalised transition matrix defined in Appendix A; main-text Eqs. (5)–(6).",
+    "originalClaim": "The paper first conditions each transition row on the observed symbol, defining $R_z(i,j)=T^{(z)}_{ij}/\\sum_kT^{(z)}_{ik}$. Appendix A.2 then identifies the globally normalized Bayesian update in Eq. (26) with the stationary-prior average $\\pi R_z$ in Eq. (27). For one observation, this is the identity displayed below.",
+    "formula": "R_z(i,j)=\\frac{T^{(z)}_{ij}}{\\sum_k T^{(z)}_{ik}},\\qquad \\underbrace{\\frac{\\pi T^{(z)}}{\\pi T^{(z)}\\mathbf 1}}_{\\text{Eq. (26), }d=1}\\ \\overset{\\text{claimed}}{=}\\ \\underbrace{\\pi R_z}_{\\text{Eq. (27), }d=1}.",
+    "assumptions": [
+      "The entry $T^{(z)}_{ij}$ is the joint probability of emitting $z$ and entering state $j$, conditional on predecessor state $i$. Beliefs are row vectors and multiply transition matrices on the left.",
+      "The unconditional transition matrix is $T=\\sum_zT^{(z)}$, and $\\pi$ is its stationary distribution. Every row sum in the witness is strictly positive.",
+      "The example lies in the paper’s symmetric three-state Mess3 family, with interior parameters, a positive-probability observation and $d=1$. No asymptotic or attention approximation is used."
+    ],
+    "paperSummary": "The paper studies transformers trained to predict sequences from hidden Markov models. It proposes that the first attention layer combines contributions from separate past observations because attention processes them in parallel. A spectral analysis predicts the resulting attention patterns and residual-stream geometry, which the authors compare with trained networks.",
+    "theoryRole": "Each contribution in the additive construction starts from a one-observation posterior. Appendix A.2 supplies that posterior, so its normalization determines whether the construction has the stated Bayesian interpretation. A later fitted linear map can absorb some errors in the contributions’ scale.",
+    "plainExplanation": "Observing a symbol changes both the transition probabilities from a given predecessor state and the probability of that predecessor state. Row normalization accounts for the first change. Averaging those rows with the unchanged prior omits the second, so it generally gives a different posterior. Positive row sums make the conditioning well defined; they do not make the two expressions equal. In the example below, the two posterior vectors differ, but their deviations from the stationary prior have a common scale.",
+    "steps": [
+      {
+        "title": "Conditioning changes the mixture weights",
+        "text": "Write $e_i(z)=\\sum_jT^{(z)}_{ij}$. Observing $z$ changes the predecessor-state weight to $\\pi_i e_i(z)/\\sum_k\\pi_k e_k(z)$. These posterior weights must be used when averaging $R_z$. Positive row sums ensure that $R_z$ is defined; they do not preserve the prior weights.",
+        "formula": "q_z(j)=\\sum_i\\frac{\\pi_i e_i(z)}{\\sum_k\\pi_k e_k(z)}R_z(i,j),\\qquad e_i(z)=\\sum_jT^{(z)}_{ij}."
+      },
+      {
+        "title": "An interior Mess3 model has unequal emission probabilities",
+        "text": "Set $\\alpha=3/5$ and $x=3/20$, so $\\beta=1/5$ and $y=7/10$. The unconditional transition matrix has diagonal $y$ and off-diagonal $x$, giving stationary distribution $\\pi=(1/3,1/3,1/3)$. The symbol-$0$ row sums are $(12/25,13/50,13/50)$, and every matrix entry is positive.",
+        "formula": "T^{(0)}=\\begin{pmatrix}21/50&3/100&3/100\\\\9/100&7/50&3/100\\\\9/100&3/100&7/50\\end{pmatrix},\\qquad\\pi=(1/3,1/3,1/3)."
+      },
+      {
+        "title": "The discrepancy appears after one observation",
+        "text": "Applying the global normalization in Eq. (26) gives the Bayesian posterior. Averaging the row-normalized matrix in Eq. (27) gives a different vector. The disagreement already occurs at $d=1$.",
+        "formula": "\\frac{\\pi T^{(0)}}{\\pi T^{(0)}\\mathbf1}=\\left(\\frac35,\\frac15,\\frac15\\right)\\ne\\pi R_0=\\left(\\frac{163}{312},\\frac{149}{624},\\frac{149}{624}\\right)."
+      },
+      {
+        "title": "Symmetry limits the effect on fitted geometry",
+        "text": "At these parameters, the incorrect token vector’s deviation from $\\pi$ is exactly $295/416$ times the correct deviation. Permutation symmetry gives the same factor for all three symbols. Linear propagation and summation preserve it, so an unrestricted fitted linear map can compensate. The spectral decay rate is unchanged.",
+        "formula": "\\pi R_z-\\pi=\\frac{295}{416}(q_z-\\pi),\\qquad z\\in\\{0,1,2\\}."
+      }
+    ],
+    "counterexample": "At $\\alpha=3/5$ and $x=3/20$, Eqs. (26) and (27) give different posterior vectors despite strictly positive row sums. This refutes their claimed equivalence at $d=1$.",
+    "witnessFormula": "q_0-\\pi R_0=\\left(\\frac{121}{1560},-\\frac{121}{3120},-\\frac{121}{3120}\\right)\\ne0.",
+    "impact": "The additive construction assigns a Bayesian contribution to each observed token. That interpretation requires the posterior mixture weights. Correcting those weights restores the one-observation posterior and retains the subsequent spectral propagation.",
+    "practical": "For this symmetric Mess3 example, an unrestricted fitted linear map can absorb the common factor $295/416$. The normalization error therefore does not establish a failure of the reported geometry fits, attention decay predictions or trained-model performance. Calculations in fixed probability coordinates do require the corrected posterior.",
+    "repair": "Retain the globally normalized update in Eq. (26). Equivalently, let $e_i(z)=\\sum_jT^{(z)}_{ij}$ and $D_z=\\operatorname{diag}(e_i(z))$. The correct mixture weights are the posterior probabilities of the predecessor states:\n$$q_z=\\frac{\\pi D_z}{\\pi D_z\\mathbf1}R_z=\\frac{\\pi T^{(z)}}{\\pi T^{(z)}\\mathbf1}.$$\nThe equality follows from $D_zR_z=T^{(z)}$, and $q_zT^n$ is the posterior after $n$ unobserved transitions. Using $q_z$ in place of $\\pi R_z$ therefore repairs the one-observation normalization step in the additive construction. If all $e_i(z)$ are equal on the support of $\\pi$, the original prior weights are valid as a special case.",
+    "repairFormula": "q_z=\\frac{\\pi T^{(z)}}{\\pi T^{(z)}\\mathbf1}=\\frac{\\pi D_z}{\\pi D_z\\mathbf1}R_z,\\qquad D_z=\\operatorname{diag}(e_1(z),e_2(z),e_3(z)).",
+    "repairProofFormula": "D_zR_z=T^{(z)},\\qquad q_zT^n\\ \\text{is the posterior propagated through }n\\text{ unobserved steps}.",
+    "implementation": "In `compute_all_vecs`, compute `posterior = steady_state @ T[z]` and then `posterior /= posterior.sum()` for each symbol $z$. Propagate that vector through the unconditional transition matrix as before. Refit the alignment map and recompute quantities that use absolute probability coordinates. The normalization repair does not require changing the transformer training objective.",
+    "caveats": [
+      "The normalization identity is evaluated in the proceedings paper and arXiv v2. Transformer training and the reported experimental scores are outside this mathematical argument.",
+      "The paper places the additive ansatz in the affine hyperplane containing the simplex. Negative coordinates are compatible with that description and are outside this normalization finding.",
+      "The common factor $295/416$ holds for this symmetric Mess3 example; it is not a claim about general hidden Markov models.",
+      "This reader-nominated paper had $16$ citations in the recorded Semantic Scholar snapshot and was outside the original cohort selected at $300$ citations or more."
+    ],
+    "correctionSearch": "The pinned author notebook implements the disputed row-normalized expression; it is evidence of the original implementation. The RRXOR follow-up addresses a different generalization question. The inspected public records do not establish an author correction of the normalization identity.",
+    "sources": [
+      {
+        "label": "ICML 2025 proceedings and publication record",
+        "url": "https://proceedings.mlr.press/v267/piotrowski25a.html",
+        "location": "Appendix A.2, Eqs. (26)–(27); Sections 4.3–4.4, Eqs. (5)–(8)"
+      },
+      {
+        "label": "Published ICML PDF",
+        "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/piotrowski25a/piotrowski25a.pdf",
+        "location": "Appendix A defines the conditional transition matrix by row normalisation"
+      },
+      {
+        "label": "arXiv v2: mathematical text and appendices",
+        "url": "https://arxiv.org/html/2502.01954v2",
+        "location": "The same normalisation identity remains in this version"
+      },
+      {
+        "label": "arXiv submission history",
+        "url": "https://arxiv.org/abs/2502.01954",
+        "location": "Latest retrieved version: v2, 15 October 2025"
+      },
+      {
+        "label": "Author notebook at original commit 503e152",
+        "url": "https://github.com/adamimos/epsilon-transformers/blob/503e15230c7fed8a62f498a52f78bb538959c501/examples/intermediate_representations.ipynb",
+        "location": "compute_all_vecs normalizes the emission matrices per row before averaging with the stationary prior; original implementation, not a correction"
+      },
+      {
+        "label": "Author repository: open and closed issues",
+        "url": "https://github.com/adamimos/epsilon-transformers/issues?q=is%3Aissue",
+        "location": "Correction search includes issue and pull-request records"
+      },
+      {
+        "label": "Author follow-up: Simplex progress report, July 2025",
+        "url": "https://www.alignmentforum.org/posts/fhkurwqhjZopx8DKK/simplex-progress-report-july-2025",
+        "location": "Discusses an additive construction in the plane of the simplex; no explicit normalisation repair found"
+      },
+      {
+        "label": "Later work: When Is an Attention Head a Computational Unit?",
+        "url": "https://openreview.net/pdf?id=QVcsBMonuz",
+        "location": "Search-index text inspected only; full PDF was inaccessible in the fresh review and was not cleared as a correction source"
+      },
+      {
+        "label": "September 2025 follow-up: RRXOR generalization (different issue)",
+        "url": "https://www.lesswrong.com/posts/BRiQ6Mn5HKc5SoyY3/constrained-belief-updates-and-geometric-structures-in",
+        "location": "Theoretical Findings: criticism of the ansatz on RRXOR, not a correction of the Mess3 normalization identity."
+      }
+    ],
+    "auditId": "NOM-2502.01954",
+    "primaryUrl": "https://proceedings.mlr.press/v267/piotrowski25a.html",
+    "citationCount": 16,
+    "citationUrl": "https://www.semanticscholar.org/paper/decab8df62433e06a202da0d85761e78dae1d4c8",
+    "selection": "user-nominated",
+    "reproductionUrl": "/data/proof-atlas/reproduce-belief.py",
+    "severity": "repairable",
+    "issueTypes": [
+      "formula_error"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "title": "MathAudit",
+    "url": "https://mathaudit.org/",
+    "description": "A catalogue of AI proof audits and dependency graphs."
+  },
+  {
+    "title": "Pith",
+    "url": "https://pith.science/",
+    "description": "Public AI analyses of research papers, including mathematical claims and proofs."
+  },
+  {
+    "title": "To Err Is Human",
+    "url": "https://arxiv.org/abs/2512.05925",
+    "description": "LLM searches for errors in published AI papers, with expert assessment of a sample."
+  },
+  {
+    "title": "Agent-Based Auditing of Mathematical Proofs",
+    "url": "https://github.com/NNHieu/math_auditing_examples",
+    "description": "A workflow that checks proof steps and their dependencies, then revisits each flagged error."
+  },
+  {
+    "title": "Optimend",
+    "url": "https://www.optimend.app/",
+    "description": "AI audits of optimization papers, with supporting calculations and code."
+  },
+  {
+    "title": "The Black Spatula Project",
+    "url": "https://the-black-spatula-project.github.io/",
+    "description": "A community effort to find and assess errors in scientific papers."
+  },
+  {
+    "title": "Google’s Paper Assistant Tool",
+    "url": "https://arxiv.org/abs/2606.28277",
+    "description": "An agentic reviewer tested with authors before submission."
+  },
+  {
+    "title": "AI reviewers for TMLR",
+    "url": "https://cspaper.org/openprint/20260706.0002v1",
+    "description": "An evaluation against editorial decisions and deliberately inserted errors."
+  },
+  {
+    "title": "FLAWS",
+    "url": "https://arxiv.org/abs/2511.21843",
+    "description": "A benchmark for locating deliberately inserted, claim-invalidating errors."
+  },
+  {
+    "title": "PubPeer",
+    "url": "https://pubpeer.com/",
+    "description": "Post-publication discussions checked for earlier reports of the same claim."
+  }
+]

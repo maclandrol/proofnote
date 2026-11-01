@@ -1,0 +1,50 @@
+[
+  {
+    "checkId": "REVIEW-154520",
+    "field": "explanation",
+    "before": "Cached official title, four-author roster, and core abstract match the public arXiv HTML-derived source. This does not establish identity with an accepted conference manuscript revision.\nThe soft projection is approximate and the paper separately relies on its final discrete correction for exact charge balance. No tentative proof/formula/statistics concern met the first-pass threshold.",
+    "after": "The soft projection is approximate; the final discrete correction provides exact charge balance. No proof, formula, or statistical error was identified in the material examined. Equivalence with the accepted conference manuscript has not been established."
+  },
+  {
+    "checkId": "REVIEW-151446",
+    "field": "explanation",
+    "before": "Read all 110,815 cached characters to EOF (main text Secs. 1-6, references, Appendices A-F). Checked the reward/GRPO definitions, Table 3 ablation, and Appendix B grouping. The reported Avg. SR values in Table 1 match a category-count-weighted (overall) average in 10/12 Qwen3-8B/32B rows, whereas App. B.3.3 defines Avg. SR as a 'macro-average across the six categories' (unweighted); this is at most a wording/definition mismatch (macro vs micro aggregation), and two baseline rows (ReasoningBank 55.7 vs weighted 56.19; MemP 49.7 vs weighted 47.86) sit outside rounding. Recorded as residual doubt only, not flagged: the discrepancy does not affect the method's own formulas, and the paper's headline SkillOS rows match the count-weighted average. Main-text pointer to Appendix A for 'all prompts' is not satisfied by the cached appendix (no prompt bodies); recorded as source_gap. No unjustified proof step, bound, or false invariance found. No suspicions.",
+    "after": "The reported group sizes are all greater than one, so the denominator \\(|G|-1\\) in the task-outcome reward is nonzero in those configurations. No unjustified proof step, bound, or false invariance was identified in the checked statements."
+  },
+  {
+    "checkId": "REVIEW-153462",
+    "field": "explanation",
+    "before": "The cached official title, six-author roster, and core abstract match the public arXiv HTML-derived source. This does not establish identity with an accepted conference manuscript revision.\nThe behavioral verification method is limited by its stated assumption and disclosed detection scope; no tentative mathematical flag met the first-pass threshold.",
+    "after": "The behavioral verification method depends on its stated assumption and has the disclosed detection limits. No mathematical error was identified in the material examined. Equivalence with the accepted conference manuscript has not been established."
+  },
+  {
+    "checkId": "REVIEW-154756",
+    "field": "explanation",
+    "before": "The cached official title and core abstract match the public arXiv source. The public source lists Yuan Xie, Jiaqi Song, Guang Qiu, Xianliang Wang, Ming Lei, Jie Gao, and Jie Wu; the cached official roster lists Yuan Xie, Jiaqi Song, Xianliang Wang, Ming Lei, and Jie Gao. Preserve this roster difference; it does not establish accepted-body equivalence.\nThe source itself qualifies the Gaussian diagnostic metrics as relative proxies, not exact information quantities. No tentative proof/formula/statistics concern met the first-pass threshold.",
+    "after": "The Gaussian diagnostic metrics are qualified as relative proxies rather than exact information quantities. No proof or formula error was identified in the material examined. Equivalence with the accepted conference manuscript has not been established."
+  },
+  {
+    "checkId": "REVIEW-151446",
+    "field": "claimContext",
+    "before": "The reported grouping configurations use group sizes 10, 10, or Random(5,12), so every group has size greater than one and the denominator |G|-1 is well-defined.",
+    "after": "The reported configurations use groups of size \\(10\\), \\(10\\), or \\(\\operatorname{Random}(5,12)\\), so every group has \\(|G|>1\\) and the denominator \\(|G|-1\\) is nonzero."
+  },
+  {
+    "checkId": "SUS26-152058-04",
+    "field": "explanation",
+    "before": "At most ambiguity about pooling, not an impossible reported p-value. No numerical error established from cached text.",
+    "after": "The reported \\(p\\)-value is compatible with the available numerical information. The pooling procedure is not specified clearly enough to identify a numerical error."
+  },
+  {
+    "checkId": "SUS26-152058-04",
+    "field": "scope",
+    "before": "At most ambiguity about pooling, not an impossible reported p-value. No numerical error established from cached text.",
+    "after": "The reported \\(p\\)-value is compatible with the available numerical information. The pooling procedure is not specified clearly enough to identify a numerical error."
+  },
+  {
+    "checkId": "SUS26-139308-01",
+    "field": "claimContext",
+    "before": "Appendix A.3 defines a physical-validity mask \\(\\Omega\\) and a low-gradient mask \\(\\Omega_{80}\\). The earlier cached text combined them by union; current v3 explicitly uses their intersection.",
+    "after": "Appendix A.3 defines a physical-validity mask \\(\\Omega\\) and a low-gradient mask \\(\\Omega_{80}\\). Version 3 combines these masks by intersection rather than union."
+  }
+]

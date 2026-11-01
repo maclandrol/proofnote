@@ -1,0 +1,865 @@
+[
+  {
+    "slug": "memory-retrieval-saliency-identity",
+    "title": "Memory Retrieval for Changing Preferences",
+    "issueTitle": "The saliency identity adds an unsupported query term",
+    "year": 2026,
+    "category": "Representation learning",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v1, uploaded 2 June 2026",
+    "location": "Definition 2; Theorem 3, Equation (6); Theorem 4, Equation (14)",
+    "originalClaim": "The answer-saliency difference is decomposed into a query-saliency difference and a marginal answer-saliency difference. The resulting claim uses query saliency to recover the answer-based ranking.",
+    "formula": "\\Delta\\mathrm{Sal}_a=\\Delta\\mathrm{Sal}_q+\\Delta\\mathrm{Sal}^{\\mathrm{marg}}_a",
+    "assumptions": [
+      "A strictly positive joint law for binary memory \\(C\\), answer \\(A\\) and query \\(Q\\).",
+      "The source's query-conditional sufficiency condition: \\(A\\perp Q\\mid C\\).",
+      "Each memory value has probability \\(1/2\\)."
+    ],
+    "paperSummary": "The paper uses likelihood gains to decide when a conversational system should access memory and which historical turns it should retrieve as preferences change.",
+    "theoryRole": "The saliency identities are used to justify a relationship between observable query relevance and the answer-based utility of a memory. The witness tests that relationship, rather than benchmark performance.",
+    "plainExplanation": "Under the stated conditional independence, the answer-saliency difference already equals the marginal answer difference. Query evidence is a separate quantity and need not vanish. A positive eight-outcome distribution makes the proposed identity false and can make the two rankings disagree.",
+    "steps": [
+      {
+        "title": "Choose a positive joint law",
+        "text": "Let \\(C\\) be fair. Conditional on \\(C=0,1\\), let the query probabilities be \\((0.1,0.9)\\) and answer probabilities \\((0.5001,0.4999)\\). Draw \\(A,Q\\) independently given \\(C\\), so all eight outcomes have positive probability."
+      },
+      {
+        "title": "Apply conditional sufficiency",
+        "text": "At fixed \\(a=q=1\\), the answer-score difference equals the marginal-answer difference.",
+        "formula": "\\Delta\\mathrm{Sal}_a=\\log\\frac{0.5001}{0.4999}=\\Delta\\mathrm{Sal}_a^{\\mathrm{marg}}>0"
+      },
+      {
+        "title": "Compare the query score",
+        "text": "The query difference is negative and nonzero. It both contradicts the added-term identity and reverses the answer ordering. The marginal-answer gap can be made arbitrarily small.",
+        "formula": "\\Delta\\mathrm{Sal}_q=\\log(1/9)<0"
+      }
+    ],
+    "counterexample": "The positive joint law gives a positive answer-score gap and query gap \\(-\\log9\\). Setting both conditional answer probabilities to \\(1/2\\) makes the answer and marginal gaps and sufficiency residuals all zero while the query gap remains nonzero, also disproving Eq. (14).",
+    "impact": "The stated identity and error bound do not justify replacing answer saliency by query saliency. A ranking guarantee needs an explicit alignment condition and, with approximation error, a score margin.",
+    "practical": "Query relevance can oppose answer utility even when every memory is query-sufficient. This identifies what an additional ranking assumption must control.",
+    "repair": "Use the exact identity above. If \\(|d_i|\\le\\varepsilon_i\\), the triangle inequality yields\n\\[|(A_i-A_j)-(Q_i-Q_j)|\\le\\varepsilon_i+\\varepsilon_j+|(M_i-M_j)-(Q_i-Q_j)|.\\]\nA query-only ranking guarantee therefore needs a quantitative alignment bound on the final term. If the right-hand side is \\(B\\), a query-score gap of absolute size greater than \\(B\\) guarantees the same strict ordering for the answer scores. Approximate constancy of the marginal-answer scores alone does not supply this alignment or margin.",
+    "repairFormula": "\\Delta\\mathrm{Sal}_a=\\Delta\\mathrm{Sal}^{\\mathrm{marg}}_a",
+    "implementation": "No scorer implementation was available in the inspected author-associated data release. The mathematical correction concerns the justification; a practical ranking change would need to be tested separately.",
+    "caveats": [
+      "This note concerns public arXiv v1. Equality with the accepted manuscript has not been established.",
+      "The separate reporting-only table discrepancy is excluded from the mathematical report."
+    ],
+    "correctionSearch": "Public arXiv history, the author-associated data repository and its public issues/commit comments were checked. Pith supplies an AI-generated discussion of the Bayes-factor framing, not a verified correction of this identity. OpenReview discussion content was blocked by browser verification. No same-claim correction was identified on the inspected surfaces.",
+    "sources": [
+      {
+        "label": "Paper, public v1",
+        "url": "https://arxiv.org/html/2606.02976v1",
+        "location": "Definition 2; Theorems 3 and 4"
+      },
+      {
+        "label": "NeurIPS 2026 listing",
+        "url": "https://neurips.cc/virtual/2026/poster/155002"
+      },
+      {
+        "label": "Author-associated benchmark data",
+        "url": "https://github.com/yqin43/saliency"
+      },
+      {
+        "label": "Related AI-generated review",
+        "url": "https://pith.science/paper/2606.02976"
+      }
+    ],
+    "auditId": "SUS26-155002-01",
+    "primaryUrl": "https://arxiv.org/abs/2606.02976v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "severity": "major",
+    "issueTypes": [
+      "false_statement"
+    ],
+    "verificationStatus": "confirmed"
+  },
+  {
+    "slug": "coupled-reward-machines-stochastic-ordering",
+    "title": "Reinforcement Learning for Long-Horizon Unordered Tasks: From Boolean to Coupled Reward Machines",
+    "issueTitle": "Stochastic reward shaping can reverse policy preference",
+    "year": 2026,
+    "category": "Reinforcement learning",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v2, uploaded 21 June 2026; v1 uploaded 31 October 2025",
+    "location": "Equation (5); Theorem 3 and its return-ordering argument",
+    "originalClaim": "The expected-duration reward transformation preserves the globally optimal discounted-return preference in the stated stochastic tabular setting.",
+    "formula": "\\delta=\\max(\\bar K_i-K_i,\\;K-\\bar K),\\qquad R=\\gamma^{\\delta+1}\\;\\text{when }\\delta\\neq0",
+    "assumptions": [
+      "A finite, terminating stochastic MDP with one terminal completion reward of one and zero intermediate rewards.",
+      "Discount factor $\\gamma=0.9$ and exact frozen local and global expected-duration baselines equal to $5$.",
+      "The risky action completes after $K=1$ or $K=9$ steps with equal probabilities; the safe action completes after $K=6$."
+    ],
+    "paperSummary": "Coupled reward machines decompose long-horizon tasks into subtasks while sharing progress information. QCoRM uses this structure and a duration-dependent reward transformation to support learning.",
+    "theoryRole": "The stochastic guarantee is intended to connect local shaped rewards to the original global objective. A reversal at exact fixed baselines already breaks policy preservation, independently of baseline-estimation error.",
+    "plainExplanation": "An optimal stochastic policy need not finish at its expected duration. The duration transformation penalizes both its shorter and longer realizations. In the finite construction below, those sample-wise penalties make the originally optimal action worse than the safe action, even though both expected-duration references are exact.",
+    "steps": [
+      {
+        "title": "Compare the original returns",
+        "text": "Use one subtask with discount $\\gamma=0.9$, terminal reward $1$ and zero intermediate rewards. The risky action chooses, with equal probabilities, a chain completing after $K=1$ or $K=9$ steps. The safe action completes after $K=6$ steps. Their expected durations are $5$ and $6$. Their original returns are $0.715233605$ and $0.59049$, respectively, so the risky action is better for both criteria. Finite acyclic chains implement these dynamics with certain termination.",
+        "formula": "G_{\\rm risky}=\\frac{1+0.9^8}{2}>0.9^5=G_{\\rm safe}"
+      },
+      {
+        "title": "Apply the printed duration penalty",
+        "text": "Give the rule the exact local and global optimal expected-duration references, both equal to $5$. In this single-subtask instance its discrepancy is $\\delta=|K-5|$. It equals $4$ on either risky realization and $1$ on the safe realization. Thus even the optimal action receives a nonzero penalty on every sample: optimality of its expected duration does not make its realized duration equal to that mean."
+      },
+      {
+        "title": "Observe the reversed preference",
+        "text": "Combining the completion reward in Eq. (5) with the ordinary trajectory discount gives shaped returns $0.42233829141645$ for the risky action and $0.4782969$ for the safe action. The reward transformation therefore reverses the optimal action even with exact frozen references. The expectation cannot be moved inside the discount exponent, and averaging the sample-wise shaped returns leaves the reversal intact.",
+        "formula": "G'_{\\rm risky}=\\frac{0.9^5+0.9^{13}}2<0.9^7=G'_{\\rm safe}"
+      }
+    ],
+    "counterexample": "Finite acyclic branching chains realize the two actions with bounded termination times. All intermediate rewards are zero, both exact expected-duration references equal five, and the original discounted optimum also minimizes expected duration. The original and shaped preferences are nevertheless opposite.",
+    "impact": "The stated stochastic reward transformation does not preserve the globally optimal discounted-return policy. Exact expected-duration references do not suffice for the advertised policy-preservation guarantee.",
+    "practical": "The reversal concerns the policy ordering at exact fixed references. It does not determine the limiting behavior of the full coupled algorithm as its references change, and does not assess the deterministic-domain measurements, neural experiments or reward-machine representation.",
+    "repair": "A deterministic-duration restriction would exclude this construction, but the coupled learning updates would still need a proof under that restriction. Alternatively, replace the duration transformation by potential-based shaping on a sufficient Markov state. The displayed potential difference telescopes to an initial-state offset when the terminal potential is zero, preserving the original discounted policy ordering. This is a different reward construction; its guarantee does not automatically extend to the proposed compressed QCoRM architecture.",
+    "repairFormula": "r'(s,a,s')=r(s,a,s')+\\gamma\\Phi(s')-\\Phi(s)",
+    "implementation": "The policy-preserving alternative replaces the duration penalty with a potential difference. It therefore changes the reward used to train QCoRM; the paper’s results do not establish experimental equivalence between these two rewards.",
+    "caveats": [
+      "The checked formula is v2, which differs from v1 and its deterministic qualification.",
+      "The accepted manuscript and public review discussion were not accessible for comparison."
+    ],
+    "correctionSearch": "The public history still lists v2 as the latest version. Pith contains a related AI-generated optimality critique of v1, using a different formula and reward setting. It does not verify this v2 counterexample and its simulated rebuttal is not an author response. No exact v2 correction was identified in the inspected public surfaces; OpenReview was blocked by browser verification.",
+    "sources": [
+      {
+        "label": "Paper, public v2",
+        "url": "https://arxiv.org/html/2510.27329v2",
+        "location": "Equation (5); Theorem 3"
+      },
+      {
+        "label": "Version history",
+        "url": "https://arxiv.org/abs/2510.27329"
+      },
+      {
+        "label": "NeurIPS 2026 listing",
+        "url": "https://neurips.cc/virtual/2026/poster/149595"
+      },
+      {
+        "label": "Related AI-generated v1 critique",
+        "url": "https://pith.science/paper/2510.27329"
+      }
+    ],
+    "auditId": "SUS26-149595-01",
+    "primaryUrl": "https://arxiv.org/abs/2510.27329v2",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "severity": "critical",
+    "issueTypes": [
+      "false_statement",
+      "proof_gap"
+    ],
+    "verificationStatus": "confirmed"
+  },
+  {
+    "slug": "lomo-supervised-loss-kl-alignment",
+    "title": "LoMo: Local Modality Substitution for Deeper Vision-Language Fusion",
+    "issueTitle": "Supervised loss can improve while cross-modal KL worsens",
+    "year": 2026,
+    "category": "Representation learning",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v1, uploaded 28 May 2026",
+    "location": "Section 3.3, interpretation immediately following Equations (5) and (6)",
+    "originalClaim": "The supervised substitution objective is interpreted as equivalent to adding an implicit cross-modal KL-alignment term to standard supervised training.",
+    "formula": "\\mathcal L_{\\rm SFT}=-\\log q(y),\\qquad D_{\\rm KL}(p\\|q)=\\sum_a p(a)\\log\\frac{p(a)}{q(a)}",
+    "assumptions": [
+      "There are two possible answers and a fixed corpus label equal to the first answer.",
+      "The original-carrier distribution is \\(p=(0.8,0.2)\\).",
+      "The substituted-carrier distribution moves from \\(q=p\\) to \\(q=(0.9,0.1)\\), with \\(p\\) fixed."
+    ],
+    "paperSummary": "LoMo renders a local text span as an image and substitutes it into multimodal training examples, aiming to reduce sensitivity to whether equivalent content is provided as text or pixels.",
+    "theoryRole": "The alignment interpretation is offered as an explanation of why ordinary supervised fine-tuning on substituted inputs should align predictive distributions. It is separate from the reported empirical gains.",
+    "plainExplanation": "A fixed-label loss rewards probability on the corpus label. With \\(p=(0.8,0.2)\\) fixed, moving \\(q\\) from \\(p\\) to \\((0.9,0.1)\\) reduces supervised loss while increasing \\(\\mathrm{KL}(p\\|q)\\). The model-sampled expectation in Equation (6) is different from this fixed-label objective.",
+    "steps": [
+      {
+        "title": "Start with identical carrier distributions",
+        "text": "Let \\(p=(0.8,0.2)\\) and initially \\(q=p\\). Their KL divergence is zero, while fixed-label loss is \\(-\\log(0.8)\\approx0.2231\\)."
+      },
+      {
+        "title": "Improve the labelled prediction",
+        "text": "Change \\(q\\) to \\((0.9,0.1)\\). The fixed-label loss becomes \\(-\\log(0.9)\\approx0.1054\\)."
+      },
+      {
+        "title": "Compare the full distributions",
+        "text": "The KL divergence rises from zero to approximately \\(0.0444\\), despite the loss improvement.",
+        "formula": "0.8\\log\\frac{0.8}{0.9}+0.2\\log\\frac{0.2}{0.1}\\approx0.0444>0"
+      }
+    ],
+    "counterexample": "With the original-carrier distribution fixed, one supervised update direction strictly reduces the actual fixed-label loss while strictly increasing the proposed KL-alignment quantity. The original-carrier supervised term, if included, is unchanged.",
+    "impact": "The optimization-equivalence inference does not follow from the valid pointwise identity and model-answer expectation in Equations (5) and (6). The displayed identities themselves are not refuted.",
+    "practical": "This does not show that LoMo fails to improve multimodal performance or that the benchmark results are wrong. It limits the formal interpretation of the training objective.",
+    "repair": "State the expectation distribution explicitly. The fixed-label argument equals the model-sampled KL decomposition only when the original-carrier distribution \\(p\\) equals the data-label distribution \\(r\\). Otherwise use \\(\\mathbb E_r[-\\log q]=H(r,p)+\\mathrm{KL}(r\\|q)-\\mathrm{KL}(r\\|p)\\). An actual teacher-distribution objective is a different training objective.",
+    "implementation": "The discrepancy is in the claimed equivalence, not a demonstrated training-code defect. Adding a KL or distillation term would define a different objective and would need its own evaluation.",
+    "caveats": [
+      "Public v1 is the checked manuscript. Later code or project-page updates do not by themselves revise its mathematical argument.",
+      "This is a local explanation gap, with no main theorem or empirical-performance failure established."
+    ],
+    "correctionSearch": "The official README removed the phrase \"extra cross-carrier alignment signal\" on 27 May 2026, before public v1 was uploaded. The diff changes one descriptive sentence; it contains no explanation of the fixed-label versus model-expectation distinction and establishes no correction of that argument. The visible issues concern evaluation listings and related literature. OpenReview discussion content remains inaccessible.",
+    "sources": [
+      {
+        "label": "Paper, public v1",
+        "url": "https://arxiv.org/html/2605.30265v1",
+        "location": "Section 3.3, Equations (5)–(6) and following interpretation"
+      },
+      {
+        "label": "Official project repository",
+        "url": "https://github.com/Maplebb/LoMo"
+      },
+      {
+        "label": "Public repository discussion",
+        "url": "https://github.com/Maplebb/LoMo/issues"
+      },
+      {
+        "label": "NeurIPS 2026 listing",
+        "url": "https://neurips.cc/virtual/2026/poster/154345"
+      },
+      {
+        "label": "Author repository: README wording change, 27 May 2026",
+        "url": "https://github.com/Maplebb/LoMo/commit/ecdfe052d3fb9dc78d2df8ac68309bde5d1ca53c",
+        "location": "One-sentence change; no mathematical explanation or manuscript correction."
+      }
+    ],
+    "auditId": "SUS26-154345-01",
+    "primaryUrl": "https://arxiv.org/abs/2605.30265v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "severity": "repairable",
+    "issueTypes": [
+      "proof_gap"
+    ],
+    "verificationStatus": "confirmed"
+  },
+  {
+    "slug": "consistency-test-degenerate-null",
+    "title": "Consistency as a Testable Property: Statistical Methods to Evaluate AI Agent Reliability",
+    "issueTitle": "Perfect consistency makes the Gaussian statistic undefined",
+    "year": 2026,
+    "category": "Optimization & generalization",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v1, uploaded 11 May 2026",
+    "location": "Section 2, Equation (5) and its null-limit claim; Theorem 2; Appendix A.2",
+    "originalClaim": "Under the perfect-consistency null, the sample-variance-studentized statistic converges to a standard normal distribution as the number of contexts grows.",
+    "formula": "T_{M,n}=\\frac{\\sqrt M(\\bar U-1)}{s_U}\\;\\xrightarrow{d}\\;\\mathcal N(0,1)",
+    "assumptions": [
+      "The similarity kernel satisfies \\(0\\le k\\le1\\).",
+      "The perfect-consistency null is \\(\\mathbb E[k]=1\\).",
+      "A deterministic agent with the exact-match kernel is an admissible instance of this null."
+    ],
+    "paperSummary": "The paper develops similarity-based measurements and hypothesis tests for the consistency of AI-agent outputs and trajectories under repeated or perturbed inputs.",
+    "theoryRole": "The normal approximation is used to calibrate a test around perfect consistency. Such calibration requires a defined statistic and a justified null distribution.",
+    "plainExplanation": "A similarity bounded by one can have mean one only by equaling one almost surely. Every instance score is then one, making both the centered numerator and sample standard deviation zero. The printed statistic is \\(0/0\\), not asymptotically standard normal.",
+    "steps": [
+      {
+        "title": "Use the boundedness assumption",
+        "text": "The nonnegative variable \\(1-k\\) has expectation zero, so it vanishes almost surely.",
+        "formula": "0\\le k\\le1,\\quad\\mathbb E[k]=1\\quad\\Longrightarrow\\quad k=1\\ \\text{almost surely}"
+      },
+      {
+        "title": "Form the instance averages",
+        "text": "Every finite within-instance average satisfies \\(U_n^m=1\\), including for a deterministic agent returning one fixed answer."
+      },
+      {
+        "title": "Evaluate the statistic",
+        "text": "The centered sample mean and sample variance are both zero. Defining the ratio to be zero gives conservative non-rejection rather than a standard-normal law.",
+        "formula": "\\bar U_{M,n}-1=0,\\qquad\\hat\\sigma_U^2=0"
+      }
+    ],
+    "counterexample": "A constant-output agent with the exact-match kernel satisfies the null. At every sample size, all instance statistics equal one and the printed studentized ratio is undefined.",
+    "impact": "The stated standard-normal null calibration is false at the null that the output-consistency test is intended to assess. A nondegenerate central-limit theorem cannot be applied at this boundary without an additional argument.",
+    "practical": "A valid exact-null test can reject on observed disagreement and otherwise retain the null. Gaussian calibration is unnecessary for that conservative procedure.",
+    "repair": "Specify non-rejection when every observed pair has similarity one. One valid test for the exact null is to reject upon any observed similarity strictly below one: its null rejection probability is zero. Under independent identically distributed instances with a fixed alternative \\(\\theta<1\\) and at least two outputs per instance, each instance has a positive probability \\(p\\) of containing such a pair. The probability of no rejection after \\(M\\) instances is \\((1-p)^M\\to0\\). This proves conservative size and consistent power for that test, without Gaussian calibration. A normal test around a tolerance threshold below one needs an appropriate positive-variance CLT instead.",
+    "implementation": "The test specification must define its zero-variance case. The mathematical result does not depend on how an implementation currently handles it.",
+    "caveats": [
+      "This note concerns output-consistency studentization, not every statistic or empirical experiment in the paper.",
+      "Public v1 and its NeurIPS listing were checked; accepted-body equality remains unverified."
+    ],
+    "correctionSearch": "The public version history, listed anonymous code surface and available AI-generated discussion were checked. Public OpenReview review content was blocked by browser verification. A related discussion is not treated as an author correction or evidence that this exact boundary case was already repaired.",
+    "sources": [
+      {
+        "label": "Paper, public v1",
+        "url": "https://arxiv.org/html/2605.10516v1",
+        "location": "Section 2; Equation (5); Appendix A.2"
+      },
+      {
+        "label": "NeurIPS 2026 listing",
+        "url": "https://neurips.cc/virtual/2026/poster/155880"
+      },
+      {
+        "label": "Paper-linked anonymous code status",
+        "url": "https://anonymous.4open.science/status/consistent-agents-8C8B"
+      },
+      {
+        "label": "Related AI-generated review",
+        "url": "https://pith.science/paper/2605.10516"
+      }
+    ],
+    "auditId": "SUS26-155880-01",
+    "primaryUrl": "https://arxiv.org/abs/2605.10516v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "severity": "major",
+    "issueTypes": [
+      "false_statement",
+      "calibration_error"
+    ],
+    "verificationStatus": "confirmed"
+  },
+  {
+    "slug": "aerochem-open-loop-error-bound",
+    "title": "AeroChem: Closed-loop Physics-Informed State Space Modeling for Long-term Chemically-Reactive Air Quality Forecasting",
+    "issueTitle": "A contracting system contradicts the error lower bound",
+    "year": 2026,
+    "category": "Optimization & generalization",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "Public extended version, arXiv v1, uploaded 12 October 2026",
+    "location": "Appendix A.3, Theorem A.3, Equation (13); proof Step 6, Equation (25)",
+    "originalClaim": "In the [public extended version, arXiv v1](https://arxiv.org/html/2610.16630v1), Theorem A.3 contrasts corrected state estimation with open-loop prediction. Equation (13) claims that an upper Lipschitz constant $L_F>0$ forces the open-loop mean-squared error to grow exponentially. Here $e_t^{\\mathrm{open}}$ is the error after $t$ steps of length $\\Delta t$. This version was uploaded on 12 October 2026, after the conference notification date; presence of this theorem in the reviewed or accepted manuscript has not been established.",
+    "formula": "\\mathbb E\\lVert e_t^{\\rm open}\\rVert^2\\geq(1+L_F\\Delta t)^{2t}\\mathbb E\\lVert e_0\\rVert^2",
+    "assumptions": [
+      "Scalar exact dynamics $F(s)=-s$, Lipschitz constant $L_F=1$, and unit step length $\\Delta t=1$.",
+      "True state $s_0=0$, initial prediction $\\widehat s_0=1$, and zero process noise, measurement noise and bias.",
+      "For the associated closed-loop condition, choose $K=3/4$ and $W=0$, giving $\\alpha=(1+1)(1-3/4)=1/2$."
+    ],
+    "paperSummary": "AeroChem couples a physical process branch with learned virtual measurements and state correction to forecast chemically reactive air quality over long horizons.",
+    "theoryRole": "The appendix's open-loop lower bound is intended to contrast open-loop drift with closed-loop stability. This comparison is stronger than saying that some open-loop systems can amplify errors.",
+    "plainExplanation": "An upper Lipschitz condition bounds how far two states can separate; it also permits them to move closer. Proof Step 6 reverses this direction when deriving a lower bound on $\\mathbb E\\|e_t^{\\mathrm{open}}\\|^2$. The contracting drift $F(s)=-s$ obeys the upper condition and makes the prediction error shrink.",
+    "steps": [
+      {
+        "title": "Choose a contracting admissible system",
+        "text": "Use $\\dot s=-s$ with true state $s_0=0$ and initial prediction $\\widehat s_0=1$. The drift is $1$-Lipschitz, and its exact unit-step flow is $\\Phi_1(s)=e^{-1}s$, which satisfies Assumption A5. Zero noise and bias, with the associated closed-loop choices $K=3/4$ and $W=0$, satisfy A6–A9 and give $\\alpha=1/2<1$. The open-loop comparison is expressly defined by setting $K=0$."
+      },
+      {
+        "title": "Compute its exact error",
+        "text": "The exact flow multiplies the initial error by $e^{-t}$, so its squared error is $e^{-2t}$. At the first unit step, $e^{-2}\\approx0.1353$.",
+        "formula": "e_t=e^{-t},\\qquad\\lVert e_t\\rVert^2=e^{-2t}"
+      },
+      {
+        "title": "Compare the asserted lower bound",
+        "text": "With $L_F=1$ and $\\Delta t=1$, Equation (13) requires a lower bound of $4^t$. At the first step this is $4$, strictly above the exact error. Independent centered process noise with variance $0.01$ still gives only $e^{-2}+0.01\\approx0.1453<4$, so positive noise does not restore the claim.",
+        "formula": "e^{-2}\\approx0.1353<4=(1+1)^2"
+      }
+    ],
+    "counterexample": "The contracting scalar ODE satisfies the displayed assumptions and the associated condition $\\alpha<1$, yet violates Equation (13) at $t=1$ and at every later noise-free step.",
+    "impact": "The claimed comparison requires every admitted open-loop predictor to amplify error. The admissible contraction instead gives $\\mathbb E|e_t^{\\mathrm{open}}|^2=e^{-2t}$, so the theorem cannot establish that universal instability or the resulting contrast with closed-loop stability.",
+    "practical": "The scalar counterexample does not assess forecasting accuracy. It refutes the universal lower bound used to contrast open-loop and closed-loop predictions.",
+    "repair": "Replace the universal growth claim with a correctly directed upper estimate. Write $a=1+L_F\\Delta t$. For centered process innovations with conditional variance at most $v$, the open-loop error recursion gives $\\mathbb E\\|e_{t+1}\\|^2\\le a^2\\mathbb E\\|e_t\\|^2+v$, and hence\n$$\\mathbb E\\|e_t\\|^2\\le a^{2t}\\mathbb E\\|e_0\\|^2+v\\sum_{j=0}^{t-1}a^{2j}.$$\nThis bounds possible amplification without asserting that amplification must occur. To retain a lower growth bound, impose a separate expansion condition $\\|\\Phi(x)-\\Phi(y)\\|\\ge m\\|x-y\\|$ with $m>1$, together with centered innovations whose cross term vanishes. Conditioning then gives $\\mathbb E\\|e_{t+1}\\|^2\\ge m^2\\mathbb E\\|e_t\\|^2$, which iterates to the desired lower bound with $m^{2t}$. That stronger premise excludes the contracting example and is not implied by A5.",
+    "implementation": "Correct the appendix's lower-bound claim and recurrence. This counterexample does not identify a defect in the forecasting implementation.",
+    "caveats": [
+      "The checked source identifies itself as an extended version and was first uploaded after the 24 September 2026 notification date.",
+      "The result is attributed to that public extended version; presence in the reviewed or accepted manuscript has not been established."
+    ],
+    "correctionSearch": "The arXiv history, paper-linked AirQuality repository and public issue/commit-comment surfaces were checked. The timing of the extended version is recorded separately from review-period corrections. OpenReview discussion content was blocked by browser verification; no author response is inferred from an AI-generated review.",
+    "sources": [
+      {
+        "label": "Public extended version",
+        "url": "https://arxiv.org/html/2610.16630v1",
+        "location": "Appendix A.3, Equations (13) and (25)"
+      },
+      {
+        "label": "Version history",
+        "url": "https://arxiv.org/abs/2610.16630"
+      },
+      {
+        "label": "Paper-linked implementation",
+        "url": "https://github.com/kiendemo/AirQuality"
+      },
+      {
+        "label": "NeurIPS 2026 listing",
+        "url": "https://neurips.cc/virtual/2026/poster/153606"
+      },
+      {
+        "label": "Conference notification date",
+        "url": "https://neurips.cc/Conferences/2026/CallForPapers"
+      }
+    ],
+    "auditId": "SUS26-153606-01",
+    "primaryUrl": "https://arxiv.org/abs/2610.16630v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "severity": "critical",
+    "issueTypes": [
+      "false_statement",
+      "incorrect_bound"
+    ],
+    "verificationStatus": "confirmed"
+  },
+  {
+    "slug": "lynx-early-exit-conditioning",
+    "title": "LYNX: Learning Dynamic Exits for Confidence-Controlled Reasoning",
+    "issueTitle": "Positive-only calibration does not bound early-exit error",
+    "year": 2026,
+    "category": "Transformers & sequence models",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v1, uploaded 5 December 2025",
+    "location": "Section 3.4, Equations (10)–(12), guarantee paragraph; Algorithm 1",
+    "originalClaim": "A threshold calibrated using correct examples is claimed to control the fraction of incorrect early exits at approximately the chosen $\\delta$.",
+    "formula": "\\Pr[y(e_{\\text{test}})=1]\\geq 1-\\delta",
+    "assumptions": [
+      "Exchangeable calibration and test examples, with one exit cue per problem.",
+      "A perfectly calibrated correctness probe with balanced correct/incorrect prevalence.",
+      "The printed rule: calibrate a 95th percentile of $1-p$ on positive examples only, then exit below that threshold."
+    ],
+    "paperSummary": "LYNX learns confidence probes from hidden reasoning states and uses calibrated exit decisions to stop generation early while aiming to retain answer correctness.",
+    "theoryRole": "The confidence-control argument is meant to turn probe scores and split calibration into a distribution-free reliability guarantee for selected exits.",
+    "plainExplanation": "Positive-only calibration controls how often a correct cue passes the threshold, $\\Pr(\\mathrm{exit}\\mid Y=1)$. The claimed guarantee instead concerns correctness after an exit, $\\Pr(Y=1\\mid\\mathrm{exit})$. Incorrect cues can pass the same threshold. In a balanced calibrated population of forty records, the printed rule accepts every cue and gives correctness $1/2$ at a requested level $0.95$.",
+    "steps": [
+      {
+        "title": "Use a calibrated finite population",
+        "text": "Let $Y\\in\\{0,1\\}$ indicate correctness. Take twenty records with probe score $p=1/4$, five correct, and twenty with score $p=3/4$, fifteen correct. Thus $\\Pr(Y=1\\mid p)=p$ in each score group and the overall correctness fraction is $1/2$. Give each problem one cue. A uniform permutation, with its final record reserved for testing, makes the calibration and test records exchangeable."
+      },
+      {
+        "title": "Calibrate on positives",
+        "text": "Set $\\delta=0.05$ and calibrate the positive-only scores $1-p$. If the test record is correct, $n_+=19$ positive calibration records remain; otherwise $n_+=20$. The corrected ranks are $\\lceil20\\cdot0.95\\rceil=19$ and $\\lceil21\\cdot0.95\\rceil=20$, respectively, so each selects the largest score. At least four correct calibration records still have $p=1/4$, giving $q_\\delta=3/4$ in either case. Both possible test scores, $1/4$ and $3/4$, meet the printed exit condition $1-p\\le q_\\delta$."
+      },
+      {
+        "title": "Compute correctness among exits",
+        "text": "Every one of the forty possible held-out test records exits, and exactly twenty are correct. The exit correctness is therefore $1/2$, below the requested $0.95$ level. This argument already includes the finite-sample rank correction and uses no repeated or adaptive stopping.\n\nTies are not essential. For a continuous calibrated population, take $p$ uniform on $[1/4,3/4]$ and $Y\\mid p\\sim\\operatorname{Bernoulli}(p)$. The cutoff $c=\\sqrt{(1/4)^2+0.05[(3/4)^2-(1/4)^2]}$ gives positive-class recall $[(3/4)^2-c^2]/[(3/4)^2-(1/4)^2]=0.95$, but exit precision $\\mathbb E[p\\mid p\\ge c]=(3/4+c)/2\\approx0.5229$.",
+        "formula": "\\Pr(Y=1\\mid\\mathrm{exit})=\\frac{20}{40}=0.5<0.95"
+      }
+    ],
+    "counterexample": "Use the forty-record population in the construction above and uniformly reserve one record for testing. In every possible holdout, the corrected positive-only quantile is $3/4$ and both test scores satisfy the exit rule. Exchangeability and exact score calibration hold, the probe is realizable by the stated network class, and the balanced correctness prevalence avoids a class-weighting objection.",
+    "impact": "The positive-only threshold does not establish the stated correctness guarantee for selected exits, even with exchangeability and perfect probe calibration.",
+    "practical": "The contradiction concerns the printed positive-only rule. The released implementation uses both-label calibration and a singleton exit rule, which makes no exits on this example. The construction does not assess the reported token savings or empirical accuracy.",
+    "repair": "Calibrate the selective error risk conditional on an exit if that is the desired guarantee, and prove it for the stated exit policy. Alternatively, specify the both-label singleton rule and state the class-conditional or marginal conformal guarantee that its finite-sample construction supports. The released singleton implementation excludes this example, but neither conditional precision among exits nor repeated-cue stopping follows automatically from that fact. Those conclusions require their own proofs.",
+    "implementation": "The released code at commit e62c6c2f calibrates both labels and exits only when the predictive set is the singleton $\\{1\\}$. That rule differs from the printed positive-only threshold and excludes this all-exit example. Its conditional precision and repeated-cue guarantee still require the corresponding proofs; the example does not establish a failure of this implementation.",
+    "caveats": [
+      "The contradiction concerns the formal rule in public v1 Section 3.4 and Algorithm 1, rather than every confidence-controlled exit method.",
+      "The finite construction includes the corrected conformal rank. The continuous calibrated construction shows that ties are unnecessary."
+    ],
+    "correctionSearch": "The both-label calibration and singleton-set exit rule were already present in the initial public code release. Comparing that release with the current repository changes only README.md; the three subsequent commits concern documentation and citations. This is a manuscript/code distinction, without a visible acknowledgement or repair of the conditional-error argument. The inspected issue and commit-comment surfaces contain no discussion of this finding. OpenReview discussion content remains inaccessible.",
+    "sources": [
+      {
+        "label": "Paper, public v1",
+        "url": "https://arxiv.org/html/2512.05325v1",
+        "location": "Section 3.4 and Algorithm 1"
+      },
+      {
+        "label": "Paper-linked implementation",
+        "url": "https://github.com/farukakgul/LYNX"
+      },
+      {
+        "label": "Both-label calibration, pinned release",
+        "url": "https://github.com/farukakgul/LYNX/blob/e62c6c2f1b9b07bceb86d44cc6c58a416ffb116f/lynx/calibrate_conformal.py#L40-L45"
+      },
+      {
+        "label": "Singleton exit rule, pinned release",
+        "url": "https://github.com/farukakgul/LYNX/blob/e62c6c2f1b9b07bceb86d44cc6c58a416ffb116f/lynx/early_exit_eval.py#L568-L583"
+      },
+      {
+        "label": "Public repository discussion",
+        "url": "https://github.com/farukakgul/LYNX/issues"
+      },
+      {
+        "label": "NeurIPS 2026 listing",
+        "url": "https://neurips.cc/virtual/2026/poster/149284"
+      },
+      {
+        "label": "Author repository: initial release compared with current code",
+        "url": "https://github.com/farukakgul/LYNX/compare/750ec3ba2da52e5351680939ea4522fb579fac08...e62c6c2f1b9b07bceb86d44cc6c58a416ffb116f",
+        "location": "Only README.md changed; the different exit rule was already in the initial release."
+      }
+    ],
+    "auditId": "SUS26-149284-01",
+    "primaryUrl": "https://arxiv.org/abs/2512.05325v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "severity": "critical",
+    "issueTypes": [
+      "false_statement"
+    ],
+    "verificationStatus": "confirmed",
+    "witnessFormula": "\\Pr(\\mathrm{exit}\\mid Y=1)\\quad\\text{does not determine}\\quad\\Pr(Y=1\\mid\\mathrm{exit})"
+  },
+  {
+    "slug": "primal-dual-decoding-one-step-bound",
+    "title": "Primal-Dual Guided Decoding for Constrained Discrete Diffusion",
+    "auditId": "SUS26-152632-01",
+    "year": 2026,
+    "category": "Optimization & generalization",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v1 · uploaded 2026-05-10",
+    "primaryUrl": "https://arxiv.org/html/2605.09749v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "sources": [
+      {
+        "label": "Reviewed public manuscript",
+        "url": "https://arxiv.org/html/2605.09749v1"
+      },
+      {
+        "label": "Conference paper listing",
+        "url": "https://neurips.cc/virtual/2026/poster/152632"
+      }
+    ],
+    "issueTitle": "A post-sampling update cannot enforce the one-step constraint",
+    "location": "Statement 1; Algorithm 1; Appendix A.5, Equation (58)",
+    "originalClaim": "For every positive step size eta, a feasible constrained decoding problem has expected violation bounded by a rate that tends to zero as eta grows.",
+    "formula": "\\mathbb E[\\mathrm{violation}]\\leq O\\!\\left(\\frac{1}{\\eta}\\log\\frac{\\eta+1}{b_{\\max}-R/L}\\right).",
+    "assumptions": [
+      "One position, three tokens and one reverse step, starting from the masked state.",
+      "Base probabilities \\(p=(0.6,0.3,0.1)\\), contributions \\(b=(0,0.4,1)\\), target \\(R=0.7\\), and initial multiplier \\(\\lambda_T=1\\).",
+      "The reverse process is Markov and absorbing, and all active logits are finite.",
+      "The comparator \\((0.05,0.05,0.9)\\) has expected contribution \\(0.92>R\\), positive support and finite KL."
+    ],
+    "plainExplanation": "With one reverse step, the final sample depends on the initial multiplier but not on the subsequent step-size-dependent update. Its expected deficit can remain strictly positive for every \\(\\eta\\), contradicting a bound that vanishes as \\(\\eta\\) grows.",
+    "steps": [
+      {
+        "title": "Establish strict feasibility",
+        "text": "The comparator contributes \\(0.92\\), exceeding the target \\(0.7\\), so infeasibility cannot explain the deficit."
+      },
+      {
+        "title": "Sample with the initial multiplier",
+        "text": "At \\(\\lambda_T=1\\), the exponential tilt gives expected contribution approximately \\(0.341713\\).",
+        "formula": "q_j=\\frac{p_je^{b_j}}{\\sum_kp_ke^{b_k}},\\qquad R-\\mathbb E_q[b]\\approx0.358287"
+      },
+      {
+        "title": "Compare the explicit bound",
+        "text": "At \\(\\eta=10000\\), Eq. (58) gives approximately \\(0.00109976\\), smaller than the fixed deficit. Its upper bound tends to zero with increasing \\(\\eta\\), but the sample is unchanged."
+      },
+      {
+        "title": "Respect the update order",
+        "text": "The multiplier update follows the only sample. No remaining reverse step can respond to the new multiplier."
+      }
+    ],
+    "counterexample": "The strictly feasible one-position, one-step model above has signed expected deficit approximately \\(0.358287\\) for every \\(\\eta\\), contradicting the explicit bound and its vanishing rate.",
+    "witnessFormula": "R-\\mathbb E_q[b]\\approx0.358287>0.00109976\\qquad(\\eta=10000)",
+    "impact": "The universal finite-step constraint-deficit guarantee fails. The example concerns the signed expected deficit \\(R-\\mathbb E[b]\\), distinct from \\(\\mathbb E[(R-b)_+]\\).",
+    "practical": "Increasing a multiplier after an irreversible sample cannot correct that output. A guarantee needs either sufficient optimization before commitment or a term for the remaining initialization error.",
+    "repair": "A finite-step guarantee must retain an initialization or optimization-error term unless the multiplier is adjusted before the irreversible sample. For a one-position finite-token model with positive base probabilities and \\(R<b_{\\max}\\), a valid pre-sampling repair is to choose \\(\\lambda\\) until the tilted law satisfies \\(\\mathbb E_{q_\\lambda}[b]\\ge R\\). Indeed,\n\\[\\frac{d}{d\\lambda}\\mathbb E_{q_\\lambda}[b]=\\operatorname{Var}_{q_\\lambda}(b)\\ge0,\\qquad\\mathbb E_{q_\\lambda}[b]\\longrightarrow b_{\\max}.\\]\nHence a finite such \\(\\lambda\\) exists. This proves feasibility for the repaired one-position expected-constraint problem, not the original finite-step rate or almost-sure feasibility of a sampled token. A multi-step guarantee needs to account for previous irreversible commitments.",
+    "implementation": "A repaired expected-constraint guarantee must be tied to the sampling schedule and a pre-sampling feasibility condition; a later multiplier update alone cannot enforce it.",
+    "caveats": [
+      "This note concerns public arXiv v1; equality with the accepted manuscript has not been established."
+    ],
+    "correctionSearch": "The public arXiv history lists only v1. A GitHub repository search for the exact arXiv identifier returned no repository; no official implementation or author discussion of this finding was located in the checked sources. This does not establish that none exists.",
+    "paperSummary": "The method guides discrete diffusion generation toward linear property constraints by adding a multiplier-dependent bias to token logits and updating the multiplier during denoising.",
+    "theoryRole": "Its constraint-violation bound is meant to explain how the guidance strength controls satisfaction of the requested property.",
+    "severity": "major",
+    "issueTypes": [
+      "false_statement"
+    ],
+    "verificationStatus": "confirmed"
+  },
+  {
+    "slug": "space-group-torus-log-equivariance",
+    "title": "Space Group Conditional Flow Matching",
+    "auditId": "SUS26-152663-02",
+    "year": 2025,
+    "category": "Graphs & equivariance",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v1 · uploaded 2025-09-28",
+    "primaryUrl": "https://arxiv.org/html/2509.23822v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "sources": [
+      {
+        "label": "Reviewed public manuscript",
+        "url": "https://arxiv.org/html/2509.23822v1"
+      },
+      {
+        "label": "Conference paper listing",
+        "url": "https://neurips.cc/virtual/2026/poster/152663"
+      },
+      {
+        "label": "Author implementation: periodic logmap",
+        "url": "https://github.com/omri1348/SGFM/blob/b6f09d4c591513ce53c58accab238b1d24fcf4cb/src/sgfm/pl_modules/flow_model.py#L13-L15",
+        "location": "Correct 2π normalization; the standard principal displacement still has the counterexample above."
+      }
+    ],
+    "issueTitle": "A componentwise torus logarithm need not preserve crystal symmetry",
+    "location": "Appendix B, Lemmas B.1–B.3; conditional path (7)",
+    "originalClaim": "The componentwise torus logarithm is equivariant under a space-group operation whose fractional-coordinate matrix maps the integer lattice to itself.",
+    "formula": "R\\log_x(y)=\\log_{g\\cdot x}(g\\cdot y).",
+    "assumptions": [
+      "Fractional coordinates are modulo one; take $x=(0,0,0)$ and $y=(0.3,0.7,0)$.",
+      "Use the order-three integral matrix $R$ shown below, with no translation.",
+      "$R$ preserves the positive-definite hexagonal lattice metric $G$, so it is an allowed nonorthogonal-lattice rotation.",
+      "The counterexample uses the standard intended periodic logarithm and avoids all half-period branch ties."
+    ],
+    "plainExplanation": "For a nonorthogonal crystal lattice, a physical rotation becomes a nonorthogonal matrix in fractional coordinates. It preserves the lattice metric, but can move a principal torus displacement outside the principal cube. Wrapping the transformed displacement then changes it by an integer vector, contradicting the claimed equivariance.",
+    "steps": [
+      {
+        "title": "Use an allowed crystal rotation",
+        "text": "This integral matrix has determinant one, order three and preserves a positive hexagonal lattice metric.",
+        "formula": "R=\\begin{pmatrix}0&-1&0\\\\1&-1&0\\\\0&0&1\\end{pmatrix},\\quad G=\\begin{pmatrix}1&-1/2&0\\\\-1/2&1&0\\\\0&0&1\\end{pmatrix},\\quad R^TGR=G."
+      },
+      {
+        "title": "Take the principal displacement",
+        "text": "The standard componentwise torus logarithm wraps $0.7$ to $-0.3$. Rotating that displacement gives a component of $0.6$.",
+        "formula": "\\log_0(y)=(0.3,-0.3,0),\\qquad R\\log_0(y)=(0.3,0.6,0)."
+      },
+      {
+        "title": "Transform first, then take the logarithm",
+        "text": "The transformed endpoint modulo one is $(0.3,0.6,0)$. Its principal logarithm instead wraps the second component to $-0.4$.",
+        "formula": "\\log_0(Ry\\bmod1)=(0.3,-0.4,0)\\ne R\\log_0(y)."
+      },
+      {
+        "title": "Check both formula readings",
+        "text": "Equation (12) also omits $2\\pi$ factors inside its sine and cosine. The released code includes them. Restoring that normalization produces the standard logarithm used above and does not rescue equivariance; the literal printed formula also fails."
+      }
+    ],
+    "counterexample": "At x=0 and y=(0.3,0.7,0), the two claimed equal vectors are (0.3,0.6,0) and (0.3,−0.4,0). Exact rational checks verify the crystallographic matrix and metric premises.",
+    "witnessFormula": "R\\log_0(y)-\\log_0(Ry\\bmod1)=(0,1,0).",
+    "impact": "The conditional-logarithm and conditional-path symmetry argument fails in this allowed lattice geometry. The abstract theorem about an equivariant flow and the independently group-averaged inference field are not refuted.",
+    "practical": "Equivariance of the training interpolation cannot be inferred from the componentwise logarithm. The group-averaged inference field enforces symmetry through a separate mechanism.",
+    "repair": "For displacement \\(d=y-x\\), use a nearest image in the physical lattice metric: minimize \\((d+z)^\\top G(d+z)\\) over \\(z\\in\\mathbb Z^3\\). If \\(R\\) preserves the integer lattice and \\(R^\\top GR=G\\), uniqueness makes the minimizing displacement transform equivariantly: rotating any candidate preserves its cost and the candidate set. Ties need an equivariant selection rule or a set-valued/randomized construction. The existing componentwise map is already equivariant for signed-permutation rotations away from ties.",
+    "implementation": "The released logarithm includes the intended \\(2\\pi\\) normalization. A metric-aware training path requires changing the displacement map or restricting the rotation class; inference’s group averaging provides a separate symmetry mechanism.",
+    "caveats": [
+      "The reviewed public v1 predates this conference cycle. The inaccessible accepted manuscript was not compared."
+    ],
+    "correctionSearch": "The author repository’s 13 listed commits, all-state issue list and release-to-head diff were checked. The issue list is empty and the file defining logmap is unchanged across that interval. No inspected discussion acknowledges this equivariance objection; this is not evidence of global absence.",
+    "paperSummary": "Space Group Conditional Flow Matching generates crystals while conditioning on their space group and Wyckoff positions. It combines a symmetry-compatible prior with group-averaged vector fields.",
+    "theoryRole": "The disputed appendix supplies the conditional-path symmetry argument used for the training construction. Inference symmetry also has an independent group-averaging argument.",
+    "severity": "major",
+    "issueTypes": [
+      "false_statement"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "visual-latents-best-state-selection",
+    "title": "Visual Latents Know More Than They Say: Unsilencing Latent Reasoning in MLLMs",
+    "auditId": "SUS26-152643-02",
+    "year": 2026,
+    "category": "Representation learning",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v1 · uploaded 2026-05-04",
+    "primaryUrl": "https://arxiv.org/html/2605.02735v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "sources": [
+      {
+        "label": "Reviewed public manuscript",
+        "url": "https://arxiv.org/html/2605.02735v1"
+      },
+      {
+        "label": "Conference paper listing",
+        "url": "https://neurips.cc/virtual/2026/poster/152643"
+      },
+      {
+        "label": "Author implementation: latent optimization",
+        "url": "https://github.com/zhangxin-xd/Unsilencing-Latent-Reasoning/blob/d9f15b4dd4259083da7ec7e37b2c7832aa99831f/ulr/inference.py",
+        "location": "Candidate reward is evaluated before the NES update; the saved state is copied afterward."
+      }
+    ],
+    "issueTitle": "The algorithm scores one latent state and saves another",
+    "location": "Algorithm 1, lines 12–16; Equations (5)–(6)",
+    "originalClaim": "The best-performing latent state encountered during optimization is retained for final decoding.",
+    "formula": "R(\\widetilde H_i)>R(H^*)\\quad\\Longrightarrow\\quad H^*\\leftarrow H_{i+1}.",
+    "assumptions": [
+      "A candidate is formed as $H+\\varepsilon$, with a Gaussian perturbation $\\varepsilon$.",
+      "The update is $H_{\\text{next}}=H+\\alpha R(H+\\varepsilon)\\,\\varepsilon/\\sigma^2$.",
+      "Take $H=0$, $\\alpha=12$, $\\sigma=0.7$ and $\\varepsilon=-0.7$. Strict failure persists on an open neighborhood of that perturbation.",
+      "For four latent positions, use $R(h)=0.02+0.18\\exp\\!\\big(-6(h+0.7)^2\\big)$. Binary entropies $E_k=\\log 2-(k-1)R(h)$ realize the reward in Equation (5)."
+    ],
+    "plainExplanation": "The condition compares the reward of a perturbed candidate with the incumbent. It then saves a different state produced by the NES update, without scoring that state. The replacement can be worse than the incumbent. Saving the evaluated candidate, or evaluating the updated state before saving it, repairs the mismatch.",
+    "steps": [
+      {
+        "title": "Score the candidate",
+        "text": "Starting from zero, the sampled perturbation gives candidate state $-0.7$. Its reward $0.2$ exceeds the incumbent reward of about $0.02952$."
+      },
+      {
+        "title": "Apply the displayed update",
+        "text": "The update produces state $-24/7$, rather than the scored candidate $-0.7$.",
+        "formula": "H_{\\rm next}=12\\cdot0.2\\cdot\\frac{-0.7}{0.7^2}=-\\frac{24}{7}."
+      },
+      {
+        "title": "Measure the saved state",
+        "text": "Its reward is just above $0.02$, below the old incumbent. The comparison did not test this reward.",
+        "formula": "R(-0.7)=0.2>R(0)\\approx0.02952>R(-24/7)\\approx0.02."
+      },
+      {
+        "title": "Check four-position entropy feasibility",
+        "text": "Set $E_k=\\log 2-(k-1)R(h)$ for $k=1,\\dots,4$. Every entropy lies in $(0,\\log 2]$, since $3R(h)\\le 0.6<\\log 2$. Each is realized by a binary distribution, and the mean of the three entropy drops is exactly R(h)."
+      }
+    ],
+    "counterexample": "The comparison at candidate H=−0.7 passes, but Algorithm 1 stores H_next=−24/7. This decreases the retained reward from about 0.02952 to just above 0.02. The reward is realizable with four binary-entropy positions.",
+    "witnessFormula": "H^*_{\\rm saved}\\ne\\widetilde H_{\\rm scored}.",
+    "impact": "The best-state retention claim and the displayed bookkeeping fail. The NES estimator and the reported benchmark gains are not refuted.",
+    "practical": "The official inference code has the same score-then-update-then-save ordering. No model inference was run, so the effect on measured accuracy remains unknown.",
+    "repair": "Store a copy of the candidate whose reward was compared, or score H_next and compare that score before saving it.",
+    "implementation": "The inspected inference.py computes the candidate reward, applies grad_ascent and then copies the updated thought_hidden_states when the earlier reward wins. The relevant file is unchanged from the initial public release; no correction of this ordering was found in the inspected history.",
+    "caveats": [
+      "This is a concrete selection-logic defect, without an estimate of its frequency or benchmark impact.",
+      "The public v1 predates review; the accepted manuscript was not compared."
+    ],
+    "correctionSearch": "The public arXiv history lists only v1. The official repository has no all-state issues, and its release-to-head diff changes documentation, evaluation scripts and saved outputs, not ulr/inference.py. No inspected author discussion acknowledges this selection mismatch.",
+    "paperSummary": "The method optimizes visual latent tokens in a frozen multimodal language model, first through contrastive warm-up and then through entropy-drop rewards and noisy search.",
+    "theoryRole": "Best-state selection is intended to protect final decoding from the nonmonotonic reward trajectory during the noisy search.",
+    "severity": "repairable",
+    "issueTypes": [
+      "proof_gap"
+    ],
+    "verificationStatus": "confirmed"
+  },
+  {
+    "slug": "tokenpb-average-calibration-guarantee",
+    "title": "TokenPB: Enabling VLA Action Self-Verification via VLM Token Probability Bucketing",
+    "auditId": "SUS26-155216-03",
+    "year": 2026,
+    "category": "Robotics & action models",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v2 · uploaded 2026-10-12",
+    "primaryUrl": "https://arxiv.org/html/2603.18091v2",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "issueTitle": "Average calibration does not guarantee every action ranking",
+    "location": "Definition C.3, Equation (13); Theorem C.5 and Equation (16)",
+    "originalClaim": "If mean log-space calibration error is below half the minimum positive ideal log-probability gap, the verifier ranks every candidate pair correctly at every observation.",
+    "formula": "\\varepsilon_{\\rm cal}=\\mathbb E_s\\max_m|\\log\\pi_\\theta(h(a_m)\\mid s)-\\log P^*(h(a_m)\\mid s)|<\\frac{\\gamma_{\\min}}2.",
+    "assumptions": [
+      "Two observations have probabilities 0.96 and 0.04; both have ideal candidate probabilities (0.8,0.2).",
+      "Use two legal one-token candidate classes in the formal model, so their fixed lengths are equal and no variable-length normalization is involved.",
+      "The verifier matches the ideal probabilities at the common observation and uses (0.4,0.6) at the rare observation.",
+      "All candidate probabilities are strictly positive. The ideal ranking gap is log 4 at both observations."
+    ],
+    "plainExplanation": "A small average calibration error can hide a large error on a rare observation. Here the paper’s calibration condition holds, but the verifier reverses the ranking on 4% of observations. The proof substitutes an average error into a pointwise inequality. A uniform error bound would support the stated conclusion; a mean bound supports a probabilistic guarantee instead.",
+    "steps": [
+      {
+        "title": "Keep the ideal ranking fixed",
+        "text": "At both observations candidate A has probability 0.8 and B has probability 0.2, giving the positive log-probability gap log 4."
+      },
+      {
+        "title": "Concentrate error on the rare observation",
+        "text": "At the common observation the verifier is exact. At the rare one its probabilities are (0.4,0.6), so its largest absolute log error is log 3.",
+        "formula": "e(s_{\\rm rare})=\\max\\{|\\log(0.4/0.8)|,|\\log(0.6/0.2)|\\}=\\log3."
+      },
+      {
+        "title": "Check the printed hypothesis",
+        "text": "Averaging over the two observations gives about 0.04394, far below half the ideal gap, about 0.69315.",
+        "formula": "\\varepsilon_{\\rm cal}=0.04\\log3<\\tfrac12\\log4."
+      },
+      {
+        "title": "Check the claimed conclusion",
+        "text": "On the rare observation the verifier prefers B because 0.6 exceeds 0.4. The ideal distribution prefers A. All-state ranking soundness therefore fails despite the stated hypothesis."
+      }
+    ],
+    "counterexample": "Ideal probabilities are (0.8,0.2) at both observations. The verifier is exact with probability 0.96 and outputs (0.4,0.6) with probability 0.04. Mean calibration error is 0.04 log 3, yet ranking is reversed on the rare observation.",
+    "witnessFormula": "\\Pr_s(\\text{ranking reversed})=0.04>0.",
+    "impact": "Theorem C.5’s every-state ranking guarantee does not follow from its mean calibration premise. Under a positive uniform margin, mean calibration instead controls the probability of a ranking error.",
+    "practical": "An average calibration metric cannot certify every observation. Rare observations can have larger errors; uniform ranking guarantees need uniform calibration.",
+    "repair": "For literally every-state ranking, assume \\(\\sup_s e(s)<\\gamma_{\\min}/2\\). An essential supremum instead yields an almost-sure statement. With the existing mean definition and a positive uniform ideal margin, any ranking failure implies \\(e(s)\\geq\\gamma_{\\min}/2\\), so Markov gives \\[\\Pr(\\text{any ranking failure})\\leq\\min\\{1,2\\varepsilon_{\\rm cal}/\\gamma_{\\min}\\}.\\] This is the probabilistic guarantee supported by the original average.",
+    "repairFormula": "\\Pr_s(\\text{any ordering failure})\\leq\\min\\!\\left\\{1,\\frac{2\\varepsilon_{\\rm cal}}{\\gamma_{\\min}}\\right\\}.",
+    "implementation": "The scoring model can be retained when the theorem is weakened to the probabilistic guarantee. An every-state guarantee requires the uniform calibration condition, including rare observations.",
+    "caveats": [
+      "The reviewed public v2 was uploaded after the main-track notification date. It was checked directly; the accepted manuscript was not compared.",
+      "The theorem orders demonstration probabilities. Turning those into task-utility rankings requires the paper’s separate alignment assumption."
+    ],
+    "correctionSearch": "The current public v2 retains the mean calibration definition and all-observation conclusion. The paper-linked repository has two listed commits: an initial code release on 10 October 2026 and a README title edit six minutes later. Its all-state issue list is empty. No acknowledgement or repair of this quantifier mismatch was found on those inspected surfaces.",
+    "paperSummary": "TokenPB reuses a vision-language model to score candidate robot actions after converting their continuous values into token buckets, enabling self-verification without an additional learned critic.",
+    "theoryRole": "The verifier-soundness theorem is meant to connect calibration of the token probabilities with correct ordering of candidate actions.",
+    "sources": [
+      {
+        "label": "Current public manuscript",
+        "url": "https://arxiv.org/html/2603.18091v2",
+        "location": "Definition C.3; Theorem C.5 and its proof."
+      },
+      {
+        "label": "Public revision history",
+        "url": "https://arxiv.org/abs/2603.18091"
+      },
+      {
+        "label": "Paper-linked author implementation",
+        "url": "https://github.com/RUCKBReasoning/TokenPB"
+      },
+      {
+        "label": "Conference paper listing",
+        "url": "https://neurips.cc/virtual/2026/poster/155216"
+      }
+    ],
+    "severity": "major",
+    "issueTypes": [
+      "false_statement"
+    ],
+    "verificationStatus": "confirmed_but_rescoped"
+  },
+  {
+    "slug": "discriminative-factorization-label-information",
+    "title": "Black-box model classification under the discriminative factorization",
+    "auditId": "SUS26-154419-01",
+    "year": 2026,
+    "category": "Statistical learning",
+    "status": "counterexample",
+    "collection": "neurips-2026",
+    "version": "arXiv v1 · uploaded 2026-05-08",
+    "primaryUrl": "https://arxiv.org/html/2605.07878v1",
+    "reproductionUrl": "/data/proof-atlas/reproduce-neurips-2026.py",
+    "sources": [
+      {
+        "label": "Reviewed public manuscript",
+        "url": "https://arxiv.org/html/2605.07878v1",
+        "location": "Sections 2–3.1, Definition 1, Assumptions 1–2, Theorem 1; Appendix A.2."
+      },
+      {
+        "label": "Conference paper listing",
+        "url": "https://neurips.cc/virtual/2026/poster/154419"
+      },
+      {
+        "label": "Public version history",
+        "url": "https://arxiv.org/abs/2605.07878"
+      },
+      {
+        "label": "Author-site paper addition",
+        "url": "https://github.com/hhelm10/helivan/commit/4f926b7101423e6450dace692b1bb74c39d7aeac",
+        "location": "May 12, 2026: research-page entry added; this is a website change, not a theorem correction."
+      },
+      {
+        "label": "Author-site venue update",
+        "url": "https://github.com/hhelm10/helivan/commit/744781bd58eebc977bafdbe3625d342b03c02868",
+        "location": "September 24, 2026: NeurIPS venue tag added."
+      }
+    ],
+    "issueTitle": "Cross-class pair separation does not preserve label information",
+    "location": "Section 3.1, Assumption 2 and Theorem 1; Appendix A.2",
+    "originalClaim": "For balanced binary classes with full-model Bayes risk below 1/2, Theorem 1 claims that the probability of chance-level optimal MDS classification is at most Σ_l ρ_l^m+γ(n), with γ(n)→0. Its embedding assumption requires only positive mass of models distinguishable from at least one opposite-label model.",
+    "formula": "\\Pr\\!\\left[\\inf_{h_d}L^{(n)}_{\\psi Y}(h_d,Q)\\ge\\tfrac12\\right]\\le\\sum_{\\ell=1}^r\\rho_\\ell^m+\\gamma(n),\\qquad\\gamma(n)\\to0.",
+    "assumptions": [
+      "Balanced binary labels \\(Y\\), with full-model Bayes error below \\(1/2\\).",
+      "One query and four equally likely deterministic models \\(f_{yz}(q)=(y,z)\\), for independent fair bits \\(Y,Z\\).",
+      "The embedding \\(g(y,z)=z\\) retains only the nuisance bit.",
+      "The normalized unsquared energy metric gives \\(d_P^2=|p-p^{\\prime}|\\) on embedded Bernoulli laws, a minimal rank-one factorization and \\(\\rho_1=0\\)."
+    ],
+    "plainExplanation": "An embedding can distinguish some pairs of models from opposite classes while discarding the label completely. Here the original response contains both a label bit and an independent nuisance bit. The embedding keeps only the nuisance bit. Every model passes the stated cross-class separation test, yet both classes have exactly the same embedded distribution.",
+    "steps": [
+      {
+        "title": "Separate full and embedded observations",
+        "text": "The full model reveals \\(Y\\), so its Bayes error is zero. The embedded response is \\(Z\\), independent of \\(Y\\)."
+      },
+      {
+        "title": "Satisfy the factorization hypotheses",
+        "text": "Set \\(\\alpha_1(q)=1\\) and \\(\\phi_1(f,f^{\\prime})=|p_f-p_{f^{\\prime}}|\\). This is a valid factorization for all stochastic binary-output models; a nonzero pair forces minimal rank one. The sole direction is covered with probability one."
+      },
+      {
+        "title": "Check the stated separation condition",
+        "text": "Opposite-label witnesses are \\(f_{00}\\leftrightarrow f_{11}\\) and \\(f_{01}\\leftrightarrow f_{10}\\). Each pair differs in its nuisance bit, so all four supported models belong to \\(F^*\\)."
+      },
+      {
+        "title": "Compute the conditional Bayes risk",
+        "text": "The complete distance matrix depends only on nuisance bits. Even conditional on the training sample and test nuisance value, the independent test label is fair.",
+        "formula": "P(F^*)=1,\\quad L^*(P_{fY})=0,\\quad L^*(P_{g(f)Y})=\\tfrac12"
+      },
+      {
+        "title": "Compare the theorem bound",
+        "text": "Exact one-dimensional MDS represents the two nuisance values. The chance-level-risk event has probability one for every sample size, while the claimed upper bound reduces to \\(\\gamma(n)\\to0\\)."
+      }
+    ],
+    "counterexample": "All four equally likely full models satisfy the stated cross-class witness condition, minimal rank \\(r=1\\), complete query coverage and exact one-dimensional MDS. Yet their embedded class-conditional laws coincide, forcing risk \\(1/2\\) for every classifier and every sample size.",
+    "witnessFormula": "P(F^*)=1,\\quad r=1,\\quad\\rho_1=0,\\quad L^*(P_{fY})=0<\\tfrac12=L^*(P_{g(f)Y}).",
+    "impact": "Theorem 1’s unrestricted embedding/classification guarantee is false under its printed hypotheses. Covering every factorization direction does not ensure that the representation retains label information. This example does not refute the separate injective-embedding theorem or the reported experiments.",
+    "practical": "A query can separate models through a nuisance feature shared by both classes. The formal \\(F^*\\) condition and query coverage alone cannot certify better-than-chance classification.",
+    "repair": "Add an assumption on the embedded class-conditional laws, such as \\(L^*(P_{g(f)Y})<1/2\\). For balanced classes, the Bayes error is \\((1-\\operatorname{TV}(P_{g(f)\\mid Y=0},P_{g(f)\\mid Y=1}))/2\\), so distinct embedded laws give precisely this strict improvement. Keep full-model and embedded risks separate in the proof. This fixes the lost-information premise; the representation dimension and classifier-consistency steps still require their own valid hypotheses.",
+    "implementation": "The finite witness and its Bernoulli-space extension establish the information loss algebraically. The accompanying calculation checks the factorization, distances, exact MDS and classifier risks; it is not a reproduction of trained-model performance.",
+    "caveats": [
+      "An additional requirement that the embedding preserve label information would exclude this example. That condition is stronger than the displayed existential \\(F^*\\) condition.",
+      "If \\(\\mathcal F\\) were defined after quotienting by the embedding, its Bayes error would be \\(1/2\\) in this example. Section 2 instead defines full models before embedding, and Appendix A.1 separately introduces \\(\\mathcal F_g\\).",
+      "The witness extends to the stated space of stochastic models by setting \\(\\phi_1(f,f^{\\prime})=|p_f-p_{f^{\\prime}}|\\) for embedded Bernoulli parameters and placing the model law on the four specified deterministic models.",
+      "This note concerns public arXiv v1, uploaded 8 May 2026. Equality with the accepted manuscript has not been established."
+    ],
+    "correctionSearch": "The public arXiv history lists only v1. In the author-associated website repository, the exact May 12 paper-addition diff adds the research entry and the September 24 diff adds its NeurIPS tag. Neither changes the theorem. The inspected all-state website issues/PRs and issue comments concern site work, and both associated commit-comment endpoints are empty. No acknowledgement or repair of this objection was found in those specific records. These website records do not establish the state of a paper implementation or what the authors know; the linked OpenReview page was inaccessible.",
+    "paperSummary": "The paper studies classification of black-box generative models from embedded responses to queries. Its discriminative factorization relates query coverage to the geometry used for model-level classification.",
+    "theoryRole": "Theorem 1 is the better-than-chance guarantee that permits noninjective response embeddings. Assumption 2 is intended to ensure that such embeddings retain enough task information for query coverage to yield classification power.",
+    "severity": "major",
+    "issueTypes": [
+      "false_statement"
+    ],
+    "verificationStatus": "confirmed"
+  }
+]

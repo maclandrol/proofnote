@@ -1,0 +1,42 @@
+node_modules/
+.next/
+.vercel/
+.env*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+
+# Static GitHub Pages export
+out/
+
+# Agent instructions written by next dev
+AGENTS.md
+CLAUDE.md
+
+# Generated from data/ by scripts/sync-data.mjs (runs before dev and build)
+/public/data/proof-atlas/*
+!/public/data/proof-atlas/research-archive.zip
+!/public/data/proof-atlas/research-archive.sha256
+/src/data/proof-atlas.json
+/src/data/proof-atlas-addressed.json
+/src/data/proof-atlas-neurips-2026.json
+/src/data/proof-atlas-neurips-2026-addressed.json
+/src/data/proof-atlas-scan-counts.json
+
+# Review records and maintenance tools kept locally, not published
+/data/review-presentation.json
+/data/review-decisions.json
+/data/withdrawn.json
+/data/source-searches.json
+/data/neurips-2026-source-searches.json
+/data/neurips-2026-review.json
+/data/additional-reviews.json
+/data/same-publication-exclusions.json
+/scripts/validate.py
+/scripts/check-scanned.py
+/scripts/check-review-presentation.py
+/scripts/refine-reviews.py
+/scripts/fixtures
+/scripts/bundle-archive.py
+/MANIFEST.json

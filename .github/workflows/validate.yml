@@ -1,0 +1,25 @@
+name: Validate records
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: node scripts/sync-data.mjs
+      - run: python data/reproduce.py
+      - run: python data/reproduce-belief.py
+      - run: python data/reproduce-neurips-2026.py
+      - run: node scripts/check-explorer.mjs
+      - run: node scripts/check-rich-text.mjs
+      - run: npm run build
+      - run: node scripts/check-app.mjs
