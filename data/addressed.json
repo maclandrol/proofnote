@@ -45,7 +45,7 @@
     "status": "addressed",
     "plainExplanation": "Changing a token changes both values and attention weights. The original proof controls only the values. Hahn’s dated supplement includes the missing weight term and bounds it by \\(O(1/n)\\) under the original assumptions, preserving the influence theorem.",
     "addressingRelationship": "later-version",
-    "severity": "repairable",
+    "severity": "fixed",
     "issueTypes": [
       "proof_gap"
     ],
@@ -334,9 +334,9 @@
     "status": "addressed",
     "plainExplanation": "The authors corrected the positive-pair denominator in Eq. (3) in v2. Current v3 retains that correction.",
     "addressingRelationship": "later-version",
-    "severity": "no_issues",
+    "severity": "fixed",
     "issueTypes": [],
-    "verificationStatus": "resolved_in_original"
+    "verificationStatus": "addressed"
   },
   {
     "auditId": "E-OPT-13",
@@ -436,9 +436,9 @@
     "status": "addressed",
     "plainExplanation": "Version 7 adds solvability of the support-vector equations as an explicit assumption in Theorem 7. The earlier binary-case argument did not establish that condition for generic multiclass data.",
     "addressingRelationship": "later-version",
-    "severity": "no_issues",
+    "severity": "fixed",
     "issueTypes": [],
-    "verificationStatus": "resolved_in_original"
+    "verificationStatus": "addressed"
   },
   {
     "auditId": "IR005",

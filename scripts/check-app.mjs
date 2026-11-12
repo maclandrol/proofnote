@@ -189,7 +189,7 @@ for (const html of [home, neuripsPage]) {
   assert(html.includes("Automated mathematical claim checking with frontier LLMs."));
   assert(!html.includes("Checking proofs in machine learning."));
   assert(html.includes('aria-label="Paper collection"') && html.includes('value="others"'));
-  assert.match(html, /<button[^>]*class="pa-severity-trigger"[^>]*aria-expanded="false"[^>]*aria-controls="[^"]+"[^>]*aria-label="Finding severity: 4 of 5 selected"/);
+  assert.match(html, /<button[^>]*class="pa-severity-trigger"[^>]*aria-expanded="false"[^>]*aria-controls="[^"]+"[^>]*aria-label="Finding severity: 5 of 6 selected"/);
 }
 assert.equal(scanned.papers.length, 5212);
 assert.deepEqual(JSON.parse(read("src/data/proof-atlas-scan-counts.json")), { totalScanned: scanned.totalScanned, collections: scanned.collections });

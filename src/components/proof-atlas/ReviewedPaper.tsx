@@ -169,7 +169,7 @@ function Check({ check, index, anchorIndex = index, open }: { check: Review["che
       <span className="pa-finding-number">{String(index + 1).padStart(2, "0")}</span>
       <span className="pa-finding-heading">
         <span className="pa-finding-title" role="heading" aria-level={2}><InlineText text={check.title?.trim() || shortLocation(check.location) || (noIssue ? "Assessment" : "Claim assessment")} /></span>
-        <span className="pa-finding-meta"><Grade value={noIssue ? "no_issues" : check.impactSeverity} />{verdict === "addressed" && <span>Follow-up</span>}{!noIssue && <IssueTags values={check.issueTypes} />}</span>
+        <span className="pa-finding-meta"><Grade value={noIssue ? "no_issues" : check.impactSeverity} />{verdict === "addressed" && check.impactSeverity !== "fixed" && <span>Follow-up</span>}{!noIssue && <IssueTags values={check.issueTypes} />}</span>
       </span>
       <span className="pa-finding-toggle" aria-hidden="true" />
     </summary>
@@ -245,7 +245,7 @@ export function ReviewedPaper() {
       {error ? <header className="pa-article-header"><h1>Review unavailable</h1><p role="alert">{error}</p></header>
         : !review ? <p role="status">Loading review…</p>
           : <>
-            <PaperHeader paperTitle={review.title} primaryUrl={review.primaryUrl} severity={publishedChecks.length ? review.severity : undefined} issueTypes={hasIssues ? review.issueTypes : undefined} year={review.year} category={review.category} collection={review.collection} version={paperVersion} firstUploadedAt={review.firstUploadedAt} latestUploadedAt={latestUploadedAt} followUpLabel={review.status === "addressed" ? "Follow-up" : undefined}>{hasIssues && <SeverityScale value={review.severity} />}</PaperHeader>
+            <PaperHeader paperTitle={review.title} primaryUrl={review.primaryUrl} severity={publishedChecks.length ? review.severity : undefined} issueTypes={hasIssues ? review.issueTypes : undefined} year={review.year} category={review.category} collection={review.collection} version={paperVersion} firstUploadedAt={review.firstUploadedAt} latestUploadedAt={latestUploadedAt} followUpLabel={review.status === "addressed" && review.severity !== "fixed" ? "Follow-up" : undefined}>{hasIssues && <SeverityScale value={review.severity} />}</PaperHeader>
             {review.paperSummary && <details id="context" className="pa-section pa-context pa-paper-context"><summary>Paper context</summary><RichText text={review.paperSummary} />{review.theoryRole && <><h3>Role of the theory</h3><RichText text={review.theoryRole} /></>}</details>}
             {publishedChecks.length === review.checks.length && publishedChecks.length > 0 && !review.paperSummary && review.summary && !publishedChecks.some(check => sameText(review.summary, check.explanation) || sameText(review.summary, check.demonstration)) && <section className="pa-section pa-context"><RichText text={review.summary} /></section>}
             {publishedChecks.length > 0 ? publishedChecks.map((check, index) => <Check key={`${check.id}-${index}`} check={check} index={index} anchorIndex={check.originalIndex ?? review.checks.indexOf(check)} open={check === leadingCheck} />) : <section className="pa-section"><p>No finding published for this paper.</p></section>}

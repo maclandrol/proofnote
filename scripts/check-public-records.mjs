@@ -65,7 +65,7 @@ for (const [slug, review] of Object.entries(projected)) {
   }
 }
 assert.equal(published, 6547);
-assert.equal(positive, 4123);
+assert.equal(positive, 4125);
 assert.equal(generic, 1970);
 for (const override of overrides) {
   const review = Object.values(records).find(paper => paper.checks.some(check => check.id === override.checkId));

@@ -1,9 +1,10 @@
 main:has(.proof-atlas) { max-width: 1240px; padding-top: 28px; }
 .proof-atlas { --pa-ink: var(--foreground); --pa-subtle: var(--muted); --pa-paper: var(--surface); --pa-warm: #efeeea; --pa-rule: var(--border); --pa-rust: var(--accent); --pa-teal: var(--accent-secondary); --pa-teal-bg: #f3f2ee; color: var(--pa-ink); font-size: 16px; line-height: 1.7; }
 .dark .proof-atlas { --pa-warm: #252723; --pa-teal: var(--accent-secondary); --pa-teal-bg: #212320; }
-.proof-atlas { --pa-severity-no-issues: #21644f; --pa-severity-minor: #535f73; --pa-severity-repairable: #245e9c; --pa-severity-major: #875009; --pa-severity-critical: #a52b3c; }
-.dark .proof-atlas { --pa-severity-no-issues: #86cdb0; --pa-severity-minor: #b5c0d0; --pa-severity-repairable: #9ec5ff; --pa-severity-major: #f3c67c; --pa-severity-critical: #ffabb7; }
+.proof-atlas { --pa-severity-no-issues: #21644f; --pa-severity-minor: #535f73; --pa-severity-repairable: #245e9c; --pa-severity-major: #875009; --pa-severity-critical: #a52b3c; --pa-severity-fixed: #5b4a9e; }
+.dark .proof-atlas { --pa-severity-no-issues: #86cdb0; --pa-severity-minor: #b5c0d0; --pa-severity-repairable: #9ec5ff; --pa-severity-major: #f3c67c; --pa-severity-critical: #ffabb7; --pa-severity-fixed: #c4b5f4; }
 .pa-severity-no_issues { --pa-severity: var(--pa-severity-no-issues); }
+.pa-severity-fixed { --pa-severity: var(--pa-severity-fixed); }
 .pa-severity-minor_cosmetic { --pa-severity: var(--pa-severity-minor); }
 .pa-severity-repairable { --pa-severity: var(--pa-severity-repairable); }
 .pa-severity-major { --pa-severity: var(--pa-severity-major); }

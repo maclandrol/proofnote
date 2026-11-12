@@ -79,6 +79,7 @@ export const classificationLabels = {
 };
 export const severityLabels = {
   no_issues: "No issues found",
+  fixed: "Fixed",
   minor_cosmetic: "Minor / cosmetic",
   repairable: "Repairable",
   major: "Major",
@@ -89,12 +90,15 @@ export const severities = Object.keys(severityLabels) as Severity[];
 /** One definition per grade, shared by the methodology guide and the scale on reports. */
 export const severityDescriptions: Record<Severity, string> = {
   no_issues: "No error identified in the checked claim. This includes concerns already resolved by the paper or its supplement.",
+  fixed: "An error the authors corrected in a later version of the paper or in their own supplement. The report keeps the original analysis for reference.",
   minor_cosmetic: "Notation or presentation needs correction without changing the mathematical result.",
   repairable: "A proof gap or missing condition that a specific correction closes; the result holds once it is applied.",
   major: "A lemma or stated result fails as written, although the main theorem may survive. The report may still propose a corrected statement.",
   critical: "A central theoretical claim fails under its stated assumptions.",
 };
 export const defaultSeverities = severities.filter(value => value !== "no_issues");
+/** Grades on the error scale; "fixed" sits outside it. */
+export const scaleSeverities = severities.filter(value => value !== "fixed");
 export const issueTypeLabels: Record<string, string> = {
   lemma_error: "Lemma error", false_statement: "False statement", proof_gap: "Proof gap",
   missing_assumption: "Missing assumption", incorrect_bound: "Incorrect bound",

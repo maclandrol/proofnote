@@ -8,7 +8,7 @@ export const contentType = "image/png";
 
 const index = JSON.parse(readFileSync(join(process.cwd(), "public/data/proof-atlas/scanned-papers.json"), "utf8")) as { totalScanned: number; severities: Record<string, number> };
 // Same order and palette as the severity bar on the index page.
-const bands: [string, string][] = [["critical", "#a52b3c"], ["major", "#875009"], ["repairable", "#245e9c"], ["minor_cosmetic", "#535f73"], ["no_issues", "#c9d8cf"]];
+const bands: [string, string][] = [["critical", "#a52b3c"], ["major", "#875009"], ["repairable", "#245e9c"], ["minor_cosmetic", "#535f73"], ["fixed", "#5b4a9e"], ["no_issues", "#c9d8cf"]];
 
 export default function Image() {
   return new ImageResponse(
