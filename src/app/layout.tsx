@@ -4,6 +4,7 @@ import { Source_Serif_4 } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AppHeader } from "@/components/AppHeader";
 import { AppFooter } from "@/components/AppFooter";
+import { Analytics } from "@vercel/analytics/next";
 import "./proof-atlas.css";
 import "katex/dist/katex.min.css";
 import "./globals.css";
@@ -45,6 +46,7 @@ export default function RootLayout({
           </main>
           <AppFooter />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
