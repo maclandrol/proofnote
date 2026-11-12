@@ -56,6 +56,7 @@ export type FindingSummary = Omit<Pick<Finding, "slug" | "title" | "issueTitle" 
   reviewStage?: string;
   severity?: Severity | null;
   issueTypes?: string[];
+  fixedAt?: string | null;
   verificationStatus?: string;
   addressingSources?: { label: string; url: string }[];
   resolutionType?: string;
@@ -96,6 +97,14 @@ export const severityDescriptions: Record<Severity, string> = {
   major: "A lemma or stated result fails as written, although the main theorem may survive. The report may still propose a corrected statement.",
   critical: "A central theoretical claim fails under its stated assumptions.",
 };
+/** Proof Notes went public at this time; fixes uploaded later are marked as following it. */
+export const releasedAt = "2026-11-01T16:22:38Z";
+export const fixedAfterRelease = (date?: string | null) => Boolean(date && date >= releasedAt);
+/** Short note for papers whose authors fixed a finding after Proof Notes was released. */
+export function releaseFixLabel(severity?: string | null, fixedAt?: string | null) {
+  if (!fixedAfterRelease(fixedAt)) return undefined;
+  return severity === "fixed" ? "Fixed after Proof Notes" : "Partly fixed after Proof Notes";
+}
 export const defaultSeverities = severities.filter(value => value !== "no_issues");
 /** Grades on the error scale; "fixed" sits outside it. */
 export const scaleSeverities = severities.filter(value => value !== "fixed");

@@ -17,7 +17,7 @@ for (const file of readdirSync(new URL("../data/reviews/", import.meta.url)).fil
   assert.deepEqual(read(`public/data/proof-atlas/reviews/${file}`), Object.fromEntries(Object.keys(source).map(slug => [slug, projected[slug]])), `Stale public shard: ${file}`);
 }
 let generic = 0, positive = 0, published = 0;
-const publicCheckFields = new Set(["id", "location", "claim", "verdict", "explanation", "demonstration", "repair", "scope", "title", "whyItMatters", "impactSeverity", "issueTypes", "claimContext", "claimFormula", "contextBefore", "contextAfter", "checkedLocation", "checkedSource", "relatedSources", "originalIndex"]);
+const publicCheckFields = new Set(["id", "location", "claim", "verdict", "explanation", "demonstration", "repair", "scope", "title", "whyItMatters", "impactSeverity", "issueTypes", "claimContext", "claimFormula", "contextBefore", "contextAfter", "checkedLocation", "checkedSource", "relatedSources", "fixedIn", "originalIndex"]);
 const scienceFields = ["claim", "claimContext", "claimFormula", "contextBefore", "contextAfter", "explanation", "demonstration", "repair", "scope", "title", "whyItMatters", "impactSeverity", "issueTypes", "location", "checkedLocation", "checkedSource", "relatedSources"];
 for (const [slug, review] of Object.entries(projected)) {
   const raw = records[slug];

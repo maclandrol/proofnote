@@ -22,7 +22,7 @@ export function PaperHeader({ paperTitle, primaryUrl, severity, issueTypes, year
   return <header className="pa-article-header">
     <div className="pa-paper-meta">
       {severity && Object.hasOwn(severityLabels, severity) && <><span className={`pa-review-grade pa-severity-${severity}`}>{severityLabels[severity as Severity]}</span><span>·</span></>}
-      {followUpLabel && <><span>{followUpLabel}</span><span>·</span></>}
+      {followUpLabel && <><span className={followUpLabel.endsWith("after Proof Notes") ? "pa-after-release" : undefined}>{followUpLabel}</span><span>·</span></>}
       <span>{year}</span><span>·</span><CatalogueLink field={category}>{category}</CatalogueLink>
       {collection && <><span>·</span><CatalogueLink tag={collection}>{tagLabels[collection]}</CatalogueLink></>}
     </div>

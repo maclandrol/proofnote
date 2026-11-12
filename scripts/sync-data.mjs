@@ -23,7 +23,7 @@ const preview = (text, limit = 300) => {
   if (cut.lastIndexOf("\\(") > cut.lastIndexOf("\\)")) cut = cut.slice(0, cut.lastIndexOf("\\("));
   return `${cut.trimEnd()}…`;
 };
-const listed = ["slug", "title", "authors", "issueTitle", "year", "category", "status", "plainExplanation", "primaryUrl", "citationCount", "citationUrl", "collection", "severity", "issueTypes", "noteUrl"];
+const listed = ["slug", "title", "authors", "issueTitle", "year", "category", "status", "plainExplanation", "primaryUrl", "citationCount", "citationUrl", "collection", "severity", "issueTypes", "noteUrl", "fixedAt"];
 const catalogue = JSON.parse(readFileSync("public/data/proof-atlas/scanned-papers.json", "utf8")).papers.map(paper => {
   const entry = Object.fromEntries(listed.filter(key => key in paper).map(key => [key, paper[key]]));
   return { ...entry, issueTitle: paper.issueTitle === paper.title ? "" : paper.issueTitle, plainExplanation: preview(paper.plainExplanation) };

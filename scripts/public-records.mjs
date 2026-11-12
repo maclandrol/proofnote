@@ -4,9 +4,9 @@ const noIssueVerdicts = new Set(["refuted", "no_error_found", "resolved_in_origi
 const issueVerdicts = new Set(["confirmed", "confirmed_but_rescoped", "addressed"]);
 const assessment = "No mathematical error was identified in the statements screened.";
 const pick = (record, fields) => Object.fromEntries(fields.filter(key => Object.hasOwn(record, key)).map(key => [key, record[key]]));
-const checkFields = ["id", "location", "claim", "explanation", "demonstration", "repair", "scope", "title", "whyItMatters", "impactSeverity", "issueTypes", "claimContext", "claimFormula", "contextBefore", "contextAfter", "checkedLocation", "checkedSource", "relatedSources"];
-const paperFields = ["slug", "title", "year", "category", "status", "primaryUrl", "version", "firstUploadedAt", "latestUploadedAt", "collection", "paperSummary", "theoryRole", "severity", "issueTypes", "sources"];
-const indexFields = ["slug", "title", "authors", "year", "category", "status", "issueTitle", "plainExplanation", "primaryUrl", "noteUrl", "collection", "citationCount", "citationUrl", "latestUploadedAt", "severity", "issueTypes"];
+const checkFields = ["id", "location", "claim", "explanation", "demonstration", "repair", "scope", "title", "whyItMatters", "impactSeverity", "issueTypes", "claimContext", "claimFormula", "contextBefore", "contextAfter", "checkedLocation", "checkedSource", "relatedSources", "fixedIn"];
+const paperFields = ["slug", "title", "year", "category", "status", "primaryUrl", "version", "firstUploadedAt", "latestUploadedAt", "collection", "paperSummary", "theoryRole", "severity", "issueTypes", "sources", "fixedAt"];
+const indexFields = ["slug", "title", "authors", "year", "category", "status", "issueTitle", "plainExplanation", "primaryUrl", "noteUrl", "collection", "citationCount", "citationUrl", "latestUploadedAt", "severity", "issueTypes", "fixedAt"];
 
 export function publicReview(review, copyOverrides = []) {
   const checks = [];
