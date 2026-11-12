@@ -102,6 +102,7 @@ const dependencies = {
   "./types": types,
   "./Citation": { Citation: () => null },
   "./RichText": { InlineText: ({ text }) => text },
+  "./ProofNotesMark": { ProofNotesMark: () => React.createElement("svg", { className: "pa-pn-mark" }) },
 };
 const source = readFileSync(new URL("../src/components/proof-atlas/Explorer.tsx", import.meta.url), "utf8");
 const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2017, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;

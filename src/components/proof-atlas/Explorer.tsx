@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Severity, FindingSummary } from "./types";
-import { severities, severityLabels, defaultSeverities, findingSeverity, releaseFixLabel, issueTypeLabels, tagLabels, filterFindings } from "./types";
+import { ProofNotesMark } from "./ProofNotesMark";
+import { severities, severityLabels, defaultSeverities, findingSeverity, fixedAfterRelease, issueTypeLabels, tagLabels, filterFindings } from "./types";
 import { catalogueFilters, catalogueHref, reportHref } from "../../lib/catalogue-navigation";
 import { Citation } from "./Citation";
 import { InlineText } from "./RichText";
@@ -137,7 +138,7 @@ function ExplorerBody({ findings: initial, compact = false, active, catalogue, q
         const href = reportHref(f, filterContext);
         return <article key={f.slug} className={`pa-paper ${severity ? `pa-severity-${severity}` : ""} ${active === f.slug ? "pa-active" : ""} ${f.status === "addressed" || severity === "fixed" ? "pa-addressed" : ""}`}>
         {!compact && <span className="pa-paper-number">{String(offset + i + 1).padStart(2, "0")}</span>}
-        <div className="pa-paper-copy"><div className="pa-paper-meta">{severity && <><span className={`pa-dot ${f.status}`} /><span className="pa-severity-label">{severityLabels[severity]}</span><span>·</span></>}{f.status === "addressed" && severity !== "fixed" && <><span>Follow-up</span><span>·</span></>}{releaseFixLabel(severity, f.fixedAt) && <><span className="pa-after-release" title={`Corrected in a version uploaded ${f.fixedAt!.slice(0, 10)}`}>{releaseFixLabel(severity, f.fixedAt)}</span><span>·</span></>}<span>{f.year}</span>{f.collection && <><span>·</span><Link href={fieldHref("tag", "neurips-2026")}>{tagLabels[f.collection]}</Link></>}</div>
+        <div className="pa-paper-copy"><div className="pa-paper-meta">{severity && <><span className={`pa-dot ${f.status}`} /><span className="pa-severity-label">{severityLabels[severity]}</span><span>·</span></>}{f.status === "addressed" && severity !== "fixed" && <><span>Follow-up</span><span>·</span></>}<span>{f.year}</span>{f.collection && <><span>·</span><Link href={fieldHref("tag", "neurips-2026")}>{tagLabels[f.collection]}</Link></>}{fixedAfterRelease(f.fixedAt) && <ProofNotesMark date={f.fixedAt!} />}</div>
           <h2><Link href={href} aria-current={active === f.slug ? "page" : undefined}><InlineText text={f.title} /></Link></h2><p className="pa-paper-title"><a href={f.primaryUrl} target="_blank" rel="noopener noreferrer">Original paper ↗</a></p>
           {severity && severity !== "no_issues" && f.issueTypes && f.issueTypes.length > 0 && <div className="pa-issue-types">{f.issueTypes.map(type => <span key={type}>{issueTypeLabels[type] ?? type.replaceAll("_", " ")}</span>)}</div>}
           <Citation finding={f} compact={compact} />
