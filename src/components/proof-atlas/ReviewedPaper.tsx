@@ -63,7 +63,7 @@ type Review = {
     checkedLocation?: string;
     checkedSource?: { url: string; version?: string; uploadedAt?: string; sha256: string; kind?: string };
     relatedSources?: { label: string; url: string; summary: string; publishedAt?: string; relationship?: string }[];
-    fixedIn?: { label: string; url: string; uploadedAt?: string | null; how?: string };
+    fixedIn?: { label: string; url: string; uploadedAt?: string | null; how?: string; note?: string };
   }[];
   sources: { label: string; url: string }[];
 };
@@ -155,7 +155,17 @@ function checkSections(check: Review["checks"][number], anchorIndex: number) {
     ["impact", "Why it matters", !noIssue && check.whyItMatters],
     ["repair", "Possible repair", !noIssue && check.repair],
     ["scope", "Scope", scope],
+    ["fix", "How it was fixed", check.impactSeverity === "fixed" && Boolean(check.fixedIn)],
   ].filter(([, , visible]) => visible).map(([id, title]) => ({ id: `check-${anchorIndex + 1}-${id}`, title: String(title) }));
+}
+
+function FixBox({ anchor, fix }: { anchor: string; fix: NonNullable<Review["checks"][number]["fixedIn"]> }) {
+  const version = /^arXiv:\S+v\d+$/.test(fix.label) ? fix.label.replace(/^arXiv:\S+?(v\d+)$/, "$1") : "the author supplement";
+  return <section id={anchor} className="pa-review-block pa-review-fix">
+    <h3>How it was fixed</h3>
+    <p className="pa-fix-meta">{fix.how && fixLabels[fix.how] && <strong title={fixDescriptions[fix.how]}>{fixLabels[fix.how]}</strong>} in <a href={sourceHref(fix.url)} target="_blank" rel="noopener noreferrer">{version} ↗</a>{fix.uploadedAt && <>, uploaded <time dateTime={fix.uploadedAt}>{fix.uploadedAt.slice(0, 10)}</time></>}</p>
+    {fix.note && <RichText text={fix.note} />}
+  </section>;
 }
 
 function Check({ check, index, anchorIndex = index, open }: { check: Review["checks"][number]; index: number; anchorIndex?: number; open: boolean }) {
@@ -171,7 +181,7 @@ function Check({ check, index, anchorIndex = index, open }: { check: Review["che
       <span className="pa-finding-number">{String(index + 1).padStart(2, "0")}</span>
       <span className="pa-finding-heading">
         <span className="pa-finding-title" role="heading" aria-level={2}><InlineText text={check.title?.trim() || shortLocation(check.location) || (noIssue ? "Assessment" : "Claim assessment")} /></span>
-        <span className="pa-finding-meta"><Grade value={noIssue ? "no_issues" : check.impactSeverity} />{verdict === "addressed" && check.impactSeverity !== "fixed" && <span>Follow-up</span>}{check.impactSeverity === "fixed" && check.fixedIn?.how && fixLabels[check.fixedIn.how] && <span className="pa-fix-how" title={fixDescriptions[check.fixedIn.how]}>{fixLabels[check.fixedIn.how]} in {/^arXiv:\S+v\d+$/.test(check.fixedIn.label) ? check.fixedIn.label.replace(/^arXiv:\S+?(v\d+)$/, "$1") : "author supplement"}</span>}{!noIssue && <IssueTags values={check.issueTypes} />}</span>
+        <span className="pa-finding-meta"><Grade value={noIssue ? "no_issues" : check.impactSeverity} />{verdict === "addressed" && check.impactSeverity !== "fixed" && <span>Follow-up</span>}{!noIssue && <IssueTags values={check.issueTypes} />}</span>
       </span>
       <span className="pa-finding-toggle" aria-hidden="true" />
     </summary>
@@ -188,6 +198,7 @@ function Check({ check, index, anchorIndex = index, open }: { check: Review["che
       {!noIssue && check.whyItMatters && <section id={`check-${anchorIndex + 1}-impact`} className="pa-review-block"><h3>Why it matters</h3><RichText text={check.whyItMatters} /></section>}
       {!noIssue && check.repair && <section id={`check-${anchorIndex + 1}-repair`} className="pa-review-block pa-repair"><h3>Possible repair</h3><RichText text={check.repair} /></section>}
       {scope && <section id={`check-${anchorIndex + 1}-scope`} className="pa-review-block pa-review-scope"><h3>Scope</h3><RichText text={scope} /></section>}
+      {check.impactSeverity === "fixed" && check.fixedIn && <FixBox anchor={`check-${anchorIndex + 1}-fix`} fix={check.fixedIn} />}
       {Boolean(check.relatedSources?.length) && <section className="pa-review-block pa-related-sources"><h3>{check.relatedSources?.every(report => report.relationship === "author_qualification_separate_source") ? "Author documentation" : check.relatedSources?.some(report => report.relationship?.includes("issue")) ? "Earlier analysis" : "Related sources"}</h3>{check.relatedSources?.map(report => <div key={report.url}><p className="pa-version"><a href={sourceHref(report.url)} target="_blank" rel="noopener noreferrer">{report.label} ↗</a>{report.publishedAt && <> · <time dateTime={report.publishedAt}>{report.publishedAt.slice(0, 10)}</time></>}</p><RichText text={report.summary} /></div>)}</section>}
     </div>
   </details>;

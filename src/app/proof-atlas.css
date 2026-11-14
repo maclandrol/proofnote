@@ -10,7 +10,10 @@ main:has(.proof-atlas) { max-width: 1240px; padding-top: 28px; }
 .pa-severity-major { --pa-severity: var(--pa-severity-major); }
 .pa-severity-critical { --pa-severity: var(--pa-severity-critical); }
 .pa-severity-label { color: var(--pa-severity, var(--pa-ink)); }
-.pa-fix-how { color: var(--pa-severity-fixed); font-size: 12px; }
+.pa-review-fix { border-left: 2px solid var(--pa-severity-fixed); padding-left: 16px; }
+.pa-review-fix h3 { color: var(--pa-severity-fixed); }
+.pa-fix-meta { font-size: 13px; color: var(--pa-subtle); margin-bottom: 6px !important; }
+.pa-fix-meta strong { color: var(--pa-severity-fixed); font-weight: 600; }
 .pa-pn-mark { width: 13px; height: 13px; flex: none; margin-left: 2px; opacity: .7; border-radius: 3px; }
 .pa-pn-mark:hover { opacity: 1; }
 .pa-paper[class*="pa-severity-"] .pa-dot, .pa-article[class*="pa-severity-"] .pa-dot { background: var(--pa-severity); }
