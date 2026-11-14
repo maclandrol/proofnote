@@ -11,7 +11,7 @@ import { SeverityScale } from "./SeverityScale";
 import { ReadingLayout } from "./ReadingLayout";
 import { CatalogueLink } from "./CatalogueLink";
 import { InlineText, RichText } from "./RichText";
-import { issueTypeLabels, severityLabels } from "./types";
+import { fixDescriptions, fixLabels, issueTypeLabels, severityLabels } from "./types";
 
 type Review = {
   slug: string;
@@ -63,7 +63,7 @@ type Review = {
     checkedLocation?: string;
     checkedSource?: { url: string; version?: string; uploadedAt?: string; sha256: string; kind?: string };
     relatedSources?: { label: string; url: string; summary: string; publishedAt?: string; relationship?: string }[];
-    fixedIn?: { label: string; url: string; uploadedAt?: string | null };
+    fixedIn?: { label: string; url: string; uploadedAt?: string | null; how?: string };
   }[];
   sources: { label: string; url: string }[];
 };
@@ -171,7 +171,7 @@ function Check({ check, index, anchorIndex = index, open }: { check: Review["che
       <span className="pa-finding-number">{String(index + 1).padStart(2, "0")}</span>
       <span className="pa-finding-heading">
         <span className="pa-finding-title" role="heading" aria-level={2}><InlineText text={check.title?.trim() || shortLocation(check.location) || (noIssue ? "Assessment" : "Claim assessment")} /></span>
-        <span className="pa-finding-meta"><Grade value={noIssue ? "no_issues" : check.impactSeverity} />{verdict === "addressed" && check.impactSeverity !== "fixed" && <span>Follow-up</span>}{!noIssue && <IssueTags values={check.issueTypes} />}</span>
+        <span className="pa-finding-meta"><Grade value={noIssue ? "no_issues" : check.impactSeverity} />{verdict === "addressed" && check.impactSeverity !== "fixed" && <span>Follow-up</span>}{check.impactSeverity === "fixed" && check.fixedIn?.how && fixLabels[check.fixedIn.how] && <span className="pa-fix-how" title={fixDescriptions[check.fixedIn.how]}>{fixLabels[check.fixedIn.how]} in {/^arXiv:\S+v\d+$/.test(check.fixedIn.label) ? check.fixedIn.label.replace(/^arXiv:\S+?(v\d+)$/, "$1") : "author supplement"}</span>}{!noIssue && <IssueTags values={check.issueTypes} />}</span>
       </span>
       <span className="pa-finding-toggle" aria-hidden="true" />
     </summary>

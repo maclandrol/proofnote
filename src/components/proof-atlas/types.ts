@@ -91,13 +91,20 @@ export const severities = Object.keys(severityLabels) as Severity[];
 /** One definition per grade, shared by the methodology guide and the scale on reports. */
 export const severityDescriptions: Record<Severity, string> = {
   no_issues: "No error identified in the checked claim. This includes concerns already resolved by the paper or its supplement.",
-  fixed: "An error the authors corrected in a later version of the paper or in their own supplement. The report keeps the original analysis for reference.",
+  fixed: "An error the authors addressed in a later version of the paper or in their own supplement: corrected, narrowed by an added assumption or restricted claim, or removed. The report keeps the original analysis for reference.",
   minor_cosmetic: "Notation or presentation needs correction without changing the mathematical result.",
   repairable: "A proof gap or missing condition that a specific correction closes; the result holds once it is applied.",
   major: "A lemma or stated result fails as written, although the main theorem may survive. The report may still propose a corrected statement.",
   critical: "A central theoretical claim fails under its stated assumptions.",
 };
 /** Proof Notes went public at this time; fixes uploaded later are marked as following it. */
+/** How the authors fixed a finding, shown beside its Fixed grade. */
+export const fixLabels: Record<string, string> = { corrected: "Corrected", narrowed: "Narrowed", removed: "Removed" };
+export const fixDescriptions: Record<string, string> = {
+  corrected: "The authors repaired the derivation or statement.",
+  narrowed: "The authors added an assumption or restricted the claim so that it holds.",
+  removed: "The authors removed the flawed claim from the paper.",
+};
 export const releasedAt = "2026-11-01T16:22:38Z";
 export const fixedAfterRelease = (date?: string | null) => Boolean(date && date >= releasedAt);
 export const defaultSeverities = severities.filter(value => value !== "no_issues");
