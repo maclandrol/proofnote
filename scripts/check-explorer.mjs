@@ -418,8 +418,8 @@ for (let shard = 0; shard < 64; shard++) {
 for (const [checkId, kind] of Object.entries(reviewIllustrations)) {
   const check = publishedChecks.get(checkId);
   assert.ok(check, `Illustration attached to a missing check: ${checkId}`);
-  assert.ok(["critical", "major"].includes(check.impactSeverity), `Illustration on a ${check.impactSeverity} check: ${checkId}`);
-  assert.ok(["confirmed", "confirmed_but_rescoped"].includes(check.verificationStatus ?? check.verdict) && check.duplicateOf === undefined, `Illustration on an unpublished check: ${checkId}`);
+  assert.ok(["critical", "major", "fixed"].includes(check.impactSeverity), `Illustration on a ${check.impactSeverity} check: ${checkId}`);
+  assert.ok(["confirmed", "confirmed_but_rescoped", "addressed"].includes(check.verificationStatus ?? check.verdict) && check.duplicateOf === undefined, `Illustration on an unpublished check: ${checkId}`);
   const html = renderToString(React.createElement(ReviewIllustration, { checkId }));
   assert.match(html, new RegExp(`data-illustration="${kind}"`));
   assert.match(html, /role="img"/);
